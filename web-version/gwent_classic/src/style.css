@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+	font-family: "Witcher";
+	src: url("./fonts/Witcher.TTF");
+}
