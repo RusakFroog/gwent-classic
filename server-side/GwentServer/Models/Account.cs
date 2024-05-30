@@ -1,5 +1,8 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace GwentServer.Models;
 
+[Table("accounts")]
 public class Account
 {
     public Guid Id { get; set; }
