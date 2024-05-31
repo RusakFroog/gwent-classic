@@ -21,7 +21,7 @@ export default {
 </script>
 
 <template>
-    <li :class="getFloat">    
+    <li :class="getFloat">
         <a>{{ title }}</a>
     </li>
 </template>
@@ -31,7 +31,7 @@ export default {
 li {
     transition: 0.3s;
     margin-top: 8px;
- 
+
     background-image: url('../assets/buttons/frame.svg');
     background-size: contain;
     background-repeat: no-repeat;
@@ -47,7 +47,7 @@ li a {
     cursor: pointer;
     font-size: 36px;
     line-height: 40px;
-    transition: 0.3s ease; 
+    transition: 0.3s ease;
     margin-top: 8px;
 }
 

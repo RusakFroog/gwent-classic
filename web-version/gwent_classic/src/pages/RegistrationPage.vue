@@ -4,12 +4,11 @@ export default {
 		return {
 			
 		}
-	},
+	}
 }
 </script>
 
 <template>
-	<section className="flex justify-center bg-[#242424] h-screen">
-		<img className="h-screen" src="../assets/board.jpg">
+	<section class="flex justify-center h-[calc(100vh-90px)] bg-[#242424] bg-no-repeat bg-[url('./assets/images/navigator/board.jpg')] bg-contain bg-center">
 	</section>
 </template>

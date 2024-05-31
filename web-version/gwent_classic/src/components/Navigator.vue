@@ -19,7 +19,7 @@ export default {
         <ul class="flex justify-start">
             <NavigatorItem title="HOME" />
             <NavigatorItem title="DECK" />
-            <NavigatorItem title="RULES"/>
+            <NavigatorItem title="RULES" />
             <NavigatorItem title="LOG IN" right />
         </ul>
     </nav>
@@ -29,5 +29,4 @@ export default {
 * {
     font-family: "Witcher";
 }
-
 </style>
