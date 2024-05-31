@@ -14,7 +14,7 @@ export default {
 
     computed: {
         getFloat() {
-            return (this.right ? "ml-auto" : "mr-5") + " p-7 w-[321px] h-[90px] bg-[url('./assets/buttons/frame.svg')]"; //
+            return this.right ? "ml-auto" : "mr-5";
         }
     }
 };
@@ -22,25 +22,44 @@ export default {
 
 <template>
     <li :class="getFloat">    
-        <a class="block text-[#D2B47C] text-center no-underline cursor-pointer text-4xl">
-            {{ title }}
-        </a>
+        <a>{{ title }}</a>
     </li>
 </template>
 
 
 <style scoped>
-li:not(:hover) {
+li {
     transition: 0.3s;
+    margin-top: 8px;
+ 
+    background-image: url('../assets/buttons/frame.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 200px;
+    height: 90px;
+}
+
+li a {
+    display: block;
+    color: #D2B47C;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    font-size: 36px;
+    line-height: 40px;
+    transition: 0.3s ease; 
+    margin-top: 8px;
 }
 
 li:hover {
-    a {
-        transition: 0.3s;
-        color: black;
-    }
     transition: 0.3s;
+    margin-top: 0px;
     background-image: url('../assets/buttons/selected-frame.svg');
 }
 
+li:hover a {
+    transition: 0.3s;
+    margin-top: 15px;
+    color: black;
+}
 </style>

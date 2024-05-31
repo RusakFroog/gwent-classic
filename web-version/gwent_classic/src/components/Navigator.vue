@@ -15,7 +15,7 @@ export default {
 </script>
 
 <template>
-    <nav class="bg-[url('./assets/images/navigator/background-village.svg')] p-3">
+    <nav class="bg-repeat h-[90px] bg-[url('./assets/images/navigator/background-village.svg')] p-2">
         <ul class="flex justify-start">
             <NavigatorItem title="HOME" />
             <NavigatorItem title="DECK" />
