@@ -15,11 +15,12 @@ export default {
 </script>
 
 <template>
-    <nav class="bg-black p-4">
-        <ul class="flex justify-start items-center">
+    <nav class="bg-[url('./assets/images/navigator/background-village.svg')] p-3">
+        <ul class="flex justify-start">
             <NavigatorItem title="HOME" />
             <NavigatorItem title="DECK" />
-            <NavigatorItem title="RULES" right />
+            <NavigatorItem title="RULES"/>
+            <NavigatorItem title="LOG IN" right />
         </ul>
     </nav>
 </template>
@@ -28,4 +29,5 @@ export default {
 * {
     font-family: "Witcher";
 }
+
 </style>
