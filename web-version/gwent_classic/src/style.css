@@ -6,3 +6,8 @@
 	font-family: "Witcher";
 	src: url("./fonts/Witcher.TTF");
 }
+
+@font-face {
+	font-family: "WitcherAlternative";
+	src: url("./fonts/WitcherAlternative.TTF");
+}
