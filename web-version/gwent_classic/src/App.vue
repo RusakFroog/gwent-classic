@@ -1,9 +1,11 @@
 <script setup>
-import RegistrationPage from './pages/RegistrationPage.vue'
 import Navigator from './components/Navigator.vue'
+import { RouterView } from 'vue-router';
 </script>
 
 <template>
   <Navigator />
-  <RegistrationPage />
+  <main>
+    <RouterView />
+  </main>
 </template>

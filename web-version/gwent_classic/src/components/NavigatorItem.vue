@@ -6,6 +6,11 @@ export default {
             required: true
         },
 
+        active: {
+            type: Boolean,
+            default: false
+        },
+
         right: {
             type: Boolean,
             default: false
@@ -15,13 +20,21 @@ export default {
     computed: {
         getFloat() {
             return this.right ? "ml-auto" : "mr-5";
+        },
+
+        isActive() {
+            return this.active ? "active" : "";
+        },
+
+        getStyles() {
+            return [this.getFloat, this.isActive];
         }
     }
 };
 </script>
 
 <template>
-    <li :class="getFloat">
+    <li :class="getStyles">
         <a>{{ title }}</a>
     </li>
 </template>
@@ -39,6 +52,16 @@ li {
     height: 90px;
 }
 
+.active {
+    margin-top: 0px;
+    background-image: url('../assets/buttons/selected-frame.svg');
+}
+
+.active a {
+    margin-top: 15px;
+    color: black;
+}
+
 li a {
     display: block;
     color: #D2B47C;
@@ -49,6 +72,7 @@ li a {
     line-height: 40px;
     transition: 0.3s ease;
     margin-top: 8px;
+    user-select: none;
 }
 
 li:hover {
