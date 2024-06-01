@@ -9,6 +9,7 @@ export default {
 </script>
 
 <template>
-	<section class="flex justify-center h-[calc(100vh-90px)] bg-[#242424] bg-no-repeat bg-[url('./assets/images/navigator/board.jpg')] bg-contain bg-center">
+	<section class="flex justify-center h-[calc(100vh)] w-full bg-[#242424] bg-no-repeat bg-[url('./assets/images/registration/background.svg')] bg-contain bg-center">
+
 	</section>
 </template>

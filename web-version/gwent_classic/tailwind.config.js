@@ -8,6 +8,7 @@ export default {
     extend: {},
     fontFamily: {
       'witcher': ['Witcher', 'sans-serif'],
+      'witcherAlternative': ['WitcherAlternative', 'sans-serif'],
     }
   },
   plugins: [],
