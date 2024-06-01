@@ -77,13 +77,16 @@ li a {
 
 li:hover {
     transition: 0.3s;
+    background-image: url('../assets/buttons/frame-hover.svg');
+}
+
+.active:hover {
     margin-top: 0px;
     background-image: url('../assets/buttons/selected-frame.svg');
 }
 
 li:hover a {
     transition: 0.3s;
-    margin-top: 15px;
     color: black;
 }
 </style>
