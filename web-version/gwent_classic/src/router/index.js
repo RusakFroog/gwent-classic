@@ -1,10 +1,39 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import Navigator from '../components/Navigator.vue';
 
 const routes = [
-    { path: '/', alias: '/home', component: () => import('../pages/RegistrationPage.vue') },
-    { path: '/deck', component: () => import('../pages/RegistrationPage.vue') },
-    { path: '/rules', component: () => import('../pages/RegistrationPage.vue') },
-    { path: '/login', component: () => import('../pages/RegistrationPage.vue') },
+    { 
+        path: '/', 
+        alias: '/home',
+        components: 
+        {
+            default: () => import('../pages/RegistrationPage.vue'),
+            navigator: () => Navigator
+        }
+    },
+    { 
+        path: '/deck', 
+        components: 
+        {
+            default: () => import('../pages/RegistrationPage.vue'),
+            navigator: () => Navigator
+        }
+    },
+    { 
+        path: '/rules', 
+        components: 
+        {
+            default: () => import('../pages/RegistrationPage.vue'),
+            navigator: () => Navigator
+        }  
+    },
+    { 
+        path: '/login', 
+        components: 
+        {
+            default: () => import('../pages/RegistrationPage.vue'),
+        } 
+    },
 ];
 
 const router = createRouter({
