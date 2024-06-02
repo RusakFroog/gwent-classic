@@ -21,13 +21,13 @@ export default {
         <div class="flex items-center flex-col ms-20 h-screen bg-[#0D0D0D] bg-opacity-65 px-14 relative">
             <h1 class="font-witcher-alternative mt-6 text-3xl text-[#D2B47C]">Create account</h1>
             <img class="mt-8" src="../assets/images/registration/logo.png"/>
-            <div class="flex items-center space-y-6 flex-col mt-8">
+            <div class="flex items-center gap-6 flex-col mt-8">
                 <CustomInput placeholder="LOGIN" />
                 <CustomInput placeholder="EMAIL" />
                 <CustomInput placeholder="PASSWORD" />
                 <CustomInput placeholder="REPEAT PASSWORD" />
+				<Button class="Button" text="SIGN UP" />
             </div>
-            <Button class="mt-[10vh]" text="SIGN UP"/>
         </div>
         <div class="image" />
     </section>
@@ -37,14 +37,28 @@ export default {
 * :not(h1, h3) {
     font-family: "Witcher";
 }
-
-.image {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-image: url('../assets/images/registration/gwent-game.png');
+.Button {
+	margin-top: 60px;
 }
 
+.image {
+    width: 67%;
+    height: 100%;
+	transform: translateX(640px);
+    position: absolute;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url('../assets/images/registration/gwent-game.png');
+}
+@media screen and (max-height: 905px) {
+	.Button {
+		margin-top: 30px;
+	}
+}
+
+@media screen and (max-height: 870px) {
+	.Button {
+		margin-top: -10px;
+	}
+}
 </style>
