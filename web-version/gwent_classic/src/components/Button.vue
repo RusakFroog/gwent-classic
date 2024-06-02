@@ -4,13 +4,32 @@ export default {
         text: {
             type: String,
             required: true
+        },
+
+        width: {
+            type: String,
+            default: '320px'
+        },
+
+        height: {
+            type: String,
+            default: '100px'
         }
     },
+
+    computed: {
+        getStyles() {
+            return {
+                width: this.width,
+                height: this.height
+            }
+        }
+    }
 };
 </script>
 
 <template>
-    <button><a>{{ text }}</a></button>
+    <button :style="getStyles"><a>{{ text }}</a></button>
 </template>
 
 <style scoped>
@@ -20,8 +39,6 @@ button {
     background-image: url('../assets/buttons/frame.svg');
     background-size: contain;
     background-repeat: no-repeat;
-    width: 320px;
-    height: 100px;
     display: flex;
     align-items: center;
     justify-content: center;
