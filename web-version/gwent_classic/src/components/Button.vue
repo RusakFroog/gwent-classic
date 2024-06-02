@@ -1,46 +1,20 @@
 <script>
 export default {
     props: {
-        title: {
+        text: {
             type: String,
             required: true
-        },
-
-        active: {
-            type: Boolean,
-            default: false
-        },
-
-        right: {
-            type: Boolean,
-            default: false
-        },
-    },
-
-    computed: {
-        getFloat() {
-            return this.right ? "ml-auto" : "mr-5";
-        },
-
-        isActive() {
-            return this.active ? "active" : "";
-        },
-
-        getStyles() {
-            return [this.getFloat, this.isActive];
         }
-    }
+    },
 };
 </script>
 
 <template>
-    <li :class="getStyles" @click.prevent="onClick">
-        <a>{{ title }}</a>
-    </li>
+    <button><a>{{ text }}</a></button>
 </template>
 
 <style scoped>
-li {
+button {
     transition: 0.3s;
     cursor: pointer;
     background-image: url('../assets/buttons/frame.svg');
@@ -53,16 +27,7 @@ li {
     justify-content: center;
 }
 
-.active {
-    background-image: url('../assets/buttons/selected-frame.svg');
-    height: 150px;
-}
-
-.active a {
-    color: black;
-}
-
-li a {
+button a {
     display: block;
     color: #D2B47C;
     text-decoration: none;
@@ -73,16 +38,12 @@ li a {
     user-select: none;
 }
 
-li:hover {
+button:hover {
     transition: 0.3s;
     background-image: url('../assets/buttons/frame-hover.svg');
 }
 
-.active:hover {
-    background-image: url('../assets/buttons/selected-frame.svg');
-}
-
-li:hover a {
+button:hover a {
     transition: 0.3s;
     color: black;
 }
