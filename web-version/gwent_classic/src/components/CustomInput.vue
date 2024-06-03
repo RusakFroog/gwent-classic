@@ -48,7 +48,7 @@ export default {
     background-repeat: no-repeat;    
     background-size: contain;
     outline: none;
-    font-size: 40px;
+    font-size: 34px;
     text-align: left;
     padding-left: 30px;
 }
@@ -59,8 +59,8 @@ export default {
 @media screen and (max-height: 770px) {
     .input-field {
         width: 300px;
-        font-size: 30px;
-        padding-bottom: 26px;
+        font-size: 25px;
+        padding-bottom: 23px;
         margin-top: -10px;
     }
 }
