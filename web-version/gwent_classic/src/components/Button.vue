@@ -5,6 +5,16 @@ export default {
             type: String,
             required: true
         },
+
+        width: {
+            type: String,
+            default: '320px'
+        },
+
+        height: {
+            type: String,
+            default: '100px'
+        }
     },
 
     computed: {
@@ -19,7 +29,7 @@ export default {
 </script>
 
 <template>
-    <button :style="getStyles"><a>{{ text }}</a></button>
+    <button><a>{{ text }}</a></button>
 </template>
 
 <style scoped>
@@ -37,11 +47,12 @@ button {
 }
 
 button a {
-    display: block;
+    /* display: block; */
     color: #D2B47C;
     text-decoration: none;
     text-align: center;
     font-size: 36px;
+    margin-bottom: 5px;
     line-height: 40px;
     transition: 0.3s ease;
     user-select: none;
@@ -55,11 +66,5 @@ button:hover {
 button:hover a {
     transition: 0.3s;
     color: black;
-}
-@media screen and (max-height: 770px) {
-    button {
-        width: 200px;
-        height: 56px
-    }
 }
 </style>

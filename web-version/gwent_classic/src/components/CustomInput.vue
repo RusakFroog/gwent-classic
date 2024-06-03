@@ -6,14 +6,14 @@ export default {
             default: ''
         },
 
-        width: {
-            type: String,
-            default: '400px'
+        onFocus: {
+            type: Function
         },
+    },
 
-        height: {
-            type: String,
-            default: '88px'
+    methods: {
+        focus() {
+            this.$refs.input.focus();
         }
     },
 
@@ -27,8 +27,8 @@ export default {
 </script>
 
 <template>
-    <div class="custom-input">
-        <input :placeholder="placeholder" class="input-field" v-bind:value="inputValue" />
+    <div>
+        <input ref="input" :placeholder="placeholder" @focus="onFocus" class="input-field" v-model="inputValue" /> 
     </div>
 </template>
 
@@ -41,11 +41,11 @@ export default {
 .input-field {
     font-family: "Witcher";
     color: #e6e6e6;
+    padding-right: 30px;
     width: 400px;
     height: 88px;
-    padding-right: 30px;
     background: url(../assets/images/registration/input.svg);
-    background-repeat: no-repeat;    
+    background-repeat: no-repeat;
     background-size: contain;
     outline: none;
     font-size: 34px;
@@ -55,13 +55,5 @@ export default {
 
 .input-field::placeholder {
     color: #8D8D8D;
-}
-@media screen and (max-height: 770px) {
-    .input-field {
-        width: 300px;
-        font-size: 25px;
-        padding-bottom: 23px;
-        margin-top: -10px;
-    }
 }
 </style>
