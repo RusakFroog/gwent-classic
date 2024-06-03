@@ -32,7 +32,7 @@ export default {
             this.activeInput++;
 
             const input = this.$refs[`custom_input${this.activeInput}`][0];
-            input.focus();
+            input.focusInput();
         }
     }
 };
