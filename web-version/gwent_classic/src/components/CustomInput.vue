@@ -56,4 +56,12 @@ export default {
 .input-field::placeholder {
     color: #8D8D8D;
 }
+@media screen and (max-height: 770px) {
+    .input-field {
+        width: 300px;
+        font-size: 30px;
+        padding-bottom: 26px;
+        margin-top: -10px;
+    }
+}
 </style>

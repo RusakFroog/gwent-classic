@@ -5,16 +5,6 @@ export default {
             type: String,
             required: true
         },
-
-        width: {
-            type: String,
-            default: '320px'
-        },
-
-        height: {
-            type: String,
-            default: '100px'
-        }
     },
 
     computed: {
@@ -34,6 +24,8 @@ export default {
 
 <style scoped>
 button {
+    width: 320px;
+    height: 100px;
     transition: 0.3s;
     cursor: pointer;
     background-image: url('../assets/buttons/frame.svg');
@@ -63,5 +55,11 @@ button:hover {
 button:hover a {
     transition: 0.3s;
     color: black;
+}
+@media screen and (max-height: 770px) {
+    button {
+        width: 200px;
+        height: 56px
+    }
 }
 </style>
