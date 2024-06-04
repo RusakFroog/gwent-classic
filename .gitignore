@@ -1,3 +1,4 @@
 ﻿server-side/GwentServer/obj
 server-side/GwentServer/bin
 server-side/GwentServer/.idea
+*.DS_Store

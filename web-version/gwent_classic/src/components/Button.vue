@@ -4,25 +4,6 @@ export default {
         text: {
             type: String,
             required: true
-        },
-
-        width: {
-            type: String,
-            default: '320px'
-        },
-
-        height: {
-            type: String,
-            default: '100px'
-        }
-    },
-
-    computed: {
-        getStyles() {
-            return {
-                width: this.width,
-                height: this.height
-            }
         }
     }
 };
@@ -47,7 +28,6 @@ button {
 }
 
 button a {
-    /* display: block; */
     color: #D2B47C;
     text-decoration: none;
     text-align: center;
