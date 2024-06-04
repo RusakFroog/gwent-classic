@@ -31,7 +31,7 @@ const routes = [
         path: '/login',
         components: 
         {
-            default: () => import('../pages/LogInPage.vue'),
+            default: () => import('../pages/LoginPage.vue'),
         } 
     },
 ];
