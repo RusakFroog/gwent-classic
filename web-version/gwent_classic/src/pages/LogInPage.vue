@@ -1,10 +1,12 @@
 <script>
 import Button from '../components/Button.vue';
 import CustomInput from '../components/CustomInput.vue';
+import { useRouter } from 'vue-router';
 
 export default {
     data() {
         return {
+            router: useRouter(),
             activeInput: 0,
             inputs: [
                 { placeholder: 'LOGIN', type: 'text' },
@@ -16,17 +18,24 @@ export default {
 
             error: {
                 active: true,
-                text: "123 312 123 12312 213 31231231 123123123 12313133 123123123 12312"
+                text: "12sdfdsasdfdsaf sdfdsfds3 "
             }
         }
     },
-    
+
     components: {
         Button,
         CustomInput
     },
 
     methods: {
+        goToPage(link) {
+            if (this.router.currentRoute.path === link)
+                return;
+
+            this.router.push(link);
+        },
+
         setActiveInput(index) {
             this.activeInput = index;
         },
@@ -43,14 +52,14 @@ export default {
 
         showError(message) {
             this.error.text = message;
-            
+
             this.error.active = true;
         },
 
         hideError() {
             if (!this.error.active)
                 return;
-            
+
             this.error.active = false;
         },
 
@@ -63,7 +72,7 @@ export default {
     mounted() {
         for (let i = 0; i < this.inputs.length; i++) {
             const input = this.$refs[`custom_input${i}`][0];
-            
+
             this.componentInputs.push(input);
         }
     }
@@ -71,25 +80,22 @@ export default {
 </script>
 
 <template>
-    <section class="flex place-items-start h-[calc(100vh-90px)] w-screen bg-[#242424] bg-cover bg-no-repeat bg-[url('./assets/images/registration/background.png')]">
+    <section
+        class="flex place-items-start h-[calc(100vh-90px)] w-screen bg-[#242424] bg-cover bg-no-repeat bg-[url('./assets/images/registration/background.png')]">
         <div class="panel flex items-center flex-col ms-20 h-full bg-[#0D0D0D] bg-opacity-65 px-14 relative">
             <h1 class="font-witcher-alternative mt-6 text-3xl text-[#D2B47C]">Log in to account</h1>
             <img class="logo select-none mt-8" src="../assets/images/registration/logo.png" />
             <div class="inputs">
-                <CustomInput v-for="(input, index) in inputs"
-                    class="custom-input"
-                    @keyup.enter="nextInput"
-                    :onFocus="() => setActiveInput(index)"
-                    :ref="'custom_input' + index"
-                    :type="input.type"
-                    :placeholder="input.placeholder" 
-                />
+                <CustomInput v-for="(input, index) in inputs" class="custom-input" @keyup.enter="nextInput"
+                    :onFocus="() => setActiveInput(index)" :ref="'custom_input' + index" :type="input.type"
+                    :placeholder="input.placeholder" />
                 <Button class="log-in" @click="login()" text="LOG IN" />
             </div>
             <div class="error flex justify-start items-center w-[310px] mt-[10px]" v-if="error.active">
-                <img class="w-[60px] h-[60px]" src="../assets/images/info.svg"/> 
+                <img class="error-image w-[60px] h-[60px]" src="../assets/images/info.svg" />
                 <text class="text-[#AB1E1E] pl-[10px] text-[18px]">{{ error.text }}</text>
             </div>
+            <p class="text-[#8D8D8D] text-[24px] mt-[40px]">Don't have an account? <a @click="goToPage('/register')" class="to-sign-up text-[#D2B47C] hover:text-[#FFB500] cursor-pointer">SIGN UP</a></p>
         </div>
         <div class="image h-full" />
     </section>
@@ -119,21 +125,11 @@ export default {
     background-image: url('../assets/images/registration/gwent-game.png');
 }
 
-@media screen and (max-height: 900px) {
-    .error {
-        margin-top: 15px;
-    }
-
-    /* .log-in {
-        margin-top: 30px;
-    } */
-}
-
-@media screen and (max-height: 870px) {
+@media screen and (max-height: 1020px) {
     .log-in {
         margin-top: 0px;
     }
-    
+
     .error {
         margin-top: 10px;
     }
@@ -143,7 +139,21 @@ export default {
     }
 }
 
-@media screen and (max-height: 770px) {
+@media screen and (max-height: 865px) {
+    .error {
+        max-width: 300px;
+
+    }
+
+    .error text {
+        font-size: 14px;
+    }
+
+    .error-image {
+        width: 40px;
+        height: 40px;
+    }
+
     .inputs {
         gap: 4px;
     }
@@ -154,11 +164,11 @@ export default {
     }
 
     .log-in {
-        margin-top: 30px;
+        margin-top: 20px;
         width: 200px;
         height: 56px;
     }
- 
+
     .log-in :deep(a) {
         font-size: 27px;
     }

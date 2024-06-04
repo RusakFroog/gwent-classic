@@ -17,12 +17,12 @@ export default {
             componentInputs: [],
 
             error: {
-                active: false,
-                text: ""
+                active: true,
+                text: "adsfa asdfds adsfsadf "
             }
         }
     },
-    
+
     components: {
         Button,
         CustomInput
@@ -45,7 +45,7 @@ export default {
 
         showError(message) {
             this.error.text = message;
-            
+
             this.error.active = true;
         },
 
@@ -75,23 +75,19 @@ export default {
 </script>
 
 <template>
-    <section class="flex place-items-start h-screen w-screen bg-[#242424] bg-cover bg-no-repeat bg-[url('./assets/images/registration/background.png')]">
+    <section
+        class="flex place-items-start h-screen w-screen bg-[#242424] bg-cover bg-no-repeat bg-[url('./assets/images/registration/background.png')]">
         <div class="panel flex items-center flex-col ms-20 h-screen bg-[#0D0D0D] bg-opacity-65 px-14 relative">
             <h1 class="font-witcher-alternative mt-6 text-3xl text-[#D2B47C]">Create account</h1>
             <img class="logo select-none mt-8" src="../assets/images/registration/logo.png" />
             <div class="inputs">
-                <CustomInput v-for="(input, index) in inputs"
-                    class="custom-input"
-                    @keyup.enter="nextInput"
-                    :onFocus="() => setActiveInput(index)"
-                    :ref="'custom_input' + index"
-                    :type="input.type"
-                    :placeholder="input.placeholder" 
-                />
+                <CustomInput v-for="(input, index) in inputs" class="custom-input" @keyup.enter="nextInput"
+                    :onFocus="() => setActiveInput(index)" :ref="'custom_input' + index" :type="input.type"
+                    :placeholder="input.placeholder" />
                 <Button class="sign-up" @click="signUp()" text="SIGN UP" />
             </div>
-            <div class="error flex justify-start items-center w-[310px] mt-[10px]" v-if="error.active">
-                <img class="w-[60px] h-[60px]" src="../assets/images/info.svg"/> 
+            <div class="error flex justify-center items-center w-[310px] mt-[10px]" v-if="error.active">
+                <img class="error-image w-[60px] h-[60px]" src="../assets/images/info.svg" />
                 <text class="text-[#AB1E1E] pl-[10px] text-[18px]">{{ error.text }}</text>
             </div>
         </div>
@@ -124,31 +120,22 @@ export default {
     background-image: url('../assets/images/registration/gwent-game.png');
 }
 
-@media screen and (max-height: 905px) {
+
+@media screen and (max-height: 950px) {
     .error {
-        margin-top: 50px;
+        max-width: 300px;
+
     }
 
-    .sign-up {
-        margin-top: 30px;
-    }
-}
-
-@media screen and (max-height: 870px) {
-    .sign-up {
-        margin-top: 0px;
-    }
-    
-    .error {
-        margin-top: 10px;
+    .error text {
+        font-size: 14px;
     }
 
-    .inputs {
-        margin-top: 10px;
+    .error-image {
+        width: 40px;
+        height: 40px;
     }
-}
 
-@media screen and (max-height: 770px) {
     .inputs {
         gap: 4px;
     }
@@ -163,7 +150,7 @@ export default {
         width: 200px;
         height: 56px;
     }
- 
+
     .sign-up :deep(a) {
         font-size: 27px;
     }
@@ -173,6 +160,20 @@ export default {
         font-size: 25px;
         padding-bottom: 23px;
         margin-top: -10px;
+    }
+}
+
+@media screen and (max-height: 770px) {
+    .custom-input :deep(.input-field) {
+        width: 230px;
+        height: 50px;
+        font-size: 20px;
+        padding-bottom: 0px;
+        margin-top: 0px;
+    }
+
+    .inputs {
+        gap: 16.4px;
     }
 }
 

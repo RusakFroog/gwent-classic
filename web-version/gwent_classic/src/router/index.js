@@ -32,7 +32,7 @@ const routes = [
         components:
         {
             navigator: () => Navigator,
-            default: () => import('../pages/LoginPage.vue'),
+            default: () => import('../pages/LogInPage.vue'),
         } 
     },
     { 
