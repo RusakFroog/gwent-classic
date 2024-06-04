@@ -15,8 +15,8 @@ export default {
             componentInputs: [],
 
             error: {
-                active: false,
-                text: ""
+                active: true,
+                text: "123 312 123 12312 213 31231231 123123123 12313133 123123123 12312"
             }
         }
     },
@@ -54,7 +54,7 @@ export default {
             this.error.active = false;
         },
 
-        signUp() {
+        login() {
             this.hideError();
             //...
         }
@@ -63,7 +63,7 @@ export default {
     mounted() {
         for (let i = 0; i < this.inputs.length; i++) {
             const input = this.$refs[`custom_input${i}`][0];
-
+            
             this.componentInputs.push(input);
         }
     }
@@ -71,9 +71,9 @@ export default {
 </script>
 
 <template>
-    <section class="flex place-items-start h-screen w-screen bg-[#242424] bg-cover bg-no-repeat bg-[url('./assets/images/registration/background.png')]">
-        <div class="panel flex items-center flex-col ms-20 h-screen bg-[#0D0D0D] bg-opacity-65 px-14 relative">
-            <h1 class="font-witcher-alternative mt-6 text-3xl text-[#D2B47C]">Create account</h1>
+    <section class="flex place-items-start h-[calc(100vh-90px)] w-screen bg-[#242424] bg-cover bg-no-repeat bg-[url('./assets/images/registration/background.png')]">
+        <div class="panel flex items-center flex-col ms-20 h-full bg-[#0D0D0D] bg-opacity-65 px-14 relative">
+            <h1 class="font-witcher-alternative mt-6 text-3xl text-[#D2B47C]">Log in to account</h1>
             <img class="logo select-none mt-8" src="../assets/images/registration/logo.png" />
             <div class="inputs">
                 <CustomInput v-for="(input, index) in inputs"
@@ -84,14 +84,14 @@ export default {
                     :type="input.type"
                     :placeholder="input.placeholder" 
                 />
-                <Button class="sign-up" @click="signUp()" text="SIGN UP" />
-                <div class="error flex justify-center items-center w-[440px] mt-[30px]" v-if="error.active">
-                    <img class="w-[60px] h-[60px]" src="../assets/images/info.svg"/> 
-                    <text class="text-[#AB1E1E] pl-[10px] text-[18px]">{{ error.text }}</text>
-                </div>
+                <Button class="log-in" @click="login()" text="LOG IN" />
+            </div>
+            <div class="error flex justify-start items-center w-[310px] mt-[10px]" v-if="error.active">
+                <img class="w-[60px] h-[60px]" src="../assets/images/info.svg"/> 
+                <text class="text-[#AB1E1E] pl-[10px] text-[18px]">{{ error.text }}</text>
             </div>
         </div>
-        <div class="image" />
+        <div class="image h-full" />
     </section>
 </template>
 
@@ -105,33 +105,32 @@ export default {
     align-items: center;
     gap: 24px;
     flex-direction: column;
-    margin-top: 20px;
+    margin-top: 120px;
 }
 
-.sign-up {
-    margin-top: 35px;
+.log-in {
+    margin-top: 80px;
 }
 
 .image {
     flex-grow: 1;
-    height: 100vh;
     background-repeat: no-repeat;
     background-size: cover;
     background-image: url('../assets/images/registration/gwent-game.png');
 }
 
-@media screen and (max-height: 905px) {
+@media screen and (max-height: 900px) {
     .error {
-        margin-top: 50px;
+        margin-top: 15px;
     }
 
-    .sign-up {
+    /* .log-in {
         margin-top: 30px;
-    }
+    } */
 }
 
 @media screen and (max-height: 870px) {
-    .sign-up {
+    .log-in {
         margin-top: 0px;
     }
     
@@ -154,13 +153,13 @@ export default {
         height: 120px;
     }
 
-    .sign-up {
+    .log-in {
         margin-top: 30px;
         width: 200px;
         height: 56px;
     }
  
-    .sign-up :deep(a) {
+    .log-in :deep(a) {
         font-size: 27px;
     }
 

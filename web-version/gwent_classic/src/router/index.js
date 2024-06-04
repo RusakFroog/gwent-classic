@@ -29,9 +29,17 @@ const routes = [
     },
     { 
         path: '/login',
+        components:
+        {
+            navigator: () => Navigator,
+            default: () => import('../pages/LoginPage.vue'),
+        } 
+    },
+    { 
+        path: '/register',
         components: 
         {
-            default: () => import('../pages/LoginPage.vue'),
+            default: () => import('../pages/RegistrationPage.vue'),
         } 
     },
 ];

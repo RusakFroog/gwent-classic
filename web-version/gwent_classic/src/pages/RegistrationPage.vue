@@ -52,7 +52,7 @@ export default {
         hideError() {
             if (!this.error.active)
                 return;
-            
+
             this.error.active = false;
         },
 
@@ -89,10 +89,10 @@ export default {
                     :placeholder="input.placeholder" 
                 />
                 <Button class="sign-up" @click="signUp()" text="SIGN UP" />
-                <div class="error flex justify-center items-center w-[440px] mt-[30px]" v-if="error.active">
-                    <img class="w-[60px] h-[60px]" src="../assets/images/info.svg"/> 
-                    <text class="text-[#AB1E1E] pl-[10px] text-[18px]">{{ error.text }}</text>
-                </div>
+            </div>
+            <div class="error flex justify-start items-center w-[310px] mt-[10px]" v-if="error.active">
+                <img class="w-[60px] h-[60px]" src="../assets/images/info.svg"/> 
+                <text class="text-[#AB1E1E] pl-[10px] text-[18px]">{{ error.text }}</text>
             </div>
         </div>
         <div class="image" />
