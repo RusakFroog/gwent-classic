@@ -50,16 +50,17 @@ export default {
         },
 
         hideError() {
+            if (!this.error.active)
+                return;
+            
             this.error.active = false;
         },
 
         signUp() {
-            console.log(this.componentInputs[2].inputValue);
+            this.hideError();
 
             if (this.componentInputs[2].inputValue !== this.componentInputs[3].inputValue)
                 return this.showError('ERROR: Passwords do not match');
-            
-            this.hideError();
         }
     },
 
