@@ -8,7 +8,7 @@ export default {
             activeInput: 0,
             inputs: [
                 { placeholder: 'LOGIN', type: 'text' },
-                { placeholder: 'EMAIL', type: 'text' },
+                { placeholder: 'EMAIL', type: 'email' },
                 { placeholder: 'PASSWORD', type: 'password' },
                 { placeholder: 'REPEAT PASSWORD', type: 'password' },
             ]
@@ -48,7 +48,8 @@ export default {
                     class="custom-input"
                     @keyup.enter="nextInput" 
                     :onFocus="() => setActiveInput(index)"
-                    :ref="'custom_input' + + index" 
+                    :ref="'custom_input' + index"
+                    :type="input.type"
                     :placeholder="input.placeholder" 
                 />
                 <Button class="sign-up" text="SIGN UP" />

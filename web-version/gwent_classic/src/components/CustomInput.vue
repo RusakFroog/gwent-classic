@@ -9,10 +9,15 @@ export default {
         onFocus: {
             type: Function
         },
+
+        type: {
+            type: String,
+            default: 'text'
+        }
     },
 
     methods: {
-        focus() {
+        focusInput() {
             this.$refs.input.focus();
         }
     },
@@ -28,7 +33,7 @@ export default {
 
 <template>
     <div>
-        <input ref="input" :placeholder="placeholder" @focus="onFocus" class="input-field" v-model="inputValue" /> 
+        <input ref="input" :placeholder="placeholder" :type="type" @focus="onFocus" class="input-field" v-model="inputValue" /> 
     </div>
 </template>
 
