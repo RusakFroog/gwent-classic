@@ -1,10 +1,13 @@
 <script>
 import Button from '../components/Button.vue';
 import CustomInput from '../components/CustomInput.vue';
+import { useRouter } from 'vue-router';
+import { createAccount } from '../services/accounts';
 
 export default {
     data() {
         return {
+            router: useRouter(),
             activeInput: 0,
             inputs: [
                 { placeholder: 'LOGIN', type: 'text' },
@@ -17,8 +20,8 @@ export default {
             componentInputs: [],
 
             error: {
-                active: true,
-                text: "adsfa asdfds adsfsadf "
+                active: false,
+                text: ""
             }
         }
     },
@@ -29,6 +32,13 @@ export default {
     },
 
     methods: {
+        goToPage(link) {
+            if (this.router.currentRoute.path === link)
+                return;
+
+            this.router.push(link);
+        },
+
         setActiveInput(index) {
             this.activeInput = index;
         },
@@ -59,8 +69,22 @@ export default {
         signUp() {
             this.hideError();
 
-            if (this.componentInputs[2].inputValue !== this.componentInputs[3].inputValue)
+            const login = this.componentInputs[0].inputValue;
+            const email = this.componentInputs[1].inputValue;
+            const password = this.componentInputs[2].inputValue;
+            const repeatPassword = this.componentInputs[3].inputValue;
+
+            if (password !== repeatPassword)
                 return this.showError('ERROR: Passwords do not match');
+            
+            setTimeout(async () => {
+                const result = await createAccount(login, email, password);
+                
+                if (result.error != null) 
+                    return this.showError("ERROR: " + result.error);
+                
+                this.goToPage('/home');
+            }, 300);
         }
     },
 
@@ -81,15 +105,20 @@ export default {
             <h1 class="font-witcher-alternative mt-6 text-3xl text-[#D2B47C]">Create account</h1>
             <img class="logo select-none mt-8" src="../assets/images/registration/logo.png" />
             <div class="inputs">
-                <CustomInput v-for="(input, index) in inputs" class="custom-input" @keyup.enter="nextInput"
-                    :onFocus="() => setActiveInput(index)" :ref="'custom_input' + index" :type="input.type"
-                    :placeholder="input.placeholder" />
+                <CustomInput v-for="(input, index) in inputs" class="custom-input" 
+                    @keyup.enter="nextInput"
+                    :onFocus="() => setActiveInput(index)" 
+                    :ref="'custom_input' + index" 
+                    :type="input.type"
+                    :placeholder="input.placeholder" 
+                />
                 <Button class="sign-up" @click="signUp()" text="SIGN UP" />
             </div>
             <div class="error flex justify-center items-center w-[310px] mt-[10px]" v-if="error.active">
                 <img class="error-image w-[60px] h-[60px]" src="../assets/images/info.svg" />
                 <text class="text-[#AB1E1E] pl-[10px] text-[18px]">{{ error.text }}</text>
             </div>
+            <p class="text-[#8D8D8D] select-none text-[24px] mt-[40px]">Already have an account? <a @click="goToPage('/login')" class="text-[#D2B47C] hover:text-[#FFB500] cursor-pointer">LOG IN</a></p>
         </div>
         <div class="image" />
     </section>
@@ -124,7 +153,6 @@ export default {
 @media screen and (max-height: 950px) {
     .error {
         max-width: 300px;
-
     }
 
     .error text {

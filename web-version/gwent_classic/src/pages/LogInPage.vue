@@ -2,6 +2,7 @@
 import Button from '../components/Button.vue';
 import CustomInput from '../components/CustomInput.vue';
 import { useRouter } from 'vue-router';
+import { loginToAccount } from '../services/accounts';
 
 export default {
     data() {
@@ -17,8 +18,8 @@ export default {
             componentInputs: [],
 
             error: {
-                active: true,
-                text: "12sdfdsasdfdsaf sdfdsfds3 "
+                active: false,
+                text: ""
             }
         }
     },
@@ -65,7 +66,20 @@ export default {
 
         login() {
             this.hideError();
-            //...
+            const login = this.componentInputs[0].inputValue;
+            const password = this.componentInputs[1].inputValue;
+
+            if (login.length < 5 || password < 6 || login.includes(" ") || password.includes(" "))
+                return this.showError("ERROR: Login or Password are invalid");
+
+            setTimeout(async () => {
+                const result = await loginToAccount(login, password);
+
+                if (result.error != null)
+                    return this.showError("ERROR: " + result.error);
+
+                this.goToPage('/home');
+            }, 500);
         }
     },
 
@@ -86,16 +100,20 @@ export default {
             <h1 class="font-witcher-alternative mt-6 text-3xl text-[#D2B47C]">Log in to account</h1>
             <img class="logo select-none mt-8" src="../assets/images/registration/logo.png" />
             <div class="inputs">
-                <CustomInput v-for="(input, index) in inputs" class="custom-input" @keyup.enter="nextInput"
-                    :onFocus="() => setActiveInput(index)" :ref="'custom_input' + index" :type="input.type"
-                    :placeholder="input.placeholder" />
+                <CustomInput v-for="(input, index) in inputs" class="custom-input"
+                    @keyup.enter="nextInput"
+                    :onFocus="() => setActiveInput(index)"
+                    :ref="'custom_input' + index"
+                    :type="input.type"
+                    :placeholder="input.placeholder"
+                />
                 <Button class="log-in" @click="login()" text="LOG IN" />
             </div>
             <div class="error flex justify-start items-center w-[310px] mt-[10px]" v-if="error.active">
                 <img class="error-image w-[60px] h-[60px]" src="../assets/images/info.svg" />
                 <text class="text-[#AB1E1E] pl-[10px] text-[18px]">{{ error.text }}</text>
             </div>
-            <p class="text-[#8D8D8D] text-[24px] mt-[40px]">Don't have an account? <a @click="goToPage('/register')" class="to-sign-up text-[#D2B47C] hover:text-[#FFB500] cursor-pointer">SIGN UP</a></p>
+            <p class="text-[#8D8D8D] select-none text-[24px] mt-[40px]">Don't have an account? <a @click="goToPage('/register')" class="text-[#D2B47C] hover:text-[#FFB500] cursor-pointer">SIGN UP</a></p>
         </div>
         <div class="image h-full" />
     </section>

@@ -31,8 +31,8 @@ const routes = [
         path: '/login',
         components:
         {
-            navigator: () => Navigator,
-            default: () => import('../pages/LogInPage.vue'),
+            default: () => import('../pages/LoginPage.vue'),
+            navigator: () => Navigator
         } 
     },
     { 
