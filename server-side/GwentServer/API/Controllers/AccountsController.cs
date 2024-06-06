@@ -39,7 +39,7 @@ public class AccountsController : ControllerBase
             return Conflict("INVALID_DATA");
         
         ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, request.Login) }, CookieAuthenticationDefaults.AuthenticationScheme);
-
+        
         await Response.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
         
         return Ok("Logged in");

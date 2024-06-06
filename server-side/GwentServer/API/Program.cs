@@ -18,7 +18,11 @@ builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
+        options.Cookie.HttpOnly = true;
+        options.Cookie.Domain = "http://localhost:5173";
         options.Cookie.SameSite = SameSiteMode.None;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        
         options.Events = new CookieAuthenticationEvents()
         {
             OnRedirectToLogin = context =>

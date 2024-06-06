@@ -23,7 +23,7 @@ export default {
         },
 
         getItem(link) {
-            return this.items.find(item => item.alias === link || item.link === link);
+            return this.items.find(item => item.link === link);
         }
     },
 
@@ -47,7 +47,7 @@ export default {
         return {
             router: useRouter(),
             items: [
-                { title: "HOME", link: "/home", alias: '/', right: false, active: false },
+                { title: "HOME", link: "/home", right: false, active: false },
                 { title: "DECK", link: "/deck", right: false, active: false },
                 { title: "RULES", link: "/rules", right: false, active: false },
                 { title: "LOG IN", link: "/login", right: true, active: false }
@@ -60,8 +60,7 @@ export default {
 <template>
     <nav class="bg-repeat h-[90px] bg-[url('./assets/images/navigator/background-village.svg')] p-2">
         <ul class="flex justify-start">
-            <NavigatorItem
-                v-for="item in items"
+            <NavigatorItem v-for="item in items"
                 :title="item.title"
                 :right="item.right"
                 :active="item.active"

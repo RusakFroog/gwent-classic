@@ -66,6 +66,7 @@ export default {
 
         login() {
             this.hideError();
+            
             const login = this.componentInputs[0].inputValue;
             const password = this.componentInputs[1].inputValue;
 
