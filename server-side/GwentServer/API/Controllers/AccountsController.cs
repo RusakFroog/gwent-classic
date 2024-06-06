@@ -26,6 +26,10 @@ public class AccountsController : ControllerBase
 
         if (!string.IsNullOrEmpty(error))
             return Conflict(error);
+
+        ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, request.Login) }, CookieAuthenticationDefaults.AuthenticationScheme);
+        
+        await Response.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
         
         return Created();
     }

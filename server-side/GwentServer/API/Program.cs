@@ -19,9 +19,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(options =>
     {
         options.Cookie.HttpOnly = true;
-        options.Cookie.Domain = "http://localhost:5173";
         options.Cookie.SameSite = SameSiteMode.None;
         options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.Cookie.MaxAge = TimeSpan.FromDays(30);
         
         options.Events = new CookieAuthenticationEvents()
         {

@@ -2,7 +2,7 @@
 import Button from '../components/Button.vue';
 import CustomInput from '../components/CustomInput.vue';
 import { useRouter } from 'vue-router';
-import { loginToAccount } from '../services/accounts';
+import { loginToAccount } from '../services/accounts.js';
 
 export default {
     data() {

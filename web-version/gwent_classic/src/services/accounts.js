@@ -24,7 +24,8 @@ export const createAccount = async (login, email, password) => {
             login,
             email,
             password
-        })
+        }),
+        credentials: 'include'
     });
 
     return {
@@ -42,7 +43,8 @@ export const loginToAccount = async (login, password) => {
         body: JSON.stringify({
             login,
             password
-        })
+        }),
+        credentials: 'include'
     });
 
     return {
