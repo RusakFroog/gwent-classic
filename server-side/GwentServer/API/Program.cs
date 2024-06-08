@@ -18,10 +18,11 @@ builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
+        options.Cookie.Name = "token";
         options.Cookie.HttpOnly = true;
         options.Cookie.SameSite = SameSiteMode.None;
         options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-        options.Cookie.MaxAge = TimeSpan.FromDays(30);
+        options.Cookie.MaxAge = TimeSpan.FromDays(600);
         
         options.Events = new CookieAuthenticationEvents()
         {

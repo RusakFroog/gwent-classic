@@ -1,6 +1,8 @@
 <script>
 import NavigatorItem from './NavigatorItem.vue';
+import ProfileModal from "./ProfileModal.vue";
 import { useRouter } from 'vue-router';
+import { loggedIn } from '../services/accounts.js';
 
 export default {
     components: {
@@ -24,6 +26,39 @@ export default {
 
         getItem(link) {
             return this.items.find(item => item.link === link);
+        },
+
+        async checkLoggedIn() {
+            if (sessionStorage.getItem("new_session") === "false")
+                return;
+
+            console.log("Check if looged in");
+
+            const isLoggedIn = await loggedIn();
+    
+            if (isLoggedIn) {
+                const loginItem = this.getItem("/login");
+    
+                if (loginItem) {
+                    loginItem.title = "PROFILE";
+                    loginItem.link = "/profile";
+                  
+                    loginItem.onClick = () => {
+                        console.log("on click profile");
+                    };
+                }
+            }
+            else {
+                const profileItem = this.getItem("/profile");
+    
+                if (profileItem) {
+                    profileItem.title = "LOG IN";
+                    profileItem.link = "/login";
+                }
+            }
+
+            sessionStorage.setItem('logged_in', isLoggedIn ? 'true' : 'false');
+            sessionStorage.setItem('new_session', 'false');
         }
     },
 
@@ -39,6 +74,25 @@ export default {
         
                 if (findCurrentItem)
                     findCurrentItem.active = true;
+
+                this.checkLoggedIn();
+            }
+        }
+    },
+
+    mounted() {
+        if (sessionStorage.getItem("logged_in") == "true") {
+            console.log("on mount nav");
+
+            const loginItem = this.getItem("/login");
+    
+            if (loginItem) {
+                loginItem.title = "PROFILE";
+                loginItem.link = "/profile";
+
+                loginItem.onClick = () => {
+                    ProfileModal.showModal();
+                };
             }
         }
     },
@@ -47,10 +101,10 @@ export default {
         return {
             router: useRouter(),
             items: [
-                { title: "HOME", link: "/home", right: false, active: false },
-                { title: "DECK", link: "/deck", right: false, active: false },
-                { title: "RULES", link: "/rules", right: false, active: false },
-                { title: "LOG IN", link: "/login", right: true, active: false }
+                { title: "HOME", link: "/home", right: false, active: false, onClick: null },
+                { title: "DECK", link: "/deck", right: false, active: false, onClick: null },
+                { title: "RULES", link: "/rules", right: false, active: false, onClick: null },
+                { title: "LOG IN", link: "/login", right: true, active: false, onClick: null }
             ]
         }
     }
@@ -64,7 +118,7 @@ export default {
                 :title="item.title"
                 :right="item.right"
                 :active="item.active"
-                @click="goToPage(item.link)"
+                @click="item.onClick ? item.onClick() : goToPage(item.link)"
             />
         </ul>
     </nav>

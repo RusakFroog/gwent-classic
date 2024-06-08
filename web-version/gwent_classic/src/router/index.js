@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Navigator from '../components/Navigator.vue';
 
 const routes = [
     { 
@@ -8,7 +7,7 @@ const routes = [
         components: 
         {
             default: () => import('../pages/RegistrationPage.vue'),
-            navigator: () => Navigator
+            navigator: () => import('../components/Navigator.vue')
         }
     },
     { 
@@ -16,7 +15,7 @@ const routes = [
         components: 
         {
             default: () => import('../pages/RegistrationPage.vue'),
-            navigator: () => Navigator
+            navigator: () => import('../components/Navigator.vue')
         }
     },
     { 
@@ -24,7 +23,7 @@ const routes = [
         components: 
         {
             default: () => import('../pages/RegistrationPage.vue'),
-            navigator: () => Navigator
+            navigator: () => import('../components/Navigator.vue')
         }  
     },
     { 
@@ -32,7 +31,7 @@ const routes = [
         components:
         {
             default: () => import('../pages/LoginPage.vue'),
-            navigator: () => Navigator
+            navigator: () => import('../components/Navigator.vue')
         } 
     },
     { 
@@ -41,7 +40,8 @@ const routes = [
         {
             default: () => import('../pages/RegistrationPage.vue'),
         } 
-    },
+    }
+
 ];
 
 const router = createRouter({

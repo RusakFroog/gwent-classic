@@ -52,3 +52,19 @@ export const loginToAccount = async (login, password) => {
         error: response.ok ? null : loginErrors[await response.text()]
     };
 }
+
+export const logoutAccount = async () => {
+    await fetch(`${HTTP_SERVER}/accounts/logout`, {
+        method: 'POST',
+        credentials: 'include'
+    });
+}
+
+export const loggedIn = async () => {
+    const response = await fetch(`${HTTP_SERVER}/accounts/loggedin`, {
+        method: 'GET',
+        credentials: 'include'
+    });
+
+    return response.ok;
+}

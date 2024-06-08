@@ -84,6 +84,8 @@ export default {
                     return this.showError("ERROR: " + result.error);
                 
                 this.goToPage('/home');
+
+                sessionStorage.setItem('new_session', 'true');
             }, 300);
         }
     },

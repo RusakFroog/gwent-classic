@@ -3,6 +3,7 @@ using Application.Services;
 using Core.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -49,11 +50,23 @@ public class AccountsController : ControllerBase
         return Ok("Logged in");
     }
     
+    [Authorize]
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {
         await Response.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        
+
         return Ok("Logged out");
+    }
+
+    /// <summary>
+    /// This route for check if user logged in
+    /// </summary>
+    /// <returns>status "OK" if user logged in otherwise status "Unauthorized"</returns>
+    [Authorize]
+    [HttpGet("loggedin")]
+    public IActionResult LoggedIn()
+    { 
+        return Ok();
     }
 }
