@@ -22,7 +22,7 @@ const routes = [
         path: '/rules', 
         components: 
         {
-            default: () => import('../pages/RegistrationPage.vue'),
+            default: () => import('../pages/LoginPage.vue'),
             navigator: () => import('../components/Navigator.vue')
         }  
     },

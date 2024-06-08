@@ -1,12 +1,13 @@
 <script>
 import NavigatorItem from './NavigatorItem.vue';
-import ProfileModal from "./ProfileModal.vue";
+import ProfileModal from './ProfileModal.vue';
 import { useRouter } from 'vue-router';
 import { loggedIn } from '../services/accounts.js';
 
 export default {
     components: {
-        NavigatorItem
+        NavigatorItem,
+        ProfileModal
     },
 
     methods: {
@@ -31,9 +32,7 @@ export default {
         async checkLoggedIn() {
             if (sessionStorage.getItem("new_session") === "false")
                 return;
-
-            console.log("Check if looged in");
-
+            
             const isLoggedIn = await loggedIn();
     
             if (isLoggedIn) {
@@ -44,8 +43,8 @@ export default {
                     loginItem.link = "/profile";
                   
                     loginItem.onClick = () => {
-                        console.log("on click profile");
-                    };
+                        this.profileShow = !this.profileShow;
+                    }
                 }
             }
             else {
@@ -54,6 +53,8 @@ export default {
                 if (profileItem) {
                     profileItem.title = "LOG IN";
                     profileItem.link = "/login";
+
+                    profileItem.onClick = null;
                 }
             }
 
@@ -76,14 +77,14 @@ export default {
                     findCurrentItem.active = true;
 
                 this.checkLoggedIn();
+
+                this.profileShow = false;
             }
         }
     },
 
     mounted() {
         if (sessionStorage.getItem("logged_in") == "true") {
-            console.log("on mount nav");
-
             const loginItem = this.getItem("/login");
     
             if (loginItem) {
@@ -91,8 +92,8 @@ export default {
                 loginItem.link = "/profile";
 
                 loginItem.onClick = () => {
-                    ProfileModal.showModal();
-                };
+                    this.profileShow = !this.profileShow;
+                }
             }
         }
     },
@@ -105,7 +106,9 @@ export default {
                 { title: "DECK", link: "/deck", right: false, active: false, onClick: null },
                 { title: "RULES", link: "/rules", right: false, active: false, onClick: null },
                 { title: "LOG IN", link: "/login", right: true, active: false, onClick: null }
-            ]
+            ],
+
+            profileShow: false,
         }
     }
 }
@@ -122,10 +125,38 @@ export default {
             />
         </ul>
     </nav>
+    <transition name="fade">
+        <ProfileModal class="fade-in" v-if="profileShow" :nickName="'Nick name'" />
+    </transition>
 </template>
 
 <style scoped>
 * {
     font-family: "Witcher";
+}
+
+.fade-in {
+	opacity: 1;
+	animation-name: fade-in-opacity;
+	animation-iteration-count: 1;
+	animation-timing-function: ease-in-out;
+	animation-duration: 0.3s;
+}
+
+@keyframes fade-in-opacity {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 </style>
