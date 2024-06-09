@@ -17,24 +17,32 @@ public class AccountsService
     /// Create new account with validation
     /// </summary>
     /// <param name="login">string</param>
+    /// <param name="name">string</param>
     /// <param name="email">string</param>
     /// <param name="password">string</param>
     /// <returns>
     /// <para>An error message</para>
     /// - string.Empty mean not errors
     /// </returns>
-    public async Task<string> Create(string login, string email, string password)
+    public async Task<(Account?, string)> Create(string login, string name, string email, string password)
     {
         string error = await _validateAccount(login, email, password);
 
         if (!string.IsNullOrEmpty(error))
-            return error;
-        
-        await _repository.Create(Account.Create(login, email, password, true));
+            return (null, error);
 
-        return error;
+        Account account = Account.Create(login, name, email, password, true);
+        
+        await _repository.Create(account);
+
+        return (account, error);
     }
 
+    public async Task Update(Guid id, string login, string name, string email)
+    {
+        await _repository.Update(id, login, name, email);
+    }
+    
     public async Task<Account?> GetAccountByLogin(string login)
     {
         var accounts = await _repository.GetAll();

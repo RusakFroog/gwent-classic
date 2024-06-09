@@ -7,22 +7,27 @@ namespace Core.Models;
 public class Account
 {
     public const int MAX_LENGTH_LOGIN = 40;
-    
+
     public Guid Id { get; set; }
+    public readonly string Name;
     public readonly string Login;
     public readonly string Email;
     public readonly string Password;
     
-    private Account(string login, string email, string password)
+    private Account(Guid? id, string login, string name, string email, string password)
     {
+        Id = id ?? Guid.NewGuid();
         Login = login;
+        Name = name;
         Email = email;
         Password = password;
     }
 
-    public static Account Create(string login, string email, string password, bool hashPassword = false)
+    public static Account Create(string login, string name, string email, string password, bool hashPassword = false, Guid? id = null)
     {
-        return new Account(login, email, hashPassword ? _getHashedPassword(password) : password);
+        string hashedPassword = hashPassword ? _getHashedPassword(password) : password;
+        
+        return new Account(id, login, name, email, hashedPassword);
     }
 
     public bool VerifyPassword(string password)

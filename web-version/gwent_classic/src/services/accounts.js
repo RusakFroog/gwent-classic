@@ -60,6 +60,19 @@ export const logoutAccount = async () => {
     });
 }
 
+export const updateAccount = async (login) => {
+    const response = await fetch(`${HTTP_SERVER}/accounts/update`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            login
+        }),
+        credentials: 'include'
+    });
+}
+
 export const loggedIn = async () => {
     const response = await fetch(`${HTTP_SERVER}/accounts/loggedin`, {
         method: 'GET',

@@ -1,6 +1,6 @@
 <script>
 import Button from './Button.vue'; 
-import { logoutAccount } from '../services/accounts.js';
+import { logoutAccount, updateAccount } from '../services/accounts.js';
 
 export default {
     name: "ProfileModal",
@@ -22,8 +22,11 @@ export default {
     },
 
     methods: {
-        editProfile() {
+        async editProfile() {
+            if (!this.nickName.match(/^[a-zA-Z0-9_]+$/))
+                return alert("Nickname can only contain 'a-Z', '0-9' and '_'");
 
+            await updateAccount(this.nickName);
         },
 
         async logout() {
@@ -47,7 +50,7 @@ export default {
                 </div>
             </div>
             <h1 class="text-2xl text-center text-[#FFFFFF] mt-[70px]">{{nickName}}</h1>
-            <Button class="button m-auto mt-[40px]" text="EDIT PROFILE" />
+            <Button class="button m-auto mt-[40px]" @click="editProfile()" text="EDIT PROFILE" />
             <Button class="button m-auto mt-[5px]" @click="logout()" text="LOG OUT" />
         </section>
     </section>

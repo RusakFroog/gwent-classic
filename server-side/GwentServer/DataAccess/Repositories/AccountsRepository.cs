@@ -21,7 +21,7 @@ public class AccountsRepository
             .ToListAsync();
 
         var accounts = accountEntities
-            .Select(a => Account.Create(a.Login, a.Email, a.Password))
+            .Select(a => Account.Create(a.Login, a.Name, a.Email, a.Password, false, a.Id))
             .ToList();
 
         return accounts;
@@ -32,8 +32,9 @@ public class AccountsRepository
         var accountEntity = new AccountEntity
         {
             Id = account.Id,
-            Email = account.Email,
             Login = account.Login,
+            Name = account.Name,
+            Email = account.Email,
             Password = account.Password
         };
 
@@ -43,14 +44,25 @@ public class AccountsRepository
         return accountEntity.Id;
     }
 
-    public async Task<Guid> Update(Guid id, string login, string email, string password)
+    public async Task<Guid> Update(Guid id, string? login, string? name, string? email)
+    {
+        await _context.Accounts
+            .Where(a => a.Id == id)
+            .ExecuteUpdateAsync(s => s
+                .SetProperty(a => a.Email, a => string.IsNullOrEmpty(email) ? a.Email : email)
+                .SetProperty(a => a.Name, a => string.IsNullOrEmpty(name) ? a.Email : name)
+                .SetProperty(a => a.Login, a => string.IsNullOrEmpty(login) ? a.Login : login)
+            );
+
+        return id;
+    }
+
+    public async Task<Guid> UpdatePassword(Guid id, string password)
     {
         await _context.Accounts
             .Where(a => a.Id == id)
             .ExecuteUpdateAsync(s => s
                 .SetProperty(a => a.Password, a => password)
-                .SetProperty(a => a.Email, a => email)
-                .SetProperty(a => a.Login, a => login)
             );
 
         return id;

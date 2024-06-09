@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 
 namespace API.Controllers;
 
@@ -23,12 +24,13 @@ public class AccountsController : ControllerBase
     [HttpPost("create")]
     public async Task<IActionResult> Create([FromBody] CreateRequestAccount request)
     {
-        string error = await _accountsService.Create(request.Login, request.Email, request.Password);
+        // By default "name" is login of account
+        var result = await _accountsService.Create(request.Login, request.Login, request.Email, request.Password);
 
-        if (!string.IsNullOrEmpty(error))
-            return Conflict(error);
+        if (!string.IsNullOrEmpty(result.Item2))
+            return Conflict(result.Item2);
 
-        ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, request.Login) }, CookieAuthenticationDefaults.AuthenticationScheme);
+        ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.NameIdentifier, result.Item1!.Id.ToString()) }, CookieAuthenticationDefaults.AuthenticationScheme);
         
         await Response.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
         
@@ -42,8 +44,8 @@ public class AccountsController : ControllerBase
 
         if (account == null || !account.VerifyPassword(request.Password))
             return Conflict("INVALID_DATA");
-        
-        ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, request.Login) }, CookieAuthenticationDefaults.AuthenticationScheme);
+
+        ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.NameIdentifier, account.Id.ToString()) }, CookieAuthenticationDefaults.AuthenticationScheme);
         
         await Response.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
         
@@ -59,6 +61,20 @@ public class AccountsController : ControllerBase
         return Ok("Logged out");
     }
 
+    [Authorize]
+    [HttpPut("update")]
+    public async Task<IActionResult> Update([FromBody] UpdateRequestAccount request)
+    {
+        if (string.IsNullOrEmpty(request.Name) || !Regex.IsMatch(request.Name, @"^[a-zA-Z0-9_]+$"))
+            return Conflict("Only alphanumerics 0-9, a-z, A-Z and _");
+
+        Guid userId = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+        await _accountsService.Update(userId, string.Empty, request.Name, string.Empty);
+        
+        return Ok();
+    }
+    
     /// <summary>
     /// This route for check if user logged in
     /// </summary>
