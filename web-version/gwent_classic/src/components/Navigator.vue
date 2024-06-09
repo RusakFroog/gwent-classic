@@ -126,7 +126,7 @@ export default {
         </ul>
     </nav>
     <transition name="fade">
-        <ProfileModal class="fade-in" v-if="profileShow" :nickName="'Nick name'" />
+        <ProfileModal class="fade-in" v-if="profileShow" :nickNameValue="'Nick name'" />
     </transition>
 </template>
 

@@ -60,17 +60,24 @@ export const logoutAccount = async () => {
     });
 }
 
-export const updateAccount = async (login) => {
+export const updateAccount = async (name) => {
     const response = await fetch(`${HTTP_SERVER}/accounts/update`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            login
+            name,
         }),
         credentials: 'include'
     });
+
+    const error = await response.text();
+    
+    return {
+        response: response,
+        error: error
+    };
 }
 
 export const loggedIn = async () => {

@@ -66,7 +66,10 @@ public class AccountsController : ControllerBase
     public async Task<IActionResult> Update([FromBody] UpdateRequestAccount request)
     {
         if (string.IsNullOrEmpty(request.Name) || !Regex.IsMatch(request.Name, @"^[a-zA-Z0-9_]+$"))
-            return Conflict("Only alphanumerics 0-9, a-z, A-Z and _");
+            return Conflict("Nickname can only contain 'a-Z', '0-9' and '_'");
+
+        if (request.Name.Length > Account.MAX_LENGTH_NAME)
+            return BadRequest("Max. length of nick name: " + Account.MAX_LENGTH_NAME);
 
         Guid userId = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 

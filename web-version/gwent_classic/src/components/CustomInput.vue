@@ -13,6 +13,11 @@ export default {
         type: {
             type: String,
             default: 'text'
+        },
+
+        valueInput: {
+            type: String,
+            default: ''
         }
     },
 
@@ -25,7 +30,7 @@ export default {
     data() {
         return {
             active: false,
-            inputValue: ''
+            inputValue: this.$props.valueInput.toString()
         };
     }
 };

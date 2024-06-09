@@ -1,8 +1,7 @@
 <script>
 import Button from './Button.vue'; 
-import { logoutAccount, updateAccount } from '../services/accounts.js';
 import CustomInput from './CustomInput.vue';
-import { logoutAccount } from '../services/accounts.js';
+import { logoutAccount, updateAccount } from '../services/accounts.js';
 
 export default {
     name: "ProfileModal",
@@ -12,7 +11,7 @@ export default {
     },
 
     props: {
-        nickName: {
+        nickNameValue: {
             type: String,
             required: true
         }
@@ -22,15 +21,44 @@ export default {
         return {
             image: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/ab728018-e315-44d3-88f3-12a0045cc5f3/d8p1wqo-3b4d78e8-db49-4a66-99c1-882a64c82be0.jpg/v1/fit/w_828,h_1148,q_70,strp/geralt_portrait_by_yamaorce_d8p1wqo-414w-2x.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTIwMCIsInBhdGgiOiJcL2ZcL2FiNzI4MDE4LWUzMTUtNDRkMy04OGYzLTEyYTAwNDVjYzVmM1wvZDhwMXdxby0zYjRkNzhlOC1kYjQ5LTRhNjYtOTljMS04ODJhNjRjODJiZTAuanBnIiwid2lkdGgiOiI8PTg2NSJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.W1GcpQf9qlWAP_ivpHfJtdewYa4v9pndidCNdypYP80',
             inputShow: false,
+            nickName: this.$props.nickNameValue.toString(),
+
+            inputs: {
+                inputNickName: null
+            }
         }
     },
 
     methods: {
         async editProfile() {
-            if (!this.nickName.match(/^[a-zA-Z0-9_]+$/))
-                return alert("Nickname can only contain 'a-Z', '0-9' and '_'");
+            // When input is will be hidden
+            if (this.inputShow == true) {
+                const nickName = this.inputs.inputNickName.inputValue;
+                
+                if (this.nickName == nickName) {
+                    this.inputShow = !this.inputShow;
+                    return;
+                }
 
-            await updateAccount(this.nickName);
+                if (!nickName.match(/^[a-zA-Z0-9_]+$/))
+                    return alert("Nickname can only contain 'a-Z', '0-9' and '_'");
+                
+                if (!await this.updateProfile())
+                    return;
+                
+                this.nickName = nickName;
+            }
+            
+            this.inputShow = !this.inputShow;
+        },
+
+        async updateProfile() {
+            const result = await updateAccount(this.nickName);
+
+            if (!result.response.ok)
+                return alert(result.error);
+
+            return true;
         },
 
         async logout() {
@@ -40,6 +68,10 @@ export default {
             
             this.$router.push('/home');
         }
+    },
+
+    mounted() {
+        this.inputs.inputNickName = this.$refs['nick_name_input'];
     }
 }
 </script>
@@ -53,21 +85,28 @@ export default {
                     <img class="rounded-full object-cover mt-[44px] h-[140px] w-[140px] outline-8 outline outline-[#151515]" :src="image">
                 </div>
             </div>
-            <h1 class="text-2xl text-center text-[#FFFFFF] mt-[70px]">{{nickName}}</h1>
-            <Button class="button m-auto mt-[40px]" v-if="!inputShow" @click="editProfile()" text="EDIT PROFILE" />
-            <div class="input-container mt-[20px]" @keyup.enter="updateProfile" v-if="inputShow">
-                <CustomInput class="custom-input " placeholder="nickName" />
-            </div>
+            <!-- NICK NAME -->
+                <h1 v-show="!inputShow" class="text-2xl text-center text-[#FFFFFF] mt-[70px]">{{nickName}}</h1>
+                <CustomInput v-show="inputShow" class="custom-input" placeholder="NICKNAME" type="text" ref="nick_name_input" :valueInput="nickName" />
+            <!-- NICK NAME -->
+            <Button class="button m-auto mt-[35px]" @click="editProfile()" text="EDIT PROFILE" />
             <Button class="button m-auto mt-[5px]" @click="logout()" text="LOG OUT" />
         </section>
     </section>
 </template>
 
 <style scoped>
-.custom-input {
-    margin: auto;
+* :not(h3) {
+    font-family: "Witcher";
 }
 
+.custom-input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 65px;
+    margin-bottom: -13px;
+}
 
 .custom-input :deep(.input-field) {
     width: 210px;
@@ -77,11 +116,7 @@ export default {
     padding-right: 20px;
     padding-bottom: 5px;
     display: flex;
-    justify-content: center;
     align-items: center;
-}
-* :not(h3) {
-    font-family: "Witcher";
 }
 
 .button {
@@ -92,16 +127,5 @@ export default {
 .button :deep(a) {
     font-size: 24px;
     margin-top: 5px;
-}
-
-.inpuShow .button {
-    margin-top: 100px;
-}
-
-.input-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 50px;
 }
 </style>

@@ -30,7 +30,7 @@ public sealed class AccountDbContext : DbContext
         entity.HasKey(a => a.Id);
 
         entity.Property(a => a.Login).HasMaxLength(Account.MAX_LENGTH_LOGIN).IsRequired();
-        entity.Property(a => a.Name).HasMaxLength(Account.MAX_LENGTH_LOGIN).IsRequired();
+        entity.Property(a => a.Name).HasMaxLength(Account.MAX_LENGTH_NAME).IsRequired();
         entity.Property(a => a.Email).IsRequired();
         entity.Property(a => a.Password).IsRequired();
         

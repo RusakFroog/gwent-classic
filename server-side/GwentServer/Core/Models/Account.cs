@@ -7,6 +7,7 @@ namespace Core.Models;
 public class Account
 {
     public const int MAX_LENGTH_LOGIN = 40;
+    public const int MAX_LENGTH_NAME = 20;
 
     public Guid Id { get; set; }
     public readonly string Name;
