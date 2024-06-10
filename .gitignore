@@ -10,3 +10,5 @@ server-side/GwentServer/DataAccess/obj
 server-side/GwentServer/DataAccess/bin
 server-side/GwentServer/Core/bin
 server-side/GwentServer/Application/bin
+server-side/GwentServer/Game/bin
+server-side/GwentServer/Game/obj
