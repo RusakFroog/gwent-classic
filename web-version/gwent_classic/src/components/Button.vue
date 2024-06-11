@@ -16,7 +16,7 @@ export default {
 <style scoped>
 button {
     width: 320px;
-    height: 100px;
+    height: 92px;
     transition: 0.3s;
     cursor: pointer;
     background-image: url('../assets/buttons/frame.svg');
@@ -32,7 +32,7 @@ button a {
     text-decoration: none;
     text-align: center;
     font-size: 36px;
-    margin-bottom: 5px;
+    /* margin-bottom: 5px; */
     line-height: 40px;
     transition: 0.3s ease;
     user-select: none;
