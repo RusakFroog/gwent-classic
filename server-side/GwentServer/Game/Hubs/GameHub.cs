@@ -7,41 +7,67 @@ namespace Game.Hubs;
 [Authorize]
 public class GameHub : Hub
 {
-    /// <summary>
-    /// <para>Key - room ID </para>
-    /// Value - users ID
-    /// </summary>
-    private readonly Dictionary<string, List<string>> _rooms = new Dictionary<string, List<string>>();
-    
-    // public override async Task OnConnectedAsync()
-    // {
-    //     Guid userId = Guid.Parse(Context.User!.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-    //
-    //     Console.WriteLine("[CONNECT] User id: " + userId);
-    //     
-    //     await base.OnConnectedAsync();
-    // }
-    
-    public async Task CreateGame(string roomId)
+    public async Task<bool> CreateRoom(string roomId, string roomName, string password)
     {
-        _rooms.Add(roomId, new List<string>());
+        string userId = Context.User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+
+        if (GameRoom.Rooms.Values.FirstOrDefault(r => r.Name == roomName) != null)
+        {
+            await Clients.Caller.SendAsync("Client.SendError", "Room with this name already created");
+            return false;
+        }
         
-        await JoinToGame(roomId);
+        GameRoom.CreateRoom(roomId, userId, roomName, password);
+        
+        await JoinToRoom(roomId, password);
+
+        return true;
     }
     
-    public async Task JoinToGame(string roomId)
+    public async Task RemoveRoom(string roomId)
     {
-        if (!_rooms.TryGetValue(roomId, out var roomUsers))
-            throw new NullReferenceException($"Room with id: {roomId} wasn't found");
+        if (!GameRoom.Rooms.TryGetValue(roomId, out var gameRoom))
+        {
+            await Clients.Caller.SendAsync("Client.SendError", "Room doesn't exist");
+            return;
+        }
+
+        await gameRoom.DeleteRoom(this);
+    }
+    
+    public async Task<bool> JoinToRoom(string roomId, string password)
+    {
+        GameRoom? gameRoom;
+        
+        if (!GameRoom.Rooms.TryGetValue(roomId, out gameRoom))
+        {
+            gameRoom = GameRoom.Rooms.Values.FirstOrDefault(r => r.Name == roomId);
+            
+            if (gameRoom == null)
+            {
+                await Clients.Caller.SendAsync("Client.SendError", "Room doesn't exist");
+                return false;
+            }
+        }
+        
+        if (!string.IsNullOrEmpty(gameRoom.Password) && gameRoom.Password != password.Trim())
+        {
+            await Clients.Caller.SendAsync("Client.SendError", "Wrong password");
+            return false;
+        }
 
         string userId = Context.User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
 
-        if (roomUsers.Contains(userId))
-            throw new Exception($"{userId} user already contains");
-
-        roomUsers.Add(userId);
-    
-        await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
-        await Clients.Group(roomId).SendAsync("Client.UserJoined", Context.ConnectionId);
+        bool userAdded = await gameRoom.AddUser(userId, this);
+        
+        if (!userAdded)
+        {
+            await Clients.Caller.SendAsync("Client.SendError", "User already in room");
+            return false;
+        }
+        
+        await gameRoom.InvokeEvent("Client.JoinUser", this, userId);
+        
+        return true;
     }
 }
