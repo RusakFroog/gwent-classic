@@ -30,6 +30,7 @@ export default {
 
 <template>
     <div class="music-player flex gap-[25px]">
+        <VolumeSlider />
         <div class="previous" />
         <div  :class="getClass" @click="play()" />
         <div class="next" />
@@ -41,6 +42,8 @@ export default {
     width: 173px;
     height: 47px;
 }
+
+   
 
 .previous:hover {
     background-image: url('../assets/images/music-player/player-previous-hover.svg');
