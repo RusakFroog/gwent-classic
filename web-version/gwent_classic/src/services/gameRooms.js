@@ -21,25 +21,31 @@ const createConnection = async () => {
  * @param {HubConnection} connection
  */
 const configureConnection = (connection) => {
-    connection.on("Client.UserJoined", function (userId) {
-        console.log("New user joined: " + userId);
+    connection.on("Client.JoinUser", (userId) => {
+        console.log("User joined: " + userId);
+    });
+
+    connection.on("Client.SendError", (error) => {
+        alert(error);
+
+        console.error(error);
     });
 }
 
-export const createRoom = async () => {
+export const createRoom = async (roomName, password) => {
     const connection = await createConnection();
 
     const roomId = uuidv4();
+    
+    const result = await connection.invoke("CreateRoom", roomId, roomName, password);
 
-    await connection.invoke("CreateGame", roomId);
-
-    return roomId;
+    return result ? roomId : null;
 }
 
-export const joinRoom = async (roomId) => {
+export const joinRoom = async (roomId, password) => {
     const connection = await createConnection();
 
-    await connection.invoke("JoinToGame", roomId);
+    const result = await connection.invoke("JoinToRoom", roomId, password);
 
-    return connection;
+    return result ? connection : null;
 }
