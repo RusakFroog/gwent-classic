@@ -10,18 +10,11 @@ export default {
         CustomInput
     },
 
-    props: {
-        nickNameValue: {
-            type: String,
-            required: true
-        }
-    },
-
     data() {
         return {
             image: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/ab728018-e315-44d3-88f3-12a0045cc5f3/d8p1wqo-3b4d78e8-db49-4a66-99c1-882a64c82be0.jpg/v1/fit/w_828,h_1148,q_70,strp/geralt_portrait_by_yamaorce_d8p1wqo-414w-2x.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTIwMCIsInBhdGgiOiJcL2ZcL2FiNzI4MDE4LWUzMTUtNDRkMy04OGYzLTEyYTAwNDVjYzVmM1wvZDhwMXdxby0zYjRkNzhlOC1kYjQ5LTRhNjYtOTljMS04ODJhNjRjODJiZTAuanBnIiwid2lkdGgiOiI8PTg2NSJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.W1GcpQf9qlWAP_ivpHfJtdewYa4v9pndidCNdypYP80',
             inputShow: false,
-            nickName: this.$props.nickNameValue.toString(),
+            nickName: "",
 
             inputs: {
                 inputNickName: null
@@ -43,7 +36,7 @@ export default {
                 if (!nickName.match(/^[a-zA-Z0-9_]+$/))
                     return alert("Nickname can only contain 'a-Z', '0-9' and '_'");
                 
-                if (!await this.updateProfile())
+                if (!await this.updateProfile(nickName))
                     return;
                 
                 this.nickName = nickName;
@@ -52,8 +45,8 @@ export default {
             this.inputShow = !this.inputShow;
         },
 
-        async updateProfile() {
-            const result = await updateAccount(this.nickName);
+        async updateProfile(nickName) {
+            const result = await updateAccount(nickName);
 
             if (!result.response.ok)
                 return alert(result.error);
@@ -68,6 +61,13 @@ export default {
             
             this.$router.push('/home');
         }
+    },
+
+    beforeMount() {
+        const cookies = document.cookie.split(";");
+        const nickName = cookies.find(x => x.includes("account_nickname")).split("=")[1];
+
+        this.nickName = nickName;
     },
 
     mounted() {
@@ -86,7 +86,7 @@ export default {
                 </div>
             </div>
             <!-- NICK NAME -->
-                <h1 v-show="!inputShow" class="text-2xl text-center text-[#FFFFFF] mt-[70px]">{{nickName}}</h1>
+                <h1 v-show="!inputShow" :style="nickName.length > 15 ? 'font-size: 20px;' : 'font-size: 24px;'" class="text-center text-[#FFFFFF] mt-[70px] overflow-hidden text-ellipsis">{{nickName}}</h1>
                 <CustomInput v-show="inputShow" class="custom-input" placeholder="NICKNAME" type="text" ref="nick_name_input" :valueInput="nickName" />
             <!-- NICK NAME -->
             <Button class="button m-auto mt-[35px]" @click="editProfile()" text="EDIT PROFILE" />

@@ -6,7 +6,7 @@ const routes = [
         alias: '/home',
         components: 
         {
-            default: () => import('../pages/RoomsPage.vue'),
+            default: () => import('../pages/HomePage.vue'),
             navigator: () => import('../components/Navigator.vue')
         }
     },

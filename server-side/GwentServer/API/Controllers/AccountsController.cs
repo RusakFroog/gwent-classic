@@ -33,6 +33,12 @@ public class AccountsController : ControllerBase
         ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.NameIdentifier, result.Item1!.Id.ToString()) }, CookieAuthenticationDefaults.AuthenticationScheme);
         
         await Response.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+        HttpContext.Response.Cookies.Append("account_nickname", request.Login, new CookieOptions()
+        {
+            HttpOnly = false,
+            MaxAge = TimeSpan.FromDays(600)
+        });
         
         return Created();
     }
@@ -48,7 +54,13 @@ public class AccountsController : ControllerBase
         ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.NameIdentifier, account.Id.ToString()) }, CookieAuthenticationDefaults.AuthenticationScheme);
         
         await Response.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-        
+
+        HttpContext.Response.Cookies.Append("account_nickname", account.Name, new CookieOptions()
+        {
+            HttpOnly = false,
+            MaxAge = TimeSpan.FromDays(600)
+        });
+
         return Ok("Logged in");
     }
     
@@ -72,8 +84,14 @@ public class AccountsController : ControllerBase
             return BadRequest("Max. length of nick name: " + Account.MAX_LENGTH_NAME);
 
         Guid userId = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
+        
         await _accountsService.Update(userId, string.Empty, request.Name, string.Empty);
+
+        HttpContext.Response.Cookies.Append("account_nickname", request.Name, new CookieOptions()
+        {
+            HttpOnly = false,
+            MaxAge = TimeSpan.FromDays(600)
+        });
         
         return Ok();
     }
