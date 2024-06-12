@@ -3,11 +3,13 @@ import NavigatorItem from './NavigatorItem.vue';
 import ProfileModal from './ProfileModal.vue';
 import { useRouter } from 'vue-router';
 import { loggedIn } from '../services/accounts.js';
+import MusicPlayer from './MusicPlayer.vue';
 
 export default {
     components: {
         NavigatorItem,
-        ProfileModal
+        ProfileModal,
+        MusicPlayer
     },
 
     methods: {
@@ -123,6 +125,7 @@ export default {
                 :active="item.active"
                 @click="item.onClick ? item.onClick() : goToPage(item.link)"
             />
+            <MusicPlayer class=" absolute right-0 mr-[300px] mt-[15px]" />
         </ul>
     </nav>
     <transition name="fade">

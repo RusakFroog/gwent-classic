@@ -22,7 +22,7 @@ const routes = [
         path: '/rules', 
         components: 
         {
-            default: () => import('../pages/LoginPage.vue'),
+            default: () => import('../pages/LogInPage.vue'),
             navigator: () => import('../components/Navigator.vue')
         }  
     },
@@ -30,7 +30,7 @@ const routes = [
         path: '/login',
         components:
         {
-            default: () => import('../pages/LoginPage.vue'),
+            default: () => import('../pages/LogInPage.vue'),
             navigator: () => import('../components/Navigator.vue')
         } 
     },
