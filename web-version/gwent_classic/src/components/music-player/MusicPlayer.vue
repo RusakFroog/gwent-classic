@@ -1,6 +1,6 @@
 <script>
 import VolumeSlider from './VolumeSlider.vue';
-import { play, next, previous, setVolume, getCurrentTimecode } from './PlayerMp3';
+import musicPlayer from '../../services/musicPlayer.js';
 
 export default {
     components: {
@@ -10,10 +10,7 @@ export default {
 
     data() {
         return {
-            isVolumeSliderVisible: false,
             isPaused: true,
-            volume: 50,
-            isMuted: false
         }
     },
 
@@ -22,75 +19,50 @@ export default {
             return this.isPaused ? "pause" : "play";
         },
 
-        getVolume() {
-            return this.isMuted ? "mute" : "un-mute";
-        },
+        getTime() {
+            const timeInSeconds = musicPlayer.currentSongTime;
 
-        getVolumeClass() {
-            return this.getVolume;
-        },
+            const minutes = Math.floor(timeInSeconds / 60);
+            const seconds = Math.floor(timeInSeconds % 60);
 
-        getClass() {
-            return this.getPaused;
+            return `${minutes}:${seconds.toString().padStart(2, '0')}`;
         }
     },
 
     methods: {
-        toggleVolumeSlider() {
-            setTimeout(() => {
-                this.isVolumeSliderVisible = !this.isVolumeSliderVisible;
-            }, 100);
-        },
-
-        playPause() {
+        play() {
             this.isPaused = !this.isPaused;
-            play();
-        },
-
-        handleVolumeUpdate(newVolume) {
-            if (newVolume == 0) {
-                this.isMuted = true;
-            } else {
-                this.isMuted = false;
-            }
-
-            this.volume = newVolume;
             
-            setVolume(newVolume);
+            musicPlayer.play();
         },
 
-        eventNext() {
-            next();
+        nextSong() {
+            musicPlayer.nextSong();
+
+            if (this.isPaused === true)
+                this.isPaused = false;
         },
 
-        eventPrevious() {
-            previous();
+        previousSong() {
+            musicPlayer.previousSong();
+            
+            if (this.isPaused === true)
+                this.isPaused = false;
         }
     }
 };
 </script>
 
 <template>
-
     <div class="music-player">
-        <div class="volume">
-            <div :class="getVolumeClass" @mouseenter="toggleVolumeSlider()" v-if="!isVolumeSliderVisible"
-                @mouseleave="toggleVolumeSlider()" />
-            <VolumeSlider @update-volume="handleVolumeUpdate" @mouseleave="toggleVolumeSlider()"
-                v-if="isVolumeSliderVisible" />
-        </div>
-        <div class="previous" @click="eventPrevious()" />
-        <div :class="getClass" @click="playPause()" />
-        <div class="next" @click="eventNext()" />
+        <VolumeSlider />
+        <div class="previous" @click="previousSong()" />
+        <div :class="getPaused" @click="play()" />
+        <div class="next" @click="nextSong()" />
     </div>
 </template>
 
 <style scoped>
-.volume {
-    position: absolute;
-    right: 220px;
-}
-
 .music-player {
     display: flex;
     gap: 25px;
@@ -105,38 +77,12 @@ export default {
     background-image: url('../../assets/images/music-player/player-next-hover.svg');
 }
 
-.pause:hover {
+.play:hover {
     background-image: url('../../assets/images/music-player/player-pause-hover.svg');
 }
 
-.play:hover {
+.pause:hover {
     background-image: url('../../assets/images/music-player/player-play-hover.svg');
-}
-
-.mute {
-    width: 27px;
-    height: 27px;
-    background-image: url('../../assets/images/music-player/volume-none.svg');
-    background-repeat: no-repeat;
-    background-size: contain;
-    cursor: pointer;
-}
-
-.mute:hover {
-    background-image: url('../../assets/images/music-player/volume-none-hover.svg');
-}
-
-.un-mute {
-    width: 27px;
-    height: 27px;
-    background-image: url('../../assets/images/music-player/volume.svg');
-    background-repeat: no-repeat;
-    background-size: contain;
-    cursor: pointer;
-}
-
-.un-mute:hover {
-    background-image: url('../../assets/images/music-player/volume-hover.svg');
 }
 
 .previous {
@@ -149,7 +95,7 @@ export default {
     cursor: pointer;
 }
 
-.pause {
+.play {
     width: 37px;
     height: 37px;
     background-image: url('../../assets/images/music-player/player-pause.svg');
@@ -159,7 +105,7 @@ export default {
     margin-top: -6px;
 }
 
-.play {
+.pause {
     width: 37px;
     height: 37px;
     background-image: url('../../assets/images/music-player/player-play.svg');
