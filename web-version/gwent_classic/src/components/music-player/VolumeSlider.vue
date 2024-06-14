@@ -7,14 +7,13 @@ export default {
     },
 
     mounted() {
-        this.volume = parseFloat(localStorage.getItem('volume')) ?? 50;
+        this.volume = localStorage.getItem('volume') ?? 50;
     },
     
     watch: {
         volume(newVal) {
-            console.log("Volume saved:", newVal);
-
             this.saveVolume();
+            this.$emit('update-volume', newVal);
         }
     },
 
@@ -25,7 +24,6 @@ export default {
     }
 };
 </script>
-
 
 <template>
     <input 
@@ -43,10 +41,8 @@ export default {
 
 <style scoped>
 .slider {
-    /* IF YOU WANT TO MOVE IT UP */
-    /* margin-top: -20px;   */
-    
     border-radius: 3px;
+    margin-top: -20px;
     writing-mode: vertical-lr;
     height: 60px;
     direction: rtl;
@@ -69,7 +65,7 @@ export default {
     -webkit-appearance: none;
     appearance: none;
     border-radius: 3px;
-    width: 15px;
+    width: 25px;
     height: 15px;
     background: var(--thumb-color, #F1D177);
     cursor: pointer;
