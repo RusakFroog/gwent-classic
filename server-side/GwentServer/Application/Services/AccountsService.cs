@@ -57,6 +57,13 @@ public class AccountsService
         return accounts.FirstOrDefault(a => a.Email.ToLower() == email.ToLower());
     }
 
+    public async Task<Account?> GetAccountById(Guid id)
+    {
+        var accounts = await _repository.GetAll();
+        
+        return accounts.FirstOrDefault(a => a.Id == id);
+    }
+
     private async Task<string> _validateAccount(string login, string email, string password)
     {
         if (login.Length < 4 || login.Length > 40)

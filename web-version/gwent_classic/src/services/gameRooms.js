@@ -1,6 +1,8 @@
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { v4 as uuidv4 } from "uuid";
 
+const HTTP_SERVER = 'http://localhost:5187/api';
+
 /**
  * 
  * @returns {HubConnection}
@@ -48,4 +50,19 @@ export const joinRoom = async (roomId, password) => {
     const result = await connection.invoke("JoinToRoom", roomId, password);
 
     return result ? connection : null;
+}
+
+export const getRooms = async (loaded, needLoad) => {
+    const response = await fetch(`${HTTP_SERVER}/rooms/getrooms/?LoadedCount=${loaded}&NeedLoad=${needLoad}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        credentials: 'include'
+    });
+
+    const responseData = await response.json();
+
+    return responseData.rooms;
 }
