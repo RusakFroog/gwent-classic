@@ -15,12 +15,28 @@ class MusicPlayer {
     currentSongTime = 0;
     currentSong = null;
 
+    savedSongTime = localStorage.getItem('currentSongTime');
+    savedSongIndex = localStorage.getItem('currentSongIndex');
+
     constructor() {
         this.#audioPlayer.onended = this.onEndAudio.bind(this);
-        this.#audioPlayer.ontimeupdate = (event) => this.currentSongTime = this.#audioPlayer.currentTime;
+        this.#audioPlayer.ontimeupdate = () => {
+            this.currentSongTime = this.#audioPlayer.currentTime;
+            if (this.currentSongTime > 0) {
+                localStorage.setItem('currentSongTime', this.currentSongTime.toString());
+                console.log(this.currentSongTime);
+            }
+        };
         
-        if (this.currentSong === null)
+        if (this.currentSong === null && this.savedSongIndex === null)
             this.#playSong(0, false);
+
+        else
+            this.currentSongIndex = parseInt(this.savedSongIndex);
+            this.#playSong(this.savedSongIndex, false);
+
+        if (this.savedSongTime !== null)
+            this.setTime(this.savedSongTime);
     }
 
     async play() {        
@@ -36,7 +52,10 @@ class MusicPlayer {
         if (this.currentSongIndex >= playlist.length)
             this.currentSongIndex = 0;
 
+        
         this.#playSong(this.currentSongIndex);
+
+        this.seveCurrentSongIndex();
     }
 
     async previousSong() {
@@ -46,6 +65,8 @@ class MusicPlayer {
             this.currentSongIndex = playlist.length - 1;
 
         this.#playSong(this.currentSongIndex);
+
+        this.seveCurrentSongIndex();
     }
 
     async #playSong(id, play = true) {
@@ -65,7 +86,7 @@ class MusicPlayer {
     }
 
     setVolume(volume) {
-        const v = (volume / 100) * 0.05;
+        const v = (volume / 100);
 
         console.log(v);
         this.#audioPlayer.volume = v;
@@ -80,6 +101,10 @@ class MusicPlayer {
 
     onEndAudio() {
         this.nextSong();
+    }
+
+    seveCurrentSongIndex() {
+        localStorage.setItem('currentSongIndex', this.currentSongIndex.toString());
     }
 }
 

@@ -49,6 +49,13 @@ export default {
             if (this.isPaused === true)
                 this.isPaused = false;
         }
+    },
+
+    mounted() {
+        if (localStorage.getItem('currentSongIndex') != 'undefined' && localStorage.getItem('currentSongTime') != 'undefined') {
+            this.isPaused = false;
+            this.play();
+        }
     }
 };
 </script>
