@@ -15,6 +15,7 @@ builder.Services.AddSignalR();
 builder.Services.AddDbContext<AccountDbContext>();
 
 builder.Services.AddScoped<AccountsService>();
+builder.Services.AddScoped<RoomsService>();
 builder.Services.AddScoped<AccountsRepository>();
 
 builder.Services.AddAuthorization();

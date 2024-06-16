@@ -6,11 +6,11 @@ public class GameRoom
 {
     public static readonly Dictionary<string, GameRoom> Rooms = [];
 
-    public readonly string OwnerId;
     public readonly string Id;
     public readonly string Name;
+    public readonly string OwnerId;
     public readonly string Password;
-    public readonly List<string> Users = [];
+    public readonly List<string> Users = []; 
     
     private GameRoom(string id, string ownerId, string name, string password)
     {

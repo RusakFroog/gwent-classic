@@ -3,6 +3,7 @@ import Button from '../components/Button.vue';
 import GameRow from '../components/home/GameRow.vue';
 import JoiningRoom from '../components/home/JoiningRoom.vue';
 import CreatingRoom from '../components/home/CreatingRoom.vue';
+import { getRooms } from '../services/gameRooms.js';
 
 export default {
     name: "HomePage",
@@ -21,8 +22,36 @@ export default {
         showJoiningRoom() {
             this.joiningRoom.active = !this.joiningRoom.active;
         },
+
+        async loadRooms() {
+            if (this.isLoading) 
+                return;
+        
+            this.isLoading = true;
+            
+            const rooms = await getRooms(this.offset, 20);
+
+            if (rooms.length > 0) {
+                for (const room of rooms) {
+                    this.rooms.push({
+                        id: this.rooms.length + 1,
+                        owner: room.owner,
+                        password: room.password,
+                        name: room.name
+                    });
+                }
+
+                this.offset += rooms.length;
+            }
+
+            this.isLoading = false;
+        },
     },
 
+    async mounted() {
+        await this.loadRooms();
+    },
+    
     data() {
         return {
             creatingRoom: {
@@ -33,14 +62,9 @@ export default {
                 active: false
             },
 
-            rooms: [
-                {
-                    id: 1,
-                    owner: "OWNER_NIGGER",
-                    password: true,
-                    name: "SOSI JAJCA"
-                },
-            ]
+            rooms: [],
+            offset: 0,
+            isLoading: false
         }
     }
 }
@@ -71,6 +95,8 @@ export default {
                         :password="room.password"
                         :roomName="room.name"
                     />
+                    <Button v-if="!isLoading" @click="loadRooms()" class="button-custom-load" text="LOAD MORE" />
+                    <Button v-else class="button-custom-load" text="LOADING..." />
                 </ul>
             </div>
             <!-- END TABLE -->
@@ -100,12 +126,24 @@ export default {
     height: 80px;
 }
 
+.button-custom-load {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    width: 200px;
+    margin-inline: auto;
+    height: 60px;
+}
+
+.button-custom-load :deep(a) {
+    font-size: 26px;
+}
+
 ul {
     -ms-overflow-style: none;
     scrollbar-width: none;
     width: calc(100% - 16px);
     margin-left: 8px;
-    height: 92%;
+    height: calc(71vh - 12%);
     padding-right: 2px;
     padding-left: 2px;
     padding-top: 2px;
