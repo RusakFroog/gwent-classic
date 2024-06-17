@@ -15,28 +15,21 @@ class MusicPlayer {
     currentSongTime = 0;
     currentSong = null;
 
-    savedSongTime = localStorage.getItem('currentSongTime');
-    savedSongIndex = localStorage.getItem('currentSongIndex');
-
     constructor() {
-        this.#audioPlayer.onended = this.onEndAudio.bind(this);
+        this.#audioPlayer.autoplay = true;
+        this.#audioPlayer.onended = this.#onEndAudio.bind(this);
         this.#audioPlayer.ontimeupdate = () => {
             this.currentSongTime = this.#audioPlayer.currentTime;
-            if (this.currentSongTime > 0) {
-                localStorage.setItem('currentSongTime', this.currentSongTime.toString());
-                console.log(this.currentSongTime);
-            }
+
+            localStorage.setItem('currentSongTime', this.currentSongTime);
         };
         
-        if (this.currentSong === null && this.savedSongIndex === null)
-            this.#playSong(0, false);
+        this.currentSongIndex = parseInt(localStorage.getItem('currentSongIndex')) ?? 0;
+        this.currentSongTime = parseInt(localStorage.getItem('currentSongTime')) ?? 0;
 
-        else
-            this.currentSongIndex = parseInt(this.savedSongIndex);
-            this.#playSong(this.savedSongIndex, false);
-
-        if (this.savedSongTime !== null)
-            this.setTime(this.savedSongTime);
+        this.setTime(this.currentSongTime);
+        
+        this.#playSong(this.currentSongIndex, false);
     }
 
     async play() {        
@@ -51,11 +44,10 @@ class MusicPlayer {
 
         if (this.currentSongIndex >= playlist.length)
             this.currentSongIndex = 0;
-
         
         this.#playSong(this.currentSongIndex);
 
-        this.seveCurrentSongIndex();
+        localStorage.setItem('currentSongIndex', this.currentSongIndex);
     }
 
     async previousSong() {
@@ -66,7 +58,7 @@ class MusicPlayer {
 
         this.#playSong(this.currentSongIndex);
 
-        this.seveCurrentSongIndex();
+        localStorage.setItem('currentSongIndex', this.currentSongIndex);
     }
 
     async #playSong(id, play = true) {
@@ -86,10 +78,7 @@ class MusicPlayer {
     }
 
     setVolume(volume) {
-        const v = (volume / 100);
-
-        console.log(v);
-        this.#audioPlayer.volume = v;
+        this.#audioPlayer.volume = volume / 100;
     }
 
     /**
@@ -99,12 +88,8 @@ class MusicPlayer {
         this.#audioPlayer.currentTime = time;
     }
 
-    onEndAudio() {
+    #onEndAudio() {
         this.nextSong();
-    }
-
-    seveCurrentSongIndex() {
-        localStorage.setItem('currentSongIndex', this.currentSongIndex.toString());
     }
 }
 
