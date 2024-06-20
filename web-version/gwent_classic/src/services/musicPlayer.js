@@ -6,6 +6,18 @@ const playlist = [
     {
         title: "Back on the path",
         filePath: "https://dl.dropboxusercontent.com/scl/fi/w0z67ybh2248x4ibotjx0/Back-on-the-Path-Gwent-Tavern.mp3?rlkey=3z4b02r9clwfvl9tj4z2kkudg&st=znxrdy2f&dl=0"
+    },
+    {
+        title: "A Story You Won't Believe",
+        filePath: "https://dl.dropboxusercontent.com/scl/fi/hbi3aqu93pvchuq6a6tan/41.-A-Story-You-Won-t-Believe.mp3?rlkey=o7jo48ostw6peuv1qamxn6e9s&st=oq0v72mu&dl=0"   
+    },
+    {
+        title: "Another round for every one",
+        filePath: "https://dl.dropboxusercontent.com/scl/fi/404ihggjmliol0ojqwik3/Another-Round-Everyone.mp3?rlkey=ncj3rvfvxul1u34cpb5kn4pm8&st=ycrb5yhr&dl=0"
+    },
+    {
+        title: "Gwent Tavern",
+        filePath: "https://dl.dropboxusercontent.com/scl/fi/k5i8ycg8tokiwk4xrfmpo/Witcher-3-GwentTavern-Soundtrack.m4a?rlkey=v0kngz4iudllh9hxvhyzdnbba&st=gt7yr0b2&dl=0"
     }
 ];
 
