@@ -1,6 +1,7 @@
 using API.Contracts.Accounts;
 using Application.Services;
 using Core.Models;
+using DataAccess.DbContexts;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -85,7 +86,7 @@ public class AccountsController : ControllerBase
 
         Guid userId = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
         
-        await _accountsService.Update(userId, string.Empty, request.Name, string.Empty);
+        await _accountsService.Update(userId, string.Empty, request.Name, string.Empty, null);
 
         HttpContext.Response.Cookies.Append("account_nickname", request.Name, new CookieOptions()
         {
@@ -103,7 +104,7 @@ public class AccountsController : ControllerBase
     [Authorize]
     [HttpGet("loggedin")]
     public IActionResult LoggedIn()
-    { 
+    {
         return Ok();
     }
 }

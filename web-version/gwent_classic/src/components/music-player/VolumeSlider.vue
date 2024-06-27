@@ -13,7 +13,7 @@ export default {
     mounted() {
         this.isMuted = localStorage.getItem('isMuted') ? localStorage.getItem('isMuted') == 'true' : false;
 
-        this.volume = parseFloat(localStorage.getItem('volume')) ?? 50;
+        this.volume = localStorage.getItem('volume') ? parseFloat(localStorage.getItem('volume')) : 50;
     },
     
     watch: {

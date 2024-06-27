@@ -1,34 +1,34 @@
-using BCrypt.Net;
-using System.ComponentModel.DataAnnotations.Schema;
+using Core.Models.Game.Decks;
 
 namespace Core.Models;
 
-[Table("accounts")]
 public class Account
 {
     public const int MAX_LENGTH_LOGIN = 40;
     public const int MAX_LENGTH_NAME = 20;
 
-    public Guid Id { get; set; }
+    public readonly Guid Id;
     public readonly string Name;
     public readonly string Login;
     public readonly string Email;
     public readonly string Password;
-    
-    private Account(Guid? id, string login, string name, string email, string password)
+    public readonly List<Deck> Decks;
+
+    private Account(Guid? id, string login, string name, string email, string password, List<Deck>? decks = null)
     {
         Id = id ?? Guid.NewGuid();
         Login = login;
         Name = name;
         Email = email;
         Password = password;
+        Decks = decks ?? [..Deck.Default];
     }
 
-    public static Account Create(string login, string name, string email, string password, bool hashPassword = false, Guid? id = null)
+    public static Account Create(string login, string name, string email, string password, List<Deck>? decks = null, bool hashPassword = false, Guid? id = null)
     {
         string hashedPassword = hashPassword ? _getHashedPassword(password) : password;
         
-        return new Account(id, login, name, email, hashedPassword);
+        return new Account(id, login, name, email, hashedPassword, decks);
     }
 
     public bool VerifyPassword(string password)

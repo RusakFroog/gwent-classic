@@ -36,8 +36,8 @@ class MusicPlayer {
             localStorage.setItem('currentSongTime', this.currentSongTime);
         };
         
-        this.currentSongIndex = parseInt(localStorage.getItem('currentSongIndex')) ?? 0;
-        this.currentSongTime = parseInt(localStorage.getItem('currentSongTime')) ?? 0;
+        this.currentSongIndex = localStorage.getItem('currentSongIndex') ? parseFloat(localStorage.getItem('currentSongIndex')) : 0;
+        this.currentSongTime = localStorage.getItem('currentSongTime') ? parseFloat(localStorage.getItem('currentSongTime')) : 0;
 
         this.setTime(this.currentSongTime);
         

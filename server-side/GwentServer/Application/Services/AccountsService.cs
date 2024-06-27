@@ -1,4 +1,5 @@
 using Core.Models;
+using Core.Models.Game.Decks;
 using DataAccess.Repositories;
 using System.Text.RegularExpressions;
 
@@ -31,16 +32,16 @@ public class AccountsService
         if (!string.IsNullOrEmpty(error))
             return (null, error);
 
-        Account account = Account.Create(login, name, email, password, true);
+        Account account = Account.Create(login, name, email, password, null, true);
         
         await _repository.Create(account);
 
         return (account, error);
     }
 
-    public async Task Update(Guid id, string login, string name, string email)
+    public async Task Update(Guid id, string? login, string? name, string? email, List<Deck>? decks)
     {
-        await _repository.Update(id, login, name, email);
+        await _repository.Update(id, login, name, email, decks);
     }
     
     public async Task<Account?> GetAccountByLogin(string login)

@@ -1,21 +1,26 @@
+using Core.Models.Game.Hubs;
 using Application.Services;
 using DataAccess.DbContexts;
 using DataAccess.Repositories;
-using Game.Hubs;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 builder.Services.AddSignalR();
 
-builder.Services.AddDbContext<AccountDbContext>();
+builder.Services.AddDbContext<AccountDbContext>(optionsBuilder =>
+    optionsBuilder.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))));
+builder.Services.AddDbContext<CardDbContext>(optionsBuilder =>
+    optionsBuilder.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))));
 
 builder.Services.AddScoped<AccountsService>();
 builder.Services.AddScoped<RoomsService>();
+builder.Services.AddScoped<DecksService>();
+builder.Services.AddScoped<CardsRepository>();
 builder.Services.AddScoped<AccountsRepository>();
 
 builder.Services.AddAuthorization();

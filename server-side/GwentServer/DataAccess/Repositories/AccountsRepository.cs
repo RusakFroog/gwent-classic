@@ -1,4 +1,7 @@
+using Core.Enums.Game;
 using Core.Models;
+using Core.Models.Game.Cards;
+using Core.Models.Game.Decks;
 using DataAccess.DbContexts;
 using DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -7,11 +10,13 @@ namespace DataAccess.Repositories;
 
 public class AccountsRepository
 {
-    public readonly AccountDbContext _context;
-    
-    public AccountsRepository(AccountDbContext accountDbContext)
+    private readonly AccountDbContext _context;
+    private readonly CardsRepository _cardsRepository;
+
+    public AccountsRepository(AccountDbContext accountDbContext, CardsRepository cardsRepository)
     {
         _context = accountDbContext;
+        _cardsRepository = cardsRepository;
     }
 
     public async Task<List<Account>> GetAll()
@@ -21,7 +26,7 @@ public class AccountsRepository
             .ToListAsync();
 
         var accounts = accountEntities
-            .Select(a => Account.Create(a.Login, a.Name, a.Email, a.Password, false, a.Id))
+            .Select(_castToAccount)
             .ToList();
 
         return accounts;
@@ -35,7 +40,8 @@ public class AccountsRepository
             Login = account.Login,
             Name = account.Name,
             Email = account.Email,
-            Password = account.Password
+            Password = account.Password,
+            Decks = Deck.ConvertToIds(Deck.Default)
         };
 
         await _context.Accounts.AddAsync(accountEntity);
@@ -44,7 +50,7 @@ public class AccountsRepository
         return accountEntity.Id;
     }
 
-    public async Task<Guid> Update(Guid id, string? login, string? name, string? email)
+    public async Task<Guid> Update(Guid id, string? login, string? name, string? email, IEnumerable<Deck>? decks)
     {
         await _context.Accounts
             .Where(a => a.Id == id)
@@ -52,6 +58,7 @@ public class AccountsRepository
                 .SetProperty(a => a.Email, a => string.IsNullOrEmpty(email) ? a.Email : email)
                 .SetProperty(a => a.Name, a => string.IsNullOrEmpty(name) ? a.Email : name)
                 .SetProperty(a => a.Login, a => string.IsNullOrEmpty(login) ? a.Login : login)
+                .SetProperty(a => a.Decks, a => decks == null ? a.Decks : Deck.ConvertToIds(decks))
             );
 
         return id;
@@ -75,5 +82,31 @@ public class AccountsRepository
             .ExecuteDeleteAsync();
 
         return id;
+    }
+
+    private Account _castToAccount(AccountEntity accountEntity)
+    {
+        List<Deck> decks = [];
+
+        foreach (var deck in accountEntity.Decks)
+        {
+            List<Card> cards = [];
+
+            Fraction fraction = deck.Key;
+            var cardsId = deck.Value;
+
+            foreach (int cardId in cardsId)
+            {
+                Card? card = _cardsRepository.GetById(cardId);
+
+                ArgumentNullException.ThrowIfNull(card);
+
+                cards.Add(card);
+            }
+
+            decks.Add(new Deck(fraction, cards));
+        }
+
+        return Account.Create(accountEntity.Login, accountEntity.Name, accountEntity.Email, accountEntity.Password, decks, false, accountEntity.Id);
     }
 }
