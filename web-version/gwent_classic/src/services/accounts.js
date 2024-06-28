@@ -86,5 +86,11 @@ export const loggedIn = async () => {
         credentials: 'include'
     });
 
+    if (!response.ok) {
+        await logoutAccount();
+
+        console.log("log out");
+    }
+
     return response.ok;
 }

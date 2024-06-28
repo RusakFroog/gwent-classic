@@ -35,6 +35,7 @@ export default {
                 for (const room of rooms) {
                     this.rooms.push({
                         id: this.rooms.length + 1,
+                        uuid: room.uuid,
                         owner: room.owner,
                         password: room.password,
                         name: room.name
@@ -94,6 +95,7 @@ export default {
                         :owner="room.owner"
                         :password="room.password"
                         :roomName="room.name"
+                        :uuid="room.uuid"
                     />
                     <Button v-if="!isLoading" @click="loadRooms()" class="button-custom-load" text="LOAD MORE" />
                     <Button v-else class="button-custom-load" text="LOADING..." />

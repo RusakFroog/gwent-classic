@@ -24,6 +24,11 @@ export default {
             type: String,
             required: true
         },
+
+        uuid: {
+            type: String,
+            required: true
+        },
         
         password: {
             type: Boolean,
@@ -45,7 +50,7 @@ export default {
         async joinToRoom() {
             const roomPassword = this.fields.roomPassword.inputValue ?? "";
 
-            const room = await joinRoom(this.$props.roomName, roomPassword);            
+            const room = await joinRoom(this.$props.uuid, roomPassword);            
 
             if (!room)
                 return;

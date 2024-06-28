@@ -1,55 +1,73 @@
-import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 import { v4 as uuidv4 } from "uuid";
 
 const HTTP_SERVER = 'http://localhost:5187/api';
 
-/**
- * 
- * @returns {HubConnection}
- */
-const createConnection = async () => {
-    const connection = new HubConnectionBuilder()
-        .withUrl("http://localhost:5187/hub/game")
-        .build();
-
-    configureConnection(connection);
-
-    await connection.start();
-
-    return connection;
-}
-
-/**
- * @param {HubConnection} connection
- */
-const configureConnection = (connection) => {
-    connection.on("Client.JoinUser", (userId) => {
-        console.log("User joined: " + userId);
-    });
-
-    connection.on("Client.SendError", (error) => {
-        alert(error);
-
-        console.error(error);
-    });
-}
-
 export const createRoom = async (roomName, password) => {
-    const connection = await createConnection();
-
     const roomId = uuidv4();
-    
-    const result = await connection.invoke("CreateRoom", roomId, roomName, password);
 
-    return result ? roomId : null;
+    const response = await fetch(`${HTTP_SERVER}/rooms/create`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: {
+            id: roomId,
+            name: roomName,
+            password: password
+        },
+        credentials: 'include'
+    });
+
+    if (!response.ok) {
+        alert(await response.text());
+
+        return false;
+    }
+    
+    localStorage.setItem('room_id', roomId);
+
+    return true;
 }
 
 export const joinRoom = async (roomId, password) => {
-    const connection = await createConnection();
+    const response = await fetch(`${HTTP_SERVER}/rooms/join/${roomId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: {
+            password: password
+        },
+        credentials: 'include'
+    });
 
-    const result = await connection.invoke("JoinToRoom", roomId, password);
+    if (!response.ok) {
+        alert(await response.text());
+        
+        return false;
+    }
 
-    return result ? connection : null;
+    localStorage.setItem('room_id', roomId);
+    
+    return true;
+}
+
+export const setReady = async (roomId, state) => {
+    const response = await fetch(`${HTTP_SERVER}/rooms/setready/${roomId}/?state=${state}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: {
+            password: password
+        },
+        credentials: 'include'
+    });
+
+    if (!response.ok)
+        alert(await response.text());
+        
+    return response.ok;
 }
 
 export const getRooms = async (loaded, needLoad) => {

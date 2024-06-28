@@ -19,7 +19,7 @@ public class DecksController : ControllerBase
     }
 
     [Authorize]
-    [HttpPost("update")]
+    [HttpPut("update")]
     public async Task<IActionResult> UpdateDeck([FromBody] UpdateRequestDeck request)
     {
         string userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
