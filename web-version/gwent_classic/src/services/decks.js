@@ -36,6 +36,9 @@ export const getDeck = async (fraction) => {
         credentials: 'include'
     });
 
+    if (response.status === 400)
+        return alert(await response.text());
+
     if (!response.ok)
         return router.push('/login');
 
@@ -70,7 +73,7 @@ export const updateDeck = async (fraction, cardsId) => {
     });
 
     if (!response.ok)
-        return await router.push('/login');
+        return router.push('/login');
 }
 
 const getCard = async (id) => {
