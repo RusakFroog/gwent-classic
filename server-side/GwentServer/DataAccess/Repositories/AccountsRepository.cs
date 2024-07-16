@@ -19,6 +19,13 @@ public class AccountsRepository
         _cardsRepository = cardsRepository;
     }
 
+    public async Task<Account?> GetById(Guid id)
+    {
+        var accountEntity = await _context.Accounts.FindAsync(id);
+
+        return accountEntity == null ? null : _castToAccount(accountEntity);
+    }
+
     public async Task<List<Account>> GetAll()
     {
         var accountEntities = await _context.Accounts

@@ -14,7 +14,7 @@ const routes = [
         path: '/deck', 
         components: 
         {
-            default: () => import('../pages/RegistrationPage.vue'),
+            default: () => import('../pages/DecksPage.vue'),
             navigator: () => import('../components/Navigator.vue')
         }
     },

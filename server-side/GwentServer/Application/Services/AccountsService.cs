@@ -60,9 +60,7 @@ public class AccountsService
 
     public async Task<Account?> GetAccountById(Guid id)
     {
-        var accounts = await _repository.GetAll();
-        
-        return accounts.FirstOrDefault(a => a.Id == id);
+        return await _repository.GetById(id);
     }
 
     private async Task<string> _validateAccount(string login, string email, string password)
