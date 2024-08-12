@@ -1,4 +1,4 @@
-const HTTP_SERVER = 'http://localhost:5187/api';
+import { HTTP_SERVER } from './data/constants.js'; 
 
 const registerErrors = {
     "LENGTH_LOGIN" : "Length of Login must 4-40 characters",

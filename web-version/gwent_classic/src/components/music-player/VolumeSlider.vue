@@ -11,14 +11,16 @@ export default {
     },
 
     mounted() {
-        this.isMuted = localStorage.getItem('isMuted') ? localStorage.getItem('isMuted') == 'true' : false;
-
+        this.isMuted = localStorage.getItem('isMuted') ? localStorage.getItem('isMuted') === 'true' : false;
+        
         this.volume = localStorage.getItem('volume') ? parseFloat(localStorage.getItem('volume')) : 50;
     },
     
     watch: {
         volume() {
-            this.isMuted = this.volume == 0;
+            if (localStorage.getItem('isMuted') == 'false') {
+                this.isMuted = this.volume == 0;
+            }
 
             this.saveVolume();
         }
@@ -47,8 +49,7 @@ export default {
 
         toggleMute() {
             this.isMuted = !this.isMuted;
-
-            musicPlayer.setMuted(this.isMuted);
+            this.volume == 0;
 
             this.saveVolume();
         }
