@@ -5,7 +5,6 @@ import musicPlayer from '../../services/musicPlayer.js';
 export default {
     components: {
         VolumeSlider,
-        
     },
 
     data() {
@@ -17,15 +16,6 @@ export default {
     computed: {
         getPaused() {
             return this.isPaused ? "pause" : "play";
-        },
-
-        getTime() {
-            const timeInSeconds = musicPlayer.currentSongTime;
-
-            const minutes = Math.floor(timeInSeconds / 60);
-            const seconds = Math.floor(timeInSeconds % 60);
-
-            return `${minutes}:${seconds.toString().padStart(2, '0')}`;
         }
     },
 
@@ -62,50 +52,38 @@ export default {
     </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .music-player {
     display: flex;
     gap: 25px;
     width: 180px;
 }
 
-.previous:hover {
-    background-image: url('../../assets/images/music-player/player-previous-hover.svg');
-}
+.next,
+.previous {
+    width: 27px;
+    height: 27px;
+    background-image: url('../../assets/images/music-player/player-next.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    cursor: pointer;
 
-.next:hover {
-    background-image: url('../../assets/images/music-player/player-next-hover.svg');
-}
-
-.play:hover {
-    background-image: url('../../assets/images/music-player/player-pause-hover.svg');
-}
-
-.pause:hover {
-    background-image: url('../../assets/images/music-player/player-play-hover.svg');
+    &:hover {
+        background-image: url('../../assets/images/music-player/player-next-hover.svg');
+    }
 }
 
 .previous {
-    margin-right: 3px;
-    width: 27px;
-    height: 27px;
+    margin-right: 3px;    
     background-image: url('../../assets/images/music-player/player-previous.svg');
-    background-repeat: no-repeat;
-    background-size: contain;
-    cursor: pointer;
+
+    &:hover {
+        background-image: url('../../assets/images/music-player/player-previous-hover.svg');
+    }
 }
 
+.pause, 
 .play {
-    width: 37px;
-    height: 37px;
-    background-image: url('../../assets/images/music-player/player-pause.svg');
-    background-repeat: no-repeat;
-    background-size: contain;
-    cursor: pointer;
-    margin-top: -6px;
-}
-
-.pause {
     width: 37px;
     height: 37px;
     background-image: url('../../assets/images/music-player/player-play.svg');
@@ -113,14 +91,17 @@ export default {
     background-size: contain;
     cursor: pointer;
     margin-top: -6px;
+
+    &:hover {
+        background-image: url('../../assets/images/music-player/player-play-hover.svg');
+    }
 }
 
-.next {
-    width: 27px;
-    height: 27px;
-    background-image: url('../../assets/images/music-player/player-next.svg');
-    background-repeat: no-repeat;
-    background-size: contain;
-    cursor: pointer;
+.play {
+    background-image: url('../../assets/images/music-player/player-pause.svg');
+
+    &:hover {
+        background-image: url('../../assets/images/music-player/player-pause-hover.svg');
+    }
 }
 </style>

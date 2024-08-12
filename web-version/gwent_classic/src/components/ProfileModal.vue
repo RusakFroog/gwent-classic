@@ -104,27 +104,21 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 210px;
+    height: 50px;
+    
+    font-size: 24px;
+
     margin-top: 65px;
     margin-bottom: -13px;
-}
-
-.custom-input :deep(.input-field) {
-    width: 210px;
-    font-size: 24px;
-    height: 50px;
     padding-left: 20px;
     padding-right: 20px;
     padding-bottom: 5px;
-    display: flex;
-    align-items: center;
 }
 
 .button {
     width: 208px;
     height: 60px;
-}
-
-.button :deep(a) {
     font-size: 24px;
     margin-top: 5px;
 }

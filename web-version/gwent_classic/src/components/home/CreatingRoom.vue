@@ -67,9 +67,6 @@ export default {
 <style scoped>
 .custom-input {
     margin-bottom: 20px;
-}
-
-.custom-input :deep(.input-field) {
     width: 280px;
     height: 60px;
     padding-right: 18px;

@@ -1,13 +1,12 @@
 <script>
 import Button from '../components/Button.vue';
 import CustomInput from '../components/CustomInput.vue';
-import { useRouter } from 'vue-router';
+import router from '../router/index.js';
 import { createAccount } from '../services/accounts.js';
 
 export default {
     data() {
         return {
-            router: useRouter(),
             activeInput: 0,
             inputs: [
                 { placeholder: 'LOGIN', type: 'text' },
@@ -33,10 +32,10 @@ export default {
 
     methods: {
         goToPage(link) {
-            if (this.router.currentRoute.path === link)
+            if (router.currentRoute.value === link)
                 return;
 
-            this.router.push(link);
+            router.push(link);
         },
 
         setActiveInput(index) {
@@ -101,13 +100,14 @@ export default {
 </script>
 
 <template>
-    <section
-        class="flex place-items-start h-screen w-screen bg-[#242424] bg-cover bg-no-repeat bg-[url('./assets/images/registration/background.png')]">
-        <div class="panel flex items-center flex-col ms-20 h-screen bg-[#0D0D0D] bg-opacity-65 px-14 relative">
-            <h1 class="font-witcher-alternative mt-6 text-3xl text-[#D2B47C]">Create account</h1>
-            <img class="logo select-none mt-8" src="../assets/images/registration/logo.png" />
+    <section class="registration-section">
+        <div class="panel">
+            <h1>Create account</h1>
+            <img class="logo" src="../assets/images/registration/logo.png" />
             <div class="inputs">
-                <CustomInput v-for="(input, index) in inputs" class="custom-input" 
+                <CustomInput 
+                    v-for="(input, index) in inputs" 
+                    class="custom-input" 
                     @keyup.enter="nextInput"
                     :onFocus="() => setActiveInput(index)" 
                     :ref="'custom_input' + index" 
@@ -116,19 +116,71 @@ export default {
                 />
                 <Button class="sign-up" @click="signUp()" text="SIGN UP" />
             </div>
-            <div class="error flex justify-center items-center w-[310px] mt-[10px]" v-if="error.active">
-                <img class="error-image w-[60px] h-[60px]" src="../assets/images/info.svg" />
-                <text class="text-[#AB1E1E] pl-[10px] text-[18px]">{{ error.text }}</text>
+            <div class="error" v-if="error.active">
+                <img class="error-image" src="../assets/images/info.svg" />
+                <text>{{ error.text }}</text>
             </div>
-            <p class="text-[#8D8D8D] select-none text-[24px] mt-[40px]">Already have an account? <a @click="goToPage('/login')" class="text-[#D2B47C] hover:text-[#FFB500] cursor-pointer">LOG IN</a></p>
+            <p>Already have an account? 
+                <a @click="goToPage('/login')" class="login-link">LOG IN</a>
+            </p>
         </div>
-        <div class="image" />
+        <div class="image"></div>
     </section>
 </template>
 
-<style scoped>
-* :not(h1, h3) {
+<style scoped lang="scss">
+* {
     font-family: "Witcher";
+}
+
+.registration-section {
+    display: flex;
+    align-items: flex-start;
+    height: 100vh;
+    width: 100vw;
+    background-color: #242424;
+    background-image: url('../assets/images/registration/background.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.panel {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-left: 80px;
+    height: 100vh;
+    background-color: rgba(13, 13, 13, 0.65);
+    padding: 0 56px;
+    position: relative;
+
+    h1 {
+        font-family: 'WitcherAlternative';
+        font-size: 1.875rem;
+        color: #D2B47C;
+        margin-top: 24px;
+    }
+
+    .logo {
+        margin-top: 32px;
+        user-select: none;
+    }
+
+    p {
+        color: #8D8D8D;
+        font-size: 1.5rem;
+        margin-top: 40px;
+        user-select: none;
+
+        .login-link {
+            color: #D2B47C;
+            cursor: pointer;
+
+            &:hover {
+                color: #FFB500;
+            }
+        }
+    }
 }
 
 .inputs {
@@ -151,6 +203,24 @@ export default {
     background-image: url('../assets/images/registration/gwent-game.png');
 }
 
+.error {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 310px;
+    margin-top: 10px;
+
+    .error-image {
+        width: 60px;
+        height: 60px;
+    }
+
+    text {
+        color: #AB1E1E;
+        padding-left: 10px;
+        font-size: 18px;
+    }
+}
 
 @media screen and (max-height: 950px) {
     .error {
@@ -185,7 +255,7 @@ export default {
         font-size: 27px;
     }
 
-    .custom-input :deep(.input-field) {
+    .custom-input {
         width: 300px;
         font-size: 25px;
         padding-bottom: 23px;
@@ -194,7 +264,7 @@ export default {
 }
 
 @media screen and (max-height: 770px) {
-    .custom-input :deep(.input-field) {
+    .custom-input {
         width: 230px;
         height: 50px;
         font-size: 20px;

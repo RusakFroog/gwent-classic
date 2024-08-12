@@ -11,3 +11,9 @@
 	font-family: "WitcherAlternative";
 	src: url("./fonts/WitcherAlternative.TTF");
 }
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
