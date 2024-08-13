@@ -1,5 +1,7 @@
-using Core.Models;
+using Core.Models.Account;
 using Core.Models.Game.Decks;
+using DataAccess.Entities;
+using DataAccess.Intrefaces;
 using DataAccess.Repositories;
 using System.Text.RegularExpressions;
 
@@ -7,60 +9,88 @@ namespace Application.Services;
 
 public class AccountsService
 {
-    private readonly AccountsRepository _repository;
-    
-    public AccountsService(AccountsRepository repository)
+    private readonly AccountsRepository _accountRepository;
+    private readonly DecksConvertorService _decksConvertorService;
+    private readonly EncryptService _encryptService;
+
+    public AccountsService(IRepository<AccountEntity> accountRepository, DecksConvertorService decksConvertorService, EncryptService encryptService)
     {
-        _repository = repository;
+        _accountRepository = (AccountsRepository)accountRepository;
+        _decksConvertorService = decksConvertorService;
+        _encryptService = encryptService;
     }
 
-    /// <summary>
-    /// Create new account with validation
-    /// </summary>
-    /// <param name="login">string</param>
-    /// <param name="name">string</param>
-    /// <param name="email">string</param>
-    /// <param name="password">string</param>
-    /// <returns>
-    /// <para>An error message</para>
-    /// - string.Empty mean not errors
-    /// </returns>
-    public async Task<(Account?, string)> Create(string login, string name, string email, string password)
+    public async Task<(Account? Value, string Error)> Create(string login, string name, string email, string password)
     {
         string error = await _validateAccount(login, email, password);
 
         if (!string.IsNullOrEmpty(error))
             return (null, error);
 
-        Account account = Account.Create(login, name, email, password, null, true);
-        
-        await _repository.Create(account);
+        AccountEntity? accountEntity = new AccountEntity()
+        {
+            Login = login,
+            Name = name,
+            Email = email,
+            HashedPassword = _encryptService.GetHashedPassword(password),
+            Decks = _decksConvertorService.ConvertDeckToIds([..Deck.Default]),
+        };
+
+        accountEntity = await _accountRepository.AddAsync(accountEntity);
+
+        if (accountEntity == null)
+        {
+            error = "ACCOUNT_ALREADY_EXIST";
+            return (null, error);
+        }
+
+        Account account = Account.Create(accountEntity.Id, accountEntity.Login, accountEntity.Name, accountEntity.Email, accountEntity.HashedPassword, [..Deck.Default]);
 
         return (account, error);
     }
 
-    public async Task Update(Guid id, string? login, string? name, string? email, List<Deck>? decks)
+    public async Task Update(int id, string login, string name, string email, string password, List<Deck> decks)
     {
-        await _repository.Update(id, login, name, email, decks);
+        AccountEntity accountEntity = new AccountEntity()
+        {
+            Id = id,
+            Login = login,
+            Name = name,
+            Email = email,
+            HashedPassword = password,
+            Decks = _decksConvertorService.ConvertDeckToIds(decks)
+        };
+
+        await _accountRepository.UpdateAsync(accountEntity);
     }
     
     public async Task<Account?> GetAccountByLogin(string login)
     {
-        var accounts = await _repository.GetAll();
-        
-        return accounts.FirstOrDefault(a => a.Login.ToLower() == login.ToLower());
-    } 
+        var entity = await _accountRepository.GetByLoginAsync(login);
+
+        return _castToAccount(entity);
+    }
 
     public async Task<Account?> GetAccountByEmail(string email)
     {
-        var accounts = await _repository.GetAll();
-        
-        return accounts.FirstOrDefault(a => a.Email.ToLower() == email.ToLower());
+        var entity = await _accountRepository.GetByEmailAsync(email);
+
+        return _castToAccount(entity);
     }
 
-    public async Task<Account?> GetAccountById(Guid id)
+    public async Task<Account?> GetAccountById(int id)
     {
-        return await _repository.GetById(id);
+        var entity = await _accountRepository.GetByIdAsync(id);
+
+        return _castToAccount(entity);
+    }
+
+    private Account? _castToAccount(AccountEntity? accountEntity)
+    {
+        if (accountEntity == null)
+            return null;
+
+        return Account.Create(accountEntity.Id, accountEntity.Login, accountEntity.Name, accountEntity.Email, accountEntity.HashedPassword, _decksConvertorService.ConvertIdsToDecks(accountEntity.Decks));
     }
 
     private async Task<string> _validateAccount(string login, string email, string password)

@@ -1,9 +1,11 @@
-using Core.Models.Game.Hubs;
-using Application.Services;
-using DataAccess.DbContexts;
-using DataAccess.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.EntityFrameworkCore;
+using MySqlConnector;
+using Application.Services;
+using Core.Models.Game.Hubs;
+using DataAccess.Repositories;
+using DataAccess.Intrefaces;
+using DataAccess.Databases;
+using DataAccess.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,16 +14,18 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
 
-builder.Services.AddDbContext<AccountDbContext>(optionsBuilder =>
-    optionsBuilder.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))));
-builder.Services.AddDbContext<CardDbContext>(optionsBuilder =>
-    optionsBuilder.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"), ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))));
+builder.Services.AddMySqlDataSource(builder.Configuration.GetConnectionString("DefaultConnection")!);
 
-builder.Services.AddScoped<AccountsService>();
-builder.Services.AddScoped<RoomsService>();
-builder.Services.AddScoped<DecksService>();
-builder.Services.AddScoped<CardsRepository>();
-builder.Services.AddScoped<AccountsRepository>();
+builder.Services.AddSingleton<IDatabase, Database>();
+
+builder.Services.AddSingleton<IRepository<CardEntity>, CardsRepository>();
+builder.Services.AddSingleton<IRepository<AccountEntity>, AccountsRepository>();
+
+builder.Services.AddSingleton<AccountsService>();
+builder.Services.AddSingleton<EncryptService>();
+builder.Services.AddSingleton<RoomsService>();
+builder.Services.AddSingleton<DecksService>();
+builder.Services.AddSingleton<DecksConvertorService>();
 
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -60,12 +64,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
 app.UseCors();
 
 app.UseAuthentication();
@@ -75,4 +73,14 @@ app.MapControllers();
 
 app.MapHub<GameHub>("/hub/game");
 
-app.Run();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+
+    app.Run();
+}
+else
+{
+    app.Run("http://0.0.0.0:80");
+}

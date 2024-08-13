@@ -21,7 +21,7 @@ public class RoomsController : ControllerBase
     [HttpPost("create")]
     public IActionResult CreateRoom([FromBody] CreateRequestRoom request)
     {
-        string userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+        int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
         string error = _roomsService.CreateRoom(request.Id, userId, request.Name, request.Password);
 
@@ -35,7 +35,7 @@ public class RoomsController : ControllerBase
     [HttpPost("join/{id}")]
     public async Task<IActionResult> JoinToRoom(string id, [FromBody] string password)
     {
-        string userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+        int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
         string error = await _roomsService.JoinToRoom(id, userId, password);
         

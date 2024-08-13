@@ -1,4 +1,4 @@
-using Core.Models;
+using Core.Models.Account;
 using Core.Models.Game;
 
 namespace Application.Services;
@@ -7,12 +7,14 @@ public class RoomsService
 {
     private readonly AccountsService _accountsService;
     
+    //TODO: make in return codes, like in account creating
+
     public RoomsService(AccountsService accountsService)
     {
         _accountsService = accountsService;
     }
 
-    public string CreateRoom(string id, string userId, string name, string password)
+    public string CreateRoom(string id, int userId, string name, string password)
     {
         if (Room.GetRoom(name) != null)
             return "Room with this name already exist";
@@ -25,7 +27,7 @@ public class RoomsService
         return string.Empty;
     }
 
-    public async Task<string> JoinToRoom(string id, string userId, string password)
+    public async Task<string> JoinToRoom(string id, int userId, string password)
     {
         Room? room = Room.GetRoom(id);
 
@@ -35,7 +37,10 @@ public class RoomsService
         if (room.Password != password)
             return "Password isn't correct";
 
-        Account account = await _accountsService.GetAccountById(Guid.Parse(userId));
+        Account? account = await _accountsService.GetAccountById(userId);
+
+        if (account == null) 
+            return "TO_LOGIN";
 
         //room.AddPlayer(account);
 
@@ -59,12 +64,12 @@ public class RoomsService
         var rooms = Room.Rooms.Values
             .Skip(countLoaded)
             .Take(count);
-        
-        List<RoomDTO> result = new List<RoomDTO>();
+
+        List<RoomDTO> result = [];
         
         foreach (Room room in rooms)
         {
-            var account = await _accountsService.GetAccountById(Guid.Parse(room.OwnerId));
+            var account = await _accountsService.GetAccountById(room.OwnerId);
 
             result.Add(
                 new RoomDTO(
