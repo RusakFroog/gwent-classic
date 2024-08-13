@@ -1,5 +1,6 @@
 <script>
 import Button from '../components/Button.vue';
+// import CardService from '../services/cards.js';
 
 export default {
     name: "DecksPage",
@@ -28,6 +29,10 @@ export default {
 
             },
         }
+    },
+
+    mounted() {
+    
     }
 }
 </script>
