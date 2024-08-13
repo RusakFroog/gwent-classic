@@ -1,5 +1,6 @@
 <script>
 import Button from '../components/Button.vue';
+// import CardService from '../services/cards.js';
 
 export default {
     name: "DecksPage",
@@ -16,6 +17,10 @@ export default {
             fractionName: "Fraction",
             fractionImage: "assets/images/registration/fraction.png"
         }
+    },
+
+    mounted() {
+    
     }
 }
 </script>
