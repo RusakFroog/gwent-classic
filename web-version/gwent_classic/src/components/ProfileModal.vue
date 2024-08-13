@@ -59,7 +59,7 @@ export default {
 
             sessionStorage.setItem('new_session', 'true');
             
-            this.$router.push('/home');
+            this.$router.push('/login');
         }
     },
 
@@ -101,16 +101,13 @@ export default {
 }
 
 .custom-input {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 210px;
+    width: 208px;
     height: 50px;
     
     font-size: 24px;
 
+    margin-left: 12px;
     margin-top: 65px;
-    margin-bottom: -13px;
     padding-left: 20px;
     padding-right: 20px;
     padding-bottom: 5px;

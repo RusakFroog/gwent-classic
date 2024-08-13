@@ -1,0 +1,41 @@
+networks:
+  default:
+
+services:
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - './nginx.conf:/etc/nginx/nginx.conf'
+      - '/etc/letsencrypt:/etc/letsencrypt'
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - default
+    
+  backend:
+    build:
+      context: ./server-side/GwentServer
+    depends_on:
+      - mysql
+    networks:
+      - default
+
+  frontend:
+    build:
+      context: ./web-version/gwent_classic
+    networks:
+      - default
+
+  mysql:
+    image: mysql:latest
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: gwent_classic
+    networks:
+      - default
