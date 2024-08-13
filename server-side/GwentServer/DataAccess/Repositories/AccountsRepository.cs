@@ -1,119 +1,59 @@
-using Core.Enums.Game;
-using Core.Models;
-using Core.Models.Game.Cards;
-using Core.Models.Game.Decks;
-using DataAccess.DbContexts;
 using DataAccess.Entities;
-using Microsoft.EntityFrameworkCore;
+using DataAccess.Intrefaces;
 
 namespace DataAccess.Repositories;
 
-public class AccountsRepository
+public class AccountsRepository : Repository<AccountEntity>
 {
-    private readonly AccountDbContext _context;
-    private readonly CardsRepository _cardsRepository;
 
-    public AccountsRepository(AccountDbContext accountDbContext, CardsRepository cardsRepository)
+    protected override string _table => "accounts";
+
+    public AccountsRepository(IDatabase database) : base(database)
     {
-        _context = accountDbContext;
-        _cardsRepository = cardsRepository;
-    }
 
-    public async Task<Account?> GetById(Guid id)
-    {
-        var accountEntity = await _context.Accounts.FindAsync(id);
-
-        return accountEntity == null ? null : _castToAccount(accountEntity);
-    }
-
-    public async Task<List<Account>> GetAll()
-    {
-        var accountEntities = await _context.Accounts
-            .AsNoTracking()
-            .ToListAsync();
-
-        var accounts = accountEntities
-            .Select(_castToAccount)
-            .ToList();
-
-        return accounts;
-    }
-
-    public async Task<Guid> Create(Account account)
-    {
-        var accountEntity = new AccountEntity
-        {
-            Id = account.Id,
-            Login = account.Login,
-            Name = account.Name,
-            Email = account.Email,
-            Password = account.Password,
-            Decks = Deck.ConvertToIds(Deck.Default)
-        };
-
-        await _context.Accounts.AddAsync(accountEntity);
-        await _context.SaveChangesAsync();
-
-        return accountEntity.Id;
-    }
-
-    public async Task<Guid> Update(Guid id, string? login, string? name, string? email, IEnumerable<Deck>? decks)
-    {
-        await _context.Accounts
-            .Where(a => a.Id == id)
-            .ExecuteUpdateAsync(s => s
-                .SetProperty(a => a.Email, a => string.IsNullOrEmpty(email) ? a.Email : email)
-                .SetProperty(a => a.Name, a => string.IsNullOrEmpty(name) ? a.Email : name)
-                .SetProperty(a => a.Login, a => string.IsNullOrEmpty(login) ? a.Login : login)
-                .SetProperty(a => a.Decks, a => decks == null ? a.Decks : Deck.ConvertToIds(decks))
-            );
-
-        return id;
-    }
-
-    public async Task<Guid> UpdatePassword(Guid id, string password)
-    {
-        await _context.Accounts
-            .Where(a => a.Id == id)
-            .ExecuteUpdateAsync(s => s
-                .SetProperty(a => a.Password, a => password)
-            );
-
-        return id;
     }
     
-    public async Task<Guid> Delete(Guid id)
+    public async Task<AccountEntity?> GetByLoginAsync(string login)
     {
-        await _context.Accounts
-            .Where(a => a.Id == id)
-            .ExecuteDeleteAsync();
+        var findAccountEntity = _items.Values.FirstOrDefault(a => a.Login == login);
 
-        return id;
+        if (findAccountEntity != null)
+            return findAccountEntity;
+
+        var dataTable = await _database.QueryAsync($"SELECT * FROM `{_table}` WHERE `login`='{login}'");
+
+        if (dataTable == null || dataTable.Rows.Count == 0)
+            return null;
+
+        var item = _getParsedItem(dataTable.Columns, dataTable.Rows[0]);
+
+        if (item == null)
+            return null;
+
+        _items.Add(item.Id, item);
+
+        return item;
     }
 
-    private Account _castToAccount(AccountEntity accountEntity)
+    public async Task<AccountEntity?> GetByEmailAsync(string email)
     {
-        List<Deck> decks = [];
+        var findAccountEntity = _items.Values.FirstOrDefault(a => a.Email == email);
 
-        foreach (var deck in accountEntity.Decks)
-        {
-            List<Card> cards = [];
+        if (findAccountEntity != null)
+            return findAccountEntity;
 
-            Fraction fraction = deck.Key;
-            var cardsId = deck.Value;
+        var dataTable = await _database.QueryAsync($"SELECT * FROM `{_table}` WHERE `email` = '{email}'");
 
-            foreach (int cardId in cardsId)
-            {
-                Card? card = _cardsRepository.GetById(cardId);
+        if (dataTable == null || dataTable.Rows.Count == 0)
+            return null;
 
-                ArgumentNullException.ThrowIfNull(card);
+        var item = _getParsedItem(dataTable.Columns, dataTable.Rows[0]);
 
-                cards.Add(card);
-            }
+        if (item == null)
+            return null;
 
-            decks.Add(new Deck(fraction, cards));
-        }
+        _items.Add(item.Id, item);
 
-        return Account.Create(accountEntity.Login, accountEntity.Name, accountEntity.Email, accountEntity.Password, decks, false, accountEntity.Id);
+        return item;
     }
 }

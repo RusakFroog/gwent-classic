@@ -2,32 +2,32 @@
 using Core.Models.Game.Cards;
 using Core.Models.Game.Cards.Special;
 using Core.Models.Game.Cards.Weather;
-using DataAccess.DbContexts;
 using DataAccess.Entities;
+using DataAccess.Intrefaces;
 
 namespace DataAccess.Repositories;
 
-public class CardsRepository
+public class CardsRepository : Repository<CardEntity>
 {
-    private readonly CardDbContext _context;
-    private readonly Dictionary<int, Card> _cards;
-    
-    public CardsRepository(CardDbContext cardDbContext)
-    {
-        _context = cardDbContext;
-        _cards = _getCards();
+    protected override string _table => "cards";
 
-        _add(new HornCard());
-        _add(new DecoyCard());
-        _add(new FogCard());
-        _add(new FrostCard());
-        _add(new RainCard());
-        _add(new SkelligeStormCard());
+    private readonly Dictionary<int, Card> _loadedCards;
+    
+    public CardsRepository(IDatabase database) : base(database)
+    {
+        _loadedCards = _getCards().Result;
+
+        _addLoaded(Card.CreateCard<HornCard>(0));
+        _addLoaded(Card.CreateCard<DecoyCard>(1));
+        _addLoaded(Card.CreateCard<FogCard>(2));
+        _addLoaded(Card.CreateCard<FrostCard>(3));
+        _addLoaded(Card.CreateCard<RainCard>(4));
+        _addLoaded(Card.CreateCard<SkelligeStormCard>(5));
     }
 
-    public Card GetById(int id)
+    public Card GetCardById(int id)
     {
-        _cards.TryGetValue(id, out Card? value);
+        _loadedCards.TryGetValue(id, out Card? value);
 
         ArgumentNullException.ThrowIfNull(value, $"Card with id {id} was not found");
 
@@ -36,17 +36,17 @@ public class CardsRepository
 
     public int GetIdByCard<T>() where T : Card
     {
-        return _cards.FirstOrDefault(x => x.Value is T).Key;
+        return _loadedCards.FirstOrDefault(x => x.Value is T).Key;
     }
 
-    private void _add(Card card)
+    private void _addLoaded(Card card)
     {
-        _cards.Add(_cards.Count, card);
+        _loadedCards.Add(_loadedCards.Count, card);
     }
 
-    private Dictionary<int, Card> _getCards()
+    private async Task<Dictionary<int, Card>> _getCards()
     {
-        Dictionary<int, Card> result = new();
+        Dictionary<int, Card> result = [];
 
         Fraction[] fractions = [Fraction.None, Fraction.Nilfgaardian, Fraction.Skellige, Fraction.Monsters, Fraction.Scoiatael, Fraction.NorthenRealms];
         
@@ -56,7 +56,9 @@ public class CardsRepository
         {
             Console.WriteLine("Loading deck for " + fraction + "...");
 
-            foreach (var card in _getDeckByFraction(fraction))
+            var deck = await _getDeckByFraction(fraction);
+
+            foreach (var card in deck)
                 result.Add(card.Id, Card.CreateCard(card.Id, card.Name, (sbyte)card.Strength, card.Fraction, card.FieldLines, card.CanBeTaken, card.HornBoost, card.WeatherImmunity));
         }
 
@@ -65,8 +67,23 @@ public class CardsRepository
         return result;
     }
 
-    private IEnumerable<CardEntity> _getDeckByFraction(Fraction fraction)
+    private async Task<IEnumerable<CardEntity>> _getDeckByFraction(Fraction fraction)
     {
-        return _context.Cards.Where(x => x.Fraction == fraction);
+        var dataTable = await _database.QueryAsync($"SELECT * FROM `{_table}` WHERE `fraction` = '{fraction}'");
+
+        if (dataTable == null || dataTable.Rows.Count == 0)
+            return [];
+
+        List<CardEntity> result = [];
+
+        foreach (System.Data.DataRow row in dataTable.Rows)
+        {
+            var item = _getParsedItem(dataTable.Columns, row);
+
+            if (item != null)
+                result.Add(item);
+        }
+
+        return result;
     }
 }

@@ -12,6 +12,20 @@ export default {
         MusicPlayer
     },
 
+    data() {
+        return {
+            router: useRouter(),
+            items: [
+                { title: "HOME", link: "/home", right: false, active: false, onClick: null },
+                { title: "DECK", link: "/deck", right: false, active: false, onClick: null },
+                { title: "RULES", link: "/rules", right: false, active: false, onClick: null },
+                { title: "LOG IN", link: "/login", right: true, active: false, onClick: null }
+            ],
+
+            profileShow: false,
+        }
+    },
+
     methods: {
         goToPage(link) {
             if (this.router.currentRoute.path === link)
@@ -48,8 +62,7 @@ export default {
                         this.profileShow = !this.profileShow;
                     }
                 }
-            }
-            else {
+            } else {
                 const profileItem = this.getItem("/profile");
     
                 if (profileItem) {
@@ -98,20 +111,6 @@ export default {
                 }
             }
         }
-    },
-
-    data() {
-        return {
-            router: useRouter(),
-            items: [
-                { title: "HOME", link: "/home", right: false, active: false, onClick: null },
-                { title: "DECK", link: "/deck", right: false, active: false, onClick: null },
-                { title: "RULES", link: "/rules", right: false, active: false, onClick: null },
-                { title: "LOG IN", link: "/login", right: true, active: false, onClick: null }
-            ],
-
-            profileShow: false,
-        }
     }
 }
 </script>
@@ -156,10 +155,10 @@ export default {
 }
 
 .fade-enter-active, .fade-leave-active {
-  transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease;
 }
 
 .fade-enter, .fade-leave-to {
-  opacity: 0;
+    opacity: 0;
 }
 </style>

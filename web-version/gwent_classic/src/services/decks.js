@@ -1,14 +1,5 @@
 import router from '../router/index.js';
-
-const HTTP_SERVER = 'http://localhost:5187/api';
-
-export const FRACTIONS = {
-    Monsters: "Monsters",
-    Nilfgaardian: "Nilfgaardian",
-    NorthenRealms: "NorthenRealms",
-    Scoiatael: "Scoiatael",
-    Skellige: "Skellige",
-};
+import { HTTP_SERVER, FRACTIONS } from './data/constants.js'; 
 
 const getFractionId = (fraction) => {
     switch (fraction) {

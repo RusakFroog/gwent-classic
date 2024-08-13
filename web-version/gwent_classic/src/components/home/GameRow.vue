@@ -97,9 +97,6 @@ export default {
 <style scoped>
 .custom-input {
     margin-bottom: 20px;
-}
-
-.custom-input :deep(.input-field) {
     width: 280px;
     height: 60px;
     padding-right: 18px;
@@ -118,11 +115,8 @@ export default {
     margin-right: 8px;
     width: 130px;
     height: 38px;
-    margin-top: 2px;
-}
-
-.button-join :deep(a) {
     font-size: 26px;
+    margin-top: 2px;
     margin-bottom: 0px;
 }
 </style>

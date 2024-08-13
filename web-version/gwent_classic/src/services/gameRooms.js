@@ -1,6 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-
-const HTTP_SERVER = 'http://localhost:5187/api';
+import { HTTP_SERVER } from './data/constants.js'; 
 
 export const createRoom = async (roomName, password) => {
     const roomId = uuidv4();

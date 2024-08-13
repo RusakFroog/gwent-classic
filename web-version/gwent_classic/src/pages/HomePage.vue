@@ -132,11 +132,8 @@ export default {
     margin-top: 30px;
     margin-bottom: 10px;
     width: 200px;
-    margin-inline: auto;
     height: 60px;
-}
-
-.button-custom-load :deep(a) {
+    margin-inline: auto;
     font-size: 26px;
 }
 

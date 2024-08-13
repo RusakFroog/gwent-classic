@@ -1,13 +1,12 @@
 <script>
 import Button from '../components/Button.vue';
 import CustomInput from '../components/CustomInput.vue';
-import { useRouter } from 'vue-router';
+import router from '../router/index.js';
 import { loginToAccount } from '../services/accounts.js';
 
 export default {
     data() {
         return {
-            router: useRouter(),
             activeInput: 0,
             inputs: [
                 { placeholder: 'LOGIN', type: 'text' },
@@ -31,10 +30,10 @@ export default {
 
     methods: {
         goToPage(link) {
-            if (this.router.currentRoute.path === link)
+            if (router.currentRoute.value === link)
                 return;
 
-            this.router.push(link);
+            router.push(link);
         },
 
         setActiveInput(index) {
@@ -97,13 +96,14 @@ export default {
 </script>
 
 <template>
-    <section
-        class="flex place-items-start h-[calc(100vh-90px)] w-screen bg-[#242424] bg-cover bg-no-repeat bg-[url('./assets/images/registration/background.png')]">
-        <div class="panel flex items-center flex-col ms-20 h-full bg-[#0D0D0D] bg-opacity-65 px-14 relative">
-            <h1 class="font-witcher-alternative mt-6 text-3xl text-[#D2B47C]">Log in to account</h1>
-            <img class="logo select-none mt-8" src="../assets/images/registration/logo.png" />
+    <section class="login-section">
+        <div class="panel">
+            <h1>Log in to account</h1>
+            <img class="logo" src="../assets/images/registration/logo.png" />
             <div class="inputs">
-                <CustomInput v-for="(input, index) in inputs" class="custom-input"
+                <CustomInput 
+                    v-for="(input, index) in inputs" 
+                    class="custom-input"
                     @keyup.enter="nextInput"
                     :onFocus="() => setActiveInput(index)"
                     :ref="'custom_input' + index"
@@ -112,19 +112,71 @@ export default {
                 />
                 <Button class="log-in" @click="login()" text="LOG IN" />
             </div>
-            <div class="error flex justify-start items-center w-[310px] mt-[10px]" v-if="error.active">
-                <img class="error-image w-[60px] h-[60px]" src="../assets/images/info.svg" />
-                <text class="text-[#AB1E1E] pl-[10px] text-[18px]">{{ error.text }}</text>
+            <div class="error" v-if="error.active">
+                <img class="error-image" src="../assets/images/info.svg" />
+                <text>{{ error.text }}</text>
             </div>
-            <p class="text-[#8D8D8D] select-none text-[24px] mt-[40px]">Don't have an account? <a @click="goToPage('/register')" class="text-[#D2B47C] hover:text-[#FFB500] cursor-pointer">SIGN UP</a></p>
+            <p>Don't have an account? 
+                <a @click="goToPage('/register')" class="signup-link">SIGN UP</a>
+            </p>
         </div>
-        <div class="image h-full" />
+        <div class="image"></div>
     </section>
 </template>
 
-<style scoped>
-* :not(h1, h3) {
+<style scoped lang="scss">
+* {
     font-family: "Witcher";
+}
+
+.login-section {
+    display: flex;
+    align-items: start;
+    height: calc(100vh - 90px);
+    width: 100vw;
+    background-color: #242424;
+    background-image: url('../assets/images/registration/background.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.panel {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-left: 80px;
+    height: 100%;
+    background-color: rgba(13, 13, 13, 0.65);
+    padding: 0 56px;
+    position: relative;
+
+    h1 {
+        font-family: 'WitcherAlternative';
+        font-size: 1.875rem;
+        color: #D2B47C;
+        margin-top: 24px;
+    }
+
+    .logo {
+        margin-top: 32px;
+        user-select: none;
+    }
+
+    p {
+        color: #8D8D8D;
+        font-size: 1.5rem;
+        margin-top: 40px;
+        user-select: none;
+
+        .signup-link {
+            color: #D2B47C;
+            cursor: pointer;
+
+            &:hover {
+                color: #FFB500;
+            }
+        }
+    }
 }
 
 .inputs {
@@ -141,18 +193,33 @@ export default {
 
 .image {
     flex-grow: 1;
+    background-image: url('../assets/images/registration/gwent-game.png');
     background-repeat: no-repeat;
     background-size: cover;
-    background-image: url('../assets/images/registration/gwent-game.png');
+}
+
+.error {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 310px;
+    margin-top: 10px;
+
+    .error-image {
+        width: 60px;
+        height: 60px;
+    }
+
+    text {
+        color: #AB1E1E;
+        padding-left: 10px;
+        font-size: 18px;
+    }
 }
 
 @media screen and (max-height: 1020px) {
     .log-in {
         margin-top: 0px;
-    }
-
-    .error {
-        margin-top: 10px;
     }
 
     .inputs {
@@ -163,7 +230,6 @@ export default {
 @media screen and (max-height: 865px) {
     .error {
         max-width: 300px;
-
     }
 
     .error text {
@@ -194,7 +260,7 @@ export default {
         font-size: 27px;
     }
 
-    .custom-input :deep(.input-field) {
+    .custom-input {
         width: 300px;
         font-size: 25px;
         padding-bottom: 23px;

@@ -1,5 +1,7 @@
 <script>
 export default {
+    name: "Button",
+
     props: {
         text: {
             type: String,
@@ -10,41 +12,35 @@ export default {
 </script>
 
 <template>
-    <button><a>{{ text }}</a></button>
+    <button type="button">{{ text }}</button>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+$transition-duration: 0.3s;
+
 button {
-    width: 320px;
-    height: 92px;
-    transition: 0.3s;
-    cursor: pointer;
-    background-image: url('../assets/buttons/frame.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
     display: flex;
     align-items: center;
     justify-content: center;
-}
+    width: 320px;
+    height: 92px;
 
-button a {
+    background-image: url('../assets/buttons/frame.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    
+    font-size: 36px;
     color: #D2B47C;
     text-decoration: none;
     text-align: center;
-    font-size: 36px;
-    /* margin-bottom: 5px; */
     line-height: 40px;
-    transition: 0.3s ease;
+
     user-select: none;
-}
+    transition: background-image $transition-duration ease, color $transition-duration ease;
 
-button:hover {
-    transition: 0.3s;
-    background-image: url('../assets/buttons/frame-hover.svg');
-}
-
-button:hover a {
-    transition: 0.3s;
-    color: black;
+    &:hover {
+        background-image: url('../assets/buttons/frame-hover.svg');
+        color: black;
+    }
 }
 </style>

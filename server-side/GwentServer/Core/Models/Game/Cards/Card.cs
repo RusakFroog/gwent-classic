@@ -41,4 +41,12 @@ public class Card
     {
         return new Card(id, name, strength, fraction, fields, canBeTaken, hornBoost, weatherImmunity);
     }
+
+    public static T CreateCard<T>(int id) where T : Card
+    {
+        var card = Activator.CreateInstance<T>();
+        card.Id = id;
+
+        return card;
+    }
 }

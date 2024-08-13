@@ -9,6 +9,7 @@ public class Deck
 {
     public readonly static IReadOnlyList<Deck> Default = 
     [
+        new Deck(Fraction.None, []),
         new Deck(Fraction.Monsters, []),
         new Deck(Fraction.Nilfgaardian, []),
         new Deck(Fraction.NorthenRealms, []),
@@ -23,20 +24,5 @@ public class Deck
     {
         Fraction = fraction;
         Cards = cards;
-    }
-
-    public static Dictionary<Fraction, List<int>> ConvertToIds(IEnumerable<Deck> decks)
-    {
-        Dictionary<Fraction, List<int>> result = [];
-
-        foreach (var deck in decks)
-        {
-            if (result.ContainsKey(deck.Fraction))
-                result[deck.Fraction].AddRange(deck.Cards.Select(x => x.Id));
-            else
-                result.Add(deck.Fraction, deck.Cards.Select(x => x.Id).ToList());
-        }
-
-        return result;
     }
 }

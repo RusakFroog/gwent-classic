@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using Application.Services;
 using Core.Enums.Game;
 using API.Contracts.Decks;
+using Application.Services;
 
 namespace API.Controllers;
 
@@ -22,7 +22,7 @@ public class DecksController : ControllerBase
     [HttpPut("update")]
     public async Task<IActionResult> UpdateDeck([FromBody] UpdateRequestDeck request)
     {
-        string userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+        int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
         string error = await _decksService.UpdateDeck(userId, request.DeckDTO);
 
@@ -36,13 +36,16 @@ public class DecksController : ControllerBase
     [HttpGet("get/{fraction}")]
     public async Task<IActionResult> GetDecks(string fraction)
     {
-        string userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+        int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
         if (!Enum.TryParse<Fraction>(fraction, true, out var fractionParsed))
             return BadRequest("Invalid fraction");
 
-        var deck = await _decksService.GetDeckByFraction(userId, fractionParsed);
+        var result = await _decksService.GetDeckByFraction(userId, fractionParsed);
 
-        return Ok(new GetResponseDeck(deck));
+        if (!string.IsNullOrEmpty(result.Error))
+            return BadRequest(result.Error);
+
+        return Ok(new GetResponseDeck(result.Value!));
     }
 }

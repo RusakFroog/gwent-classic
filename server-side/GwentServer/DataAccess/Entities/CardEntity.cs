@@ -1,12 +1,9 @@
 ﻿using Core.Enums.Game;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataAccess.Entities;
 
-[Table("cards")]
-public class CardEntity
+public sealed class CardEntity : EntityBase
 {
-    public int Id { get; set; }
     public int Strength { get; set; }
     public string Name { get; set; } = string.Empty;
     public Fraction Fraction { get; set; } = Fraction.None;

@@ -1,7 +1,6 @@
 using API.Contracts.Accounts;
 using Application.Services;
-using Core.Models;
-using DataAccess.DbContexts;
+using Core.Models.Account;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -15,33 +14,43 @@ namespace API.Controllers;
 [Route("api/[controller]")]
 public class AccountsController : ControllerBase
 {
+    private readonly EncryptService _encryptService;
     private readonly AccountsService _accountsService;
 
-    public AccountsController(AccountsService accountsService)
+    public AccountsController(AccountsService accountsService, EncryptService encryptService)
     {
+        _encryptService = encryptService;
         _accountsService = accountsService;
     }
     
     [HttpPost("create")]
     public async Task<IActionResult> Create([FromBody] CreateRequestAccount request)
     {
-        // By default "name" is login of account
-        var result = await _accountsService.Create(request.Login, request.Login, request.Email, request.Password);
-
-        if (!string.IsNullOrEmpty(result.Item2))
-            return Conflict(result.Item2);
-
-        ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.NameIdentifier, result.Item1!.Id.ToString()) }, CookieAuthenticationDefaults.AuthenticationScheme);
-        
-        await Response.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-
-        HttpContext.Response.Cookies.Append("account_nickname", request.Login, new CookieOptions()
+        try
         {
-            HttpOnly = false,
-            MaxAge = TimeSpan.FromDays(600)
-        });
+            // By default "name" is login of account
+            var result = await _accountsService.Create(request.Login, request.Login, request.Email, request.Password);
+
+            if (!string.IsNullOrEmpty(result.Error) || result.Value == null)
+                return Conflict(result.Error);
+
+            ClaimsIdentity claimsIdentity = new ClaimsIdentity([new Claim(ClaimTypes.NameIdentifier, result.Value.Id.ToString())], CookieAuthenticationDefaults.AuthenticationScheme);
         
-        return Created();
+            await Response.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+            HttpContext.Response.Cookies.Append("account_nickname", request.Login, new CookieOptions()
+            {
+                HttpOnly = false,
+                MaxAge = TimeSpan.FromDays(600)
+            });
+        
+            return Created();
+        }
+        catch (Exception ex)
+        {
+            await Console.Out.WriteLineAsync(ex.ToString());
+            return BadRequest(ex.ToString());
+        }
     }
     
     [HttpPost("login")]
@@ -49,10 +58,10 @@ public class AccountsController : ControllerBase
     {
         Account? account = await _accountsService.GetAccountByLogin(request.Login);
 
-        if (account == null || !account.VerifyPassword(request.Password))
+        if (account == null || !_encryptService.VerifyPassword(request.Password, account.HashedPassword))
             return Conflict("INVALID_DATA");
 
-        ClaimsIdentity claimsIdentity = new ClaimsIdentity(new[] { new Claim(ClaimTypes.NameIdentifier, account.Id.ToString()) }, CookieAuthenticationDefaults.AuthenticationScheme);
+        ClaimsIdentity claimsIdentity = new ClaimsIdentity([new Claim(ClaimTypes.NameIdentifier, account.Id.ToString())], CookieAuthenticationDefaults.AuthenticationScheme);
         
         await Response.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
@@ -84,9 +93,14 @@ public class AccountsController : ControllerBase
         if (request.Name.Length > Account.MAX_LENGTH_NAME)
             return BadRequest("Max. length of nick name: " + Account.MAX_LENGTH_NAME);
 
-        Guid userId = Guid.Parse(HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-        
-        await _accountsService.Update(userId, string.Empty, request.Name, string.Empty, null);
+        int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+        var account = await _accountsService.GetAccountById(userId);
+
+        if (account == null)
+            return BadRequest("NO_ACCOUNT_WITH_ID");
+
+        await _accountsService.Update(account.Id, account.Login, request.Name, account.Email, account.HashedPassword, account.Decks);
 
         HttpContext.Response.Cookies.Append("account_nickname", request.Name, new CookieOptions()
         {
@@ -103,8 +117,12 @@ public class AccountsController : ControllerBase
     /// <returns>status "OK" if user logged in otherwise status "Unauthorized"</returns>
     [Authorize]
     [HttpGet("loggedin")]
-    public IActionResult LoggedIn()
+    public async Task<IActionResult> LoggedIn()
     {
-        return Ok();
+        int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+        var account = await _accountsService.GetAccountById(userId);
+
+        return account == null ? Unauthorized() : Ok();
     }
 }

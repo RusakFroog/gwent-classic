@@ -1,50 +1,46 @@
 ﻿using Core.Enums.Game;
-using Core.Models.Game.Cards;
 using Core.Models.Game.Decks;
+using DataAccess.Entities;
+using DataAccess.Intrefaces;
 using DataAccess.Repositories;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Application.Services;
 
 public class DecksService
 {
-    private readonly AccountsService _accountsService;
     private readonly CardsRepository _cardsRepository;
+    private readonly AccountsService _accountsService;
 
-    public DecksService(CardsRepository cardsRepository, AccountsService accountsService)
+    public DecksService(IRepository<CardEntity> cardsRepository, AccountsService accountsService)
     {
-        _cardsRepository = cardsRepository;
+        _cardsRepository = (CardsRepository)cardsRepository;
         _accountsService = accountsService;
     }
 
-    public async Task<DeckDTO> GetDeckByFraction(string userId, Fraction fraction)
+    public async Task<(DeckDTO? Value, string Error)> GetDeckByFraction(int userId, Fraction fraction)
     {
-        var account = await _accountsService.GetAccountById(Guid.Parse(userId));
-
-        ArgumentNullException.ThrowIfNull(account, "Account not found");
-
-        return new DeckDTO(fraction, account.Decks
-            .FirstOrDefault(d => d.Fraction == fraction)!.Cards
-            .Select(c => c.Id));
-    }
-
-    public async Task<string> UpdateDeck(string userId, DeckDTO deck)
-    {
-        string error = string.Empty;
-
-        var account = await _accountsService.GetAccountById(Guid.Parse(userId));
+        var account = await _accountsService.GetAccountById(userId);
 
         if (account == null)
-        {
-            error = "Account was not found";
-            return error;
-        }
+            return (null, "NO_ACCOUNT_WITH_ID");
+
+        return (new DeckDTO(fraction, account.Decks.FirstOrDefault(d => d.Fraction == fraction)!.Cards.Select(c => c.Id)), string.Empty);
+    }
+
+    public async Task<string> UpdateDeck(int userId, DeckDTO deck)
+    {
+        var account = await _accountsService.GetAccountById(userId);
+
+        if (account == null)
+            return "NO_ACCOUNT_WITH_ID";
 
         Deck foundDeck = account.Decks.FirstOrDefault(d => d.Fraction == deck.Fraction)!;
         foundDeck.Cards.Clear();
-        foundDeck.Cards.AddRange(deck.CardIds.Select(_cardsRepository.GetById));
+        foundDeck.Cards.AddRange(deck.CardIds.Select(_cardsRepository.GetCardById));
 
-        await _accountsService.Update(account.Id, null, null, null, account.Decks);
+        await _accountsService.Update(account.Id, account.Login, account.Name, account.Email, account.HashedPassword, account.Decks);
 
-        return error;
+        return string.Empty;
     }
 }

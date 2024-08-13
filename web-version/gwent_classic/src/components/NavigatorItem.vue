@@ -26,7 +26,7 @@ export default {
             return this.active ? "active" : "";
         },
 
-        getStyles() {
+        getValues() {
             return [this.getFloat, this.isActive];
         }
     }
@@ -34,13 +34,13 @@ export default {
 </script>
 
 <template>
-    <li :class="getStyles">
+    <li :class="getValues">
         <a>{{ title }}</a>
     </li>
 </template>
 
 
-<style scoped>
+<style scoped lang="scss">
 li {
     transition: 0.3s;
     margin-top: 8px;
@@ -51,43 +51,43 @@ li {
     background-repeat: no-repeat;
     width: 200px;
     height: 56px;
+
+    a {
+        display: block;
+        color: #D2B47C;
+        text-decoration: none;
+        text-align: center;
+        font-size: 36px;
+        line-height: 40px;
+        transition: 0.3s ease;
+        margin-top: 8px;
+        user-select: none;
+    }
+
+    &:hover {
+        transition: 0.3s;
+        background-image: url('../assets/buttons/frame-hover.svg');
+
+        a {
+            transition: 0.3s;
+            color: black;
+        }
+    }
 }
 
 .active {
     margin-top: 0px;
     background-image: url('../assets/buttons/selected-frame.svg');
     height: 100px;
-}
 
-.active a {
-    margin-top: 15px;
-    color: black;
-}
+    a {
+        margin-top: 15px;
+        color: black;
+    }
 
-li a {
-    display: block;
-    color: #D2B47C;
-    text-decoration: none;
-    text-align: center;
-    font-size: 36px;
-    line-height: 40px;
-    transition: 0.3s ease;
-    margin-top: 8px;
-    user-select: none;
-}
-
-li:hover {
-    transition: 0.3s;
-    background-image: url('../assets/buttons/frame-hover.svg');
-}
-
-.active:hover {
-    margin-top: 0px;
-    background-image: url('../assets/buttons/selected-frame.svg');
-}
-
-li:hover a {
-    transition: 0.3s;
-    color: black;
+    &:hover {
+        margin-top: 0px;
+        background-image: url('../assets/buttons/selected-frame.svg');
+    }
 }
 </style>

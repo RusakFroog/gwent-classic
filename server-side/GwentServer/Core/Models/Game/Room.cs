@@ -6,19 +6,19 @@ public record RoomDTO(string? Owner, bool Password, string Name, string Uuid);
 
 public class Room
 {
-    public static Dictionary<string, Room> Rooms = new Dictionary<string, Room>();
+    public static Dictionary<string, Room> Rooms = [];
 
     public readonly string Id;
     public readonly string Name;
     public readonly string Password;
-    public readonly string OwnerId;
+    public readonly int OwnerId;
     
     private PlayerReadiness _playerReadiness { get; set; } = new PlayerReadiness(false, false);
 
     private Player? _firstPlayer { get; set; }
     private Player? _secondPlayer { get; set; }
     
-    public Room(string uuid, string ownerUserId, string name, string password)
+    public Room(string uuid, int ownerUserId, string name, string password)
     {
         Id = uuid;
         Name = name;
