@@ -1,9 +1,8 @@
 ﻿using Core.Enums.Game;
-using Core.Models.Game.Decks;
+using Core.Models.Game;
 using DataAccess.Entities;
-using DataAccess.Intrefaces;
+using DataAccess.Interfaces;
 using DataAccess.Repositories;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Application.Services;
 

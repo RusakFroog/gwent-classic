@@ -1,5 +1,6 @@
-﻿using DataAccess.Entities;
-using DataAccess.Intrefaces;
+﻿using DataAccess.Databases;
+using DataAccess.Entities;
+using DataAccess.Interfaces;
 using MySqlConnector;
 using Newtonsoft.Json;
 using System.Collections;
@@ -10,11 +11,11 @@ public abstract class Repository<T> : IRepository<T> where T : EntityBase
 {
     protected abstract string _table { get; }
 
-    protected readonly IDatabase _database;
+    protected readonly MySqlDbContext _database;
 
     protected readonly Dictionary<int, T> _items = [];
 
-    public Repository(IDatabase database)
+    public Repository(MySqlDbContext database)
     {
         _database = database;
     }

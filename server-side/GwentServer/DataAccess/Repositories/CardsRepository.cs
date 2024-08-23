@@ -2,8 +2,8 @@
 using Core.Models.Game.Cards;
 using Core.Models.Game.Cards.Special;
 using Core.Models.Game.Cards.Weather;
+using DataAccess.Databases;
 using DataAccess.Entities;
-using DataAccess.Intrefaces;
 
 namespace DataAccess.Repositories;
 
@@ -13,7 +13,7 @@ public class CardsRepository : Repository<CardEntity>
 
     private readonly Dictionary<int, Card> _loadedCards;
     
-    public CardsRepository(IDatabase database) : base(database)
+    public CardsRepository(MySqlDbContext database) : base(database)
     {
         _loadedCards = _getCards().Result;
 

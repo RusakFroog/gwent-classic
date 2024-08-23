@@ -1,4 +1,4 @@
-using Core.Models.Game.Players;
+using Core.ValueObjects;
 
 namespace Core.Models.Game;
 
@@ -6,14 +6,14 @@ public record RoomDTO(string? Owner, bool Password, string Name, string Uuid);
 
 public class Room
 {
-    public static Dictionary<string, Room> Rooms = [];
+    public static readonly Dictionary<string, Room> Rooms = [];
 
     public readonly string Id;
     public readonly string Name;
     public readonly string Password;
     public readonly int OwnerId;
     
-    private PlayerReadiness _playerReadiness { get; set; } = new PlayerReadiness(false, false);
+    private readonly PlayerReadiness _playerReadiness = new PlayerReadiness(false, false);
 
     private Player? _firstPlayer { get; set; }
     private Player? _secondPlayer { get; set; }

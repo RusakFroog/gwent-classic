@@ -1,5 +1,3 @@
-using Core.Models.Game.Players;
-
 namespace Core.Models.Game;
 
 public class Game

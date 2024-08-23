@@ -7,24 +7,20 @@ public class RoomsService
 {
     private readonly AccountsService _accountsService;
     
-    //TODO: make in return codes, like in account creating
-
     public RoomsService(AccountsService accountsService)
     {
         _accountsService = accountsService;
     }
 
-    public string CreateRoom(string id, int userId, string name, string password)
+    public (Room? Room, string Error) CreateRoom(string id, int userId, string name, string password)
     {
         if (Room.GetRoom(name) != null)
-            return "Room with this name already exist";
+            return new(null, "Room with this name already exist");
 
         if (Room.Rooms.Values.FirstOrDefault(r => r.OwnerId == userId) != null)
-            return "You already have created room";
+            return new(null, "You already have created room");
         
-        new Room(id, userId, name, password);
-
-        return string.Empty;
+        return new(new Room(id, userId, name, password), string.Empty);
     }
 
     public async Task<string> JoinToRoom(string id, int userId, string password)
@@ -71,9 +67,12 @@ public class RoomsService
         {
             var account = await _accountsService.GetAccountById(room.OwnerId);
 
+            if (account == null) 
+                continue;
+
             result.Add(
                 new RoomDTO(
-                    account?.Name, 
+                    account.Name,
                     !string.IsNullOrEmpty(room.Password), 
                     room.Name, 
                     room.Id

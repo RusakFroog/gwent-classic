@@ -1,7 +1,7 @@
 using Core.Models.Account;
-using Core.Models.Game.Decks;
+using Core.Models.Game;
 using DataAccess.Entities;
-using DataAccess.Intrefaces;
+using DataAccess.Interfaces;
 using DataAccess.Repositories;
 using System.Text.RegularExpressions;
 

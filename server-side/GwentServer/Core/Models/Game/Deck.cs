@@ -1,13 +1,13 @@
 using Core.Enums.Game;
 using Core.Models.Game.Cards;
 
-namespace Core.Models.Game.Decks;
+namespace Core.Models.Game;
 
 public record DeckDTO(Fraction Fraction, IEnumerable<int> CardIds);
 
 public class Deck
 {
-    public readonly static IReadOnlyList<Deck> Default = 
+    public readonly static IReadOnlyList<Deck> Default =
     [
         new Deck(Fraction.None, []),
         new Deck(Fraction.Monsters, []),

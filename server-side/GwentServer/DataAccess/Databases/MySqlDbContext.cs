@@ -1,14 +1,14 @@
-﻿using DataAccess.Intrefaces;
-using MySqlConnector;
+﻿using MySqlConnector;
 using System.Data;
 
 namespace DataAccess.Databases;
 
-public sealed class Database : IDatabase
+public sealed class MySqlDbContext
 {
     private readonly MySqlConnection _dbConnection;
 
-    public Database(MySqlConnection connection)
+    // MySqlConnection connection getting from DI
+    public MySqlDbContext(MySqlConnection connection)
     {
         _dbConnection = connection;
 

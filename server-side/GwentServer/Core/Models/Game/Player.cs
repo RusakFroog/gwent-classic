@@ -1,7 +1,7 @@
 using Core.Enums.Game;
 using Core.Models.Game.Cards;
 
-namespace Core.Models.Game.Players;
+namespace Core.Models.Game;
 
 public class Player
 {
@@ -12,14 +12,14 @@ public class Player
     public readonly List<Card> PoolCards = [];
     public readonly List<Card> ReleasedCards = [];
     public readonly Fraction Fraction;
-    
+
     public Player(string userId, Fraction fraction, List<Card> cardsPool)
     {
         UserId = userId;
         Fraction = fraction;
         PoolCards = cardsPool;
     }
-    
+
     public void DistributeCards()
     {
         Random random = new Random();
@@ -29,7 +29,7 @@ public class Player
             int randomIndex = random.Next(0, PoolCards.Count);
 
             Card card = PoolCards[randomIndex];
-            
+
             PoolCards.RemoveAt(randomIndex);
             HandCards.Add(card);
         }

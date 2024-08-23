@@ -1,14 +1,13 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using MySqlConnector;
 using Application.Services;
-using Core.Models.Game.Hubs;
 using DataAccess.Repositories;
-using DataAccess.Intrefaces;
+using DataAccess.Interfaces;
 using DataAccess.Databases;
 using DataAccess.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
-
+ 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -16,7 +15,7 @@ builder.Services.AddSignalR();
 
 builder.Services.AddMySqlDataSource(builder.Configuration.GetConnectionString("DefaultConnection")!);
 
-builder.Services.AddSingleton<IDatabase, Database>();
+builder.Services.AddSingleton<MySqlDbContext>();
 
 builder.Services.AddSingleton<IRepository<CardEntity>, CardsRepository>();
 builder.Services.AddSingleton<IRepository<AccountEntity>, AccountsRepository>();
@@ -70,8 +69,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.MapHub<GameHub>("/hub/game");
 
 if (app.Environment.IsDevelopment())
 {

@@ -23,10 +23,10 @@ public class RoomsController : ControllerBase
     {
         int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-        string error = _roomsService.CreateRoom(request.Id, userId, request.Name, request.Password);
+        var result = _roomsService.CreateRoom(request.Id, userId, request.Name, request.Password);
 
-        if (!string.IsNullOrEmpty(error))
-            return BadRequest(error);
+        if (!string.IsNullOrEmpty(result.Error))
+            return BadRequest(result.Error);
         
         return Ok();
     }

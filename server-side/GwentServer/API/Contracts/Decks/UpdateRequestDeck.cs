@@ -1,4 +1,4 @@
-﻿using Core.Models.Game.Decks;
+﻿using Core.Models.Game;
 
 namespace API.Contracts.Decks;
 

@@ -1,8 +1,8 @@
 ﻿using Core.Enums.Game;
+using Core.Models.Game;
 using Core.Models.Game.Cards;
-using Core.Models.Game.Decks;
 using DataAccess.Entities;
-using DataAccess.Intrefaces;
+using DataAccess.Interfaces;
 using DataAccess.Repositories;
 namespace Application.Services;
 

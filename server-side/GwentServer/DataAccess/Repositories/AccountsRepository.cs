@@ -1,5 +1,5 @@
+using DataAccess.Databases;
 using DataAccess.Entities;
-using DataAccess.Intrefaces;
 
 namespace DataAccess.Repositories;
 
@@ -8,7 +8,7 @@ public class AccountsRepository : Repository<AccountEntity>
 
     protected override string _table => "accounts";
 
-    public AccountsRepository(IDatabase database) : base(database)
+    public AccountsRepository(MySqlDbContext database) : base(database)
     {
 
     }

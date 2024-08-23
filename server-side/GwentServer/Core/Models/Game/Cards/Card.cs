@@ -2,8 +2,6 @@
 
 namespace Core.Models.Game.Cards;
 
-public record CardDTO(int Id, sbyte Strength);
-
 public class Card
 {
     public int Id { get; private set; }
