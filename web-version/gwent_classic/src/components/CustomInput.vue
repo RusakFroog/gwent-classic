@@ -37,16 +37,14 @@ export default {
 </script>
 
 <template>
-    <!-- <div> -->
-        <input 
-            class="input-field" 
-            ref="input" 
-            :placeholder="placeholder" 
-            :type="type" 
-            @focus="onFocus" 
-            v-model="inputValue" 
-        /> 
-    <!-- </div> -->
+    <input 
+        class="input-field" 
+        ref="input" 
+        :placeholder="placeholder" 
+        :type="type" 
+        @focus="onFocus" 
+        v-model="inputValue" 
+    /> 
 </template>
 
 <style scoped lang="scss">
@@ -56,7 +54,7 @@ export default {
     width: 400px;
     height: 88px;
     
-    background: url('../assets/images/registration/input.svg');
+    background: url('../assets/inputs/input.svg');
     background-repeat: no-repeat;
     background-size: contain;
     outline: none;
@@ -68,7 +66,7 @@ export default {
     transition: 0.3s;
 
     &:focus {
-        background-image: url(../assets/images/registration/selected-input.svg);
+        background-image: url('../assets/inputs/selected-input.svg');
     }
 
     &::placeholder {

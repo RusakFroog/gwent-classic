@@ -38,7 +38,7 @@ const routes = [
         path: '/register',
         components: 
         {
-            default: () => import('../pages/RegistrationPage.vue'),
+            default: () => import('../pages/SignUpPage.vue'),
         } 
     }
 

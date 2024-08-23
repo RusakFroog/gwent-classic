@@ -1,20 +1,18 @@
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
 
 class GameSession {
-    #connection;
-
     /**
      * 
      * @param {import("@microsoft/signalr").HubConnection} connection 
      */
     constructor(connection) {
-        this.#connection = connection;
+        this.connection = connection;
 
         this.roomId = localStorage.getItem('room_id');
     }
 
     setReady() {
-        this.#connection.invoke("SetReady");
+        this.connection.invoke("SetReady");
     }
 }
 
