@@ -19,11 +19,11 @@ public class RoomsController : ControllerBase
 
     [Authorize]
     [HttpPost("create")]
-    public IActionResult CreateRoom([FromBody] CreateRequestRoom request)
+    public async Task<IActionResult> CreateRoom([FromBody] CreateRequestRoom request)
     {
         int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-        var result = _roomsService.CreateRoom(request.Id, userId, request.Name, request.Password);
+        var result = await _roomsService.CreateRoom(request.Id, userId, request.Name, request.Password);
 
         if (!string.IsNullOrEmpty(result.Error))
             return BadRequest(result.Error);
@@ -33,23 +33,23 @@ public class RoomsController : ControllerBase
 
     [Authorize]
     [HttpPost("join/{id}")]
-    public async Task<IActionResult> JoinToRoom(string id, [FromBody] string password)
+    public async Task<IActionResult> JoinToRoom(string id, [FromBody] JoinRequestRoom request)
     {
         int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-        string error = await _roomsService.JoinToRoom(id, userId, password);
+        string error = await _roomsService.JoinToRoom(id, userId, request.Password);
         
         if (!string.IsNullOrEmpty(error))
             return BadRequest(error);
 
         return Ok();
     }
-
+    
     [Authorize]
     [HttpPost("setready/{id}")]
     public IActionResult SetReady(string id, [FromQuery] bool state)
     {
-        string userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
+        int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
         string error = _roomsService.SetReady(id, userId, state);
         
@@ -60,9 +60,9 @@ public class RoomsController : ControllerBase
     }
 
     [HttpGet("getrooms")]
-    public async Task<IActionResult> GetRooms([FromQuery] GetRequestRoom request)
+    public IActionResult GetRooms([FromQuery] GetRequestRoom request)
     {
-        var rooms = await _roomsService.GetRoomsChunk(request.LoadedCount, request.NeedLoad);
+        var rooms = _roomsService.GetRoomsChunk(request.LoadedCount, request.NeedLoad);
         
         return Ok(new GetResponseRoom(rooms));
     }

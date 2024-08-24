@@ -12,15 +12,22 @@ public class RoomsService
         _accountsService = accountsService;
     }
 
-    public (Room? Room, string Error) CreateRoom(string id, int userId, string name, string password)
+    public async Task<(Room? Room, string Error)> CreateRoom(string id, int userId, string name, string password)
     {
         if (Room.GetRoom(name) != null)
-            return new(null, "Room with this name already exist");
+            return new(null, "ROOM_NAME_ALREADY_EXISTS");
 
         if (Room.Rooms.Values.FirstOrDefault(r => r.OwnerId == userId) != null)
-            return new(null, "You already have created room");
-        
-        return new(new Room(id, userId, name, password), string.Empty);
+            return new(null, "YOU_ALREADY_HAVE_ROOM");
+
+        Account? account = await _accountsService.GetAccountById(userId);
+
+        if (account == null)
+            return new(null, "UNAUTHORIZED");
+
+        Room room = new Room(id, userId, account.Name, name, password);
+
+        return new(room, string.Empty);
     }
 
     public async Task<string> JoinToRoom(string id, int userId, string password)
@@ -28,10 +35,10 @@ public class RoomsService
         Room? room = Room.GetRoom(id);
 
         if (room == null)
-            return "Room doesn't exist";
+            return "ROOM_DOES_NOT_EXIST";
 
         if (room.Password != password)
-            return "Password isn't correct";
+            return "INCORRECT_PASSWORD";
 
         Account? account = await _accountsService.GetAccountById(userId);
 
@@ -43,12 +50,12 @@ public class RoomsService
         return string.Empty;
     }
 
-    public string SetReady(string id, string userId, bool state)
+    public string SetReady(string id, int userId, bool state)
     {
         Room? room = Room.GetRoom(id);
         
         if (room == null)
-            return "Room doesn't exist";
+            return "ROOM_DOES_NOT_EXIST";
         
         //room.SetReady();
 
@@ -65,14 +72,9 @@ public class RoomsService
         
         foreach (Room room in rooms)
         {
-            var account = await _accountsService.GetAccountById(room.OwnerId);
-
-            if (account == null) 
-                continue;
-
             result.Add(
                 new RoomDTO(
-                    account.Name,
+                    room.OwnerName,
                     !string.IsNullOrEmpty(room.Password), 
                     room.Name, 
                     room.Id

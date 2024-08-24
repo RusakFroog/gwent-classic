@@ -1,5 +1,8 @@
 import { HTTP_SERVER } from './data/constants.js'; 
 import { ACCOUNT_ERRORS } from '../services/data/translates.js';
+import Translation from '../services/translation.js';
+
+const TranslationService = new Translation(ACCOUNT_ERRORS);
 
 export const createAccount = async (login, email, password) => {
     const response = await fetch(`${HTTP_SERVER}/accounts/create`, {
@@ -17,7 +20,7 @@ export const createAccount = async (login, email, password) => {
 
     return {
         response: response,
-        error: response.ok ? null : ACCOUNT_ERRORS[await response.text()]
+        error: response.ok ? null : TranslationService.getTranslate(await response.text())
     };
 }
 
@@ -36,7 +39,7 @@ export const loginToAccount = async (login, password) => {
 
     return {
         response: response,
-        error: response.ok ? null : ACCOUNT_ERRORS[await response.text()]
+        error: response.ok ? null : TranslationService.getTranslate(await response.text())
     };
 }
 

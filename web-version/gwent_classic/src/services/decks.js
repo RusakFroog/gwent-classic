@@ -1,5 +1,9 @@
 import router from '../router/index.js';
-import { HTTP_SERVER, FRACTIONS } from './data/constants.js'; 
+import { HTTP_SERVER, FRACTIONS } from './data/constants.js';
+import { DECK_ERRORS } from './data/translates.js';
+import Translation from '../services/translation.js';
+
+const TranslationService = new Translation(DECK_ERRORS);
 
 const getFractionId = (fraction) => {
     switch (fraction) {
@@ -27,15 +31,19 @@ export const getDeck = async (fraction) => {
         credentials: 'include'
     });
 
-    if (response.status === 400)
-        return alert(await response.text());
+    if (response.status === 400) {
+        const errorText = TranslationService.getTranslate(await response.text());
+        
+        alert(errorText);
+
+        return false;
+    }
 
     if (!response.ok)
         return router.push('/login');
 
-    const cardsId = await response.json();
-
     const cards = [];
+    const cardsId = await response.json();
 
     for (const cardId of cardsId) {
         cards.push(await getCard(cardId));

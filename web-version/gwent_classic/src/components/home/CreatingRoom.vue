@@ -32,12 +32,13 @@ export default {
 
             const roomId = await createRoom(roomName, roomPassword);
 
-            if (!roomId)
-                return;
-
-            this.closeModal();
-            
-            alert("Room created: " + roomId);
+            if (roomId) {
+                this.closeModal();
+                
+                localStorage.setItem('room_id', roomId);
+                
+                alert("Room created: " + roomId);
+            }
         },
 
         closeModal() {

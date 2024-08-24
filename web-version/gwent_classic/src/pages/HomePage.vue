@@ -67,6 +67,12 @@ export default {
             offset: 0,
             isLoading: false
         }
+    },
+
+    computed: {
+        getRooms() {
+            return this.rooms;
+        }
     }
 }
 </script>
@@ -90,7 +96,7 @@ export default {
 
                 <!-- GAME ROWS -->
                 <ul>
-                    <GameRow v-for="room in rooms" 
+                    <GameRow v-for="room in getRooms" 
                         :id="room.id"
                         :owner="room.owner"
                         :password="room.password"

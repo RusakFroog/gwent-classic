@@ -30,12 +30,13 @@ export default {
             const roomName = this.fields.roomName.inputValue;
             const roomPassword = this.fields.roomPassword.inputValue;
 
-            const room = await joinRoom(roomName, roomPassword);            
+            const roomId = await joinRoom(roomName, roomPassword);            
 
-            if (!room)
-                return;
-
-            this.closeModal();
+            if (roomId) {
+                localStorage.setItem('room_id', roomId);
+    
+                this.closeModal();
+            }
         },
 
         closeModal() {

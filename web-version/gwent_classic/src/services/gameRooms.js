@@ -1,5 +1,9 @@
 import { v4 as uuidv4 } from "uuid";
 import { HTTP_SERVER } from './data/constants.js'; 
+import { ROOM_ERRORS } from '../services/data/translates.js';
+import Translation from '../services/translation.js';
+
+const TranslationService = new Translation(ROOM_ERRORS);
 
 export const createRoom = async (roomName, password) => {
     const roomId = uuidv4();
@@ -9,23 +13,23 @@ export const createRoom = async (roomName, password) => {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: {
+        body: JSON.stringify({
             id: roomId,
             name: roomName,
             password: password
-        },
+        }),
         credentials: 'include'
     });
 
     if (!response.ok) {
-        alert(await response.text());
+        const errorText = TranslationService.getTranslate(await response.text());
+
+        alert(errorText);
 
         return false;
     }
     
-    localStorage.setItem('room_id', roomId);
-
-    return true;
+    return roomId;
 }
 
 export const joinRoom = async (roomId, password) => {
@@ -34,21 +38,21 @@ export const joinRoom = async (roomId, password) => {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: {
+        body:  JSON.stringify({
             password: password
-        },
+        }),
         credentials: 'include'
     });
 
     if (!response.ok) {
-        alert(await response.text());
-        
+        const errorText = TranslationService.getTranslate(await response.text());
+
+        alert(errorText);
+
         return false;
     }
 
-    localStorage.setItem('room_id', roomId);
-    
-    return true;
+    return roomId;
 }
 
 export const setReady = async (roomId, state) => {
@@ -63,9 +67,12 @@ export const setReady = async (roomId, state) => {
         credentials: 'include'
     });
 
-    if (!response.ok)
-        alert(await response.text());
-        
+    if (!response.ok) {
+        const errorText = TranslationService.getTranslate(await response.text());
+
+        alert(errorText);
+    }
+
     return response.ok;
 }
 

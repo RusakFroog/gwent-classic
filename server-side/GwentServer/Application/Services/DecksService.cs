@@ -22,7 +22,7 @@ public class DecksService
         var account = await _accountsService.GetAccountById(userId);
 
         if (account == null)
-            return (null, "NO_ACCOUNT_WITH_ID");
+            return (null, "ACCOUNT_DOES_NOT_EXIST");
 
         return (new DeckDTO(fraction, account.Decks.FirstOrDefault(d => d.Fraction == fraction)!.Cards.Select(c => c.Id)), string.Empty);
     }
@@ -32,7 +32,7 @@ public class DecksService
         var account = await _accountsService.GetAccountById(userId);
 
         if (account == null)
-            return "NO_ACCOUNT_WITH_ID";
+            return "ACCOUNT_DOES_NOT_EXIST";
 
         Deck foundDeck = account.Decks.FirstOrDefault(d => d.Fraction == deck.Fraction)!;
         foundDeck.Cards.Clear();

@@ -12,19 +12,21 @@ public class Room
     public readonly string Name;
     public readonly string Password;
     public readonly int OwnerId;
+    public readonly string OwnerName;
     
     private readonly PlayerReadiness _playerReadiness = new PlayerReadiness(false, false);
 
     private Player? _firstPlayer { get; set; }
     private Player? _secondPlayer { get; set; }
     
-    public Room(string uuid, int ownerUserId, string name, string password)
+    public Room(string uuid, int ownerUserId, string ownerName, string name, string password)
     {
         Id = uuid;
         Name = name;
         Password = password;
         OwnerId = ownerUserId;
-        
+        OwnerName = ownerName;
+
         Rooms.Add(uuid, this);
     }
 
