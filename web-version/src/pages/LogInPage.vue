@@ -192,7 +192,7 @@ export default {
 
 .image {
     flex-grow: 1;
-    background-image: url('../assets/images/registration/gwent-game.png');
+    background-image: url('../assets/images/gwent-game.png');
     background-repeat: no-repeat;
     background-size: cover;
 }
