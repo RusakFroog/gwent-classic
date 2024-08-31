@@ -120,7 +120,7 @@ export default {
     height: calc(100vh - 90px);
     width: 100vw;
     justify-content: flex-start;
-    background: url('../assets/images/registration/background.png') no-repeat center center;
+    background: url('../assets/images/background.png') no-repeat center center;
     background-size: cover;
 }
 

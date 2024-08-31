@@ -213,28 +213,28 @@ export default {
         .right-arrow {
             width: 30px;
             height: 23px;
-            background-image: url('../assets/images/decks/right-arrow.svg');
+            background-image: url('../assets/decks/right-arrow.svg');
             margin-left: 70px;
             -webkit-transition: background-image 0.2s ease-in-out;
             transition: background-image 0.2s ease-in-out;
 
             &:hover {
                 cursor: pointer;
-                background-image: url('../assets/images/decks/right-arrow-hover.svg');
+                background-image: url('../assets/decks/right-arrow-hover.svg');
             }
         }
 
         .left-arrow {
             width: 30px;
             height: 23px;
-            background-image: url('../assets/images/decks/left-arrow.svg');
+            background-image: url('../assets/decks/left-arrow.svg');
             margin-right: 70px;
             -webkit-transition: background-image 0.2s ease-in-out;
             transition: background-image 0.2s ease-in-out;
 
             &:hover {
                 cursor: pointer;
-                background-image: url('../assets/images/decks/left-arrow-hover.svg');
+                background-image: url('../assets/decks/left-arrow-hover.svg');
             }
         }
     }

@@ -63,22 +63,22 @@ export default {
 .previous {
     width: 27px;
     height: 27px;
-    background-image: url('../../assets/images/music-player/player-next.svg');
+    background-image: url('../../assets/music-player/player-next.svg');
     background-repeat: no-repeat;
     background-size: contain;
     cursor: pointer;
 
     &:hover {
-        background-image: url('../../assets/images/music-player/player-next-hover.svg');
+        background-image: url('../../assets/music-player/player-next-hover.svg');
     }
 }
 
 .previous {
     margin-right: 3px;    
-    background-image: url('../../assets/images/music-player/player-previous.svg');
+    background-image: url('../../assets/music-player/player-previous.svg');
 
     &:hover {
-        background-image: url('../../assets/images/music-player/player-previous-hover.svg');
+        background-image: url('../../assets/music-player/player-previous-hover.svg');
     }
 }
 
@@ -86,22 +86,22 @@ export default {
 .play {
     width: 37px;
     height: 37px;
-    background-image: url('../../assets/images/music-player/player-play.svg');
+    background-image: url('../../assets/music-player/player-play.svg');
     background-repeat: no-repeat;
     background-size: contain;
     cursor: pointer;
     margin-top: -6px;
 
     &:hover {
-        background-image: url('../../assets/images/music-player/player-play-hover.svg');
+        background-image: url('../../assets/music-player/player-play-hover.svg');
     }
 }
 
 .play {
-    background-image: url('../../assets/images/music-player/player-pause.svg');
+    background-image: url('../../assets/music-player/player-pause.svg');
 
     &:hover {
-        background-image: url('../../assets/images/music-player/player-pause-hover.svg');
+        background-image: url('../../assets/music-player/player-pause-hover.svg');
     }
 }
 </style>

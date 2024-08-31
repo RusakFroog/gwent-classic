@@ -99,7 +99,7 @@ export default {
     <section class="login-section">
         <div class="panel">
             <h1>Log in to account</h1>
-            <img class="logo" src="../assets/images/registration/logo.png" />
+            <img class="logo" src="/logo.png" />
             <div class="inputs">
                 <CustomInput 
                     v-for="(input, index) in inputs" 
@@ -114,7 +114,7 @@ export default {
                 <Button class="log-in" @click="login()" text="LOG IN" />
             </div>
             <div class="error" v-if="error.active">
-                <img class="error-image" src="../assets/images/info.svg" />
+                <img class="error-image" src="./info.svg" />
                 <text>{{ error.text }}</text>
             </div>
             <p>Don't have an account? 
@@ -134,7 +134,7 @@ export default {
     height: calc(100vh - 90px);
     width: 100vw;
     background-color: $black-light;
-    background-image: url('../assets/images/registration/background.png');
+    background-image: url('../assets/images/background.png');
     background-size: cover;
     background-repeat: no-repeat;
 }

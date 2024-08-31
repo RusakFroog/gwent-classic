@@ -128,13 +128,13 @@ export default {
     position: static;
     width: 27px;
     height: 27px;
-    background-image: url('../../assets/images/music-player/volume-none.svg');
+    background-image: url('../../assets/music-player/volume-none.svg');
     background-repeat: no-repeat;
     background-size: contain;
     cursor: pointer;
 
     &:hover {
-        background-image: url('../../assets/images/music-player/volume-none-hover.svg');
+        background-image: url('../../assets/music-player/volume-none-hover.svg');
     }
 }
 
@@ -142,13 +142,13 @@ export default {
     position: static;
     width: 27px;
     height: 27px;
-    background-image: url('../../assets/images/music-player/volume.svg');
+    background-image: url('../../assets/music-player/volume.svg');
     background-repeat: no-repeat;
     background-size: contain;
     cursor: pointer;
 
     &:hover {
-        background-image: url('../../assets/images/music-player/volume-hover.svg');
+        background-image: url('../../assets/music-player/volume-hover.svg');
     }
 }
 </style>

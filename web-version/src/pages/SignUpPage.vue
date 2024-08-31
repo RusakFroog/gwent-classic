@@ -103,7 +103,7 @@ export default {
     <section class="registration-section">
         <div class="panel">
             <h1>Create account</h1>
-            <img class="logo" src="../assets/images/registration/logo.png" />
+            <img class="logo" src="/logo.png" />
             <div class="inputs">
                 <CustomInput 
                     v-for="(input, index) in inputs" 
@@ -118,7 +118,7 @@ export default {
                 <Button class="sign-up" @click="signUp()" text="SIGN UP" />
             </div>
             <div class="error" v-if="error.active">
-                <img class="error-image" src="../assets/images/info.svg" />
+                <img class="error-image" src="/info.svg" />
                 <text>{{ error.text }}</text>
             </div>
             <p>Already have an account? 
@@ -138,7 +138,7 @@ export default {
     height: 100vh;
     width: 100vw;
     background-color: $black-light;
-    background-image: url('../assets/images/registration/background.png');
+    background-image: url('../assets/images/background.png');
     background-size: cover;
     background-repeat: no-repeat;
 }
@@ -199,7 +199,7 @@ export default {
     height: 100vh;
     background-repeat: no-repeat;
     background-size: cover;
-    background-image: url('../assets/images/registration/gwent-game.png');
+    background-image: url('../assets/images/gwent-game.png');
 }
 
 .error {

@@ -4,12 +4,12 @@
 
 @font-face {
 	font-family: "Witcher Alternative";
-	src: url("./fonts/WitcherAlternative.TTF");
+	src: url("/fonts/WitcherAlternative.TTF");
 }
 
 @font-face {
 	font-family: "Witcher";
-	src: url("./fonts/Witcher.ttf");
+	src: url("/fonts/Witcher.ttf");
 }
 
 * {

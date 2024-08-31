@@ -115,7 +115,7 @@ export default {
     margin-top: 20px;
     color: $bronze;
     font-size: 4.5rem;
-    font-family: 'Witcher-alternative';
+    font-family: 'Witcher Alternative';
 }
 
 .profile-content {
