@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+	font-family: "Witcher Alternative";
+	src: url("./fonts/WitcherAlternative.TTF");
+}
+
+@font-face {
+	font-family: "Witcher";
+	src: url("./fonts/Witcher.ttf");
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: "Witcher";
+	letter-spacing: 0.0055em;
+}

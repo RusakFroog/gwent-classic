@@ -62,7 +62,7 @@ public class RoomsService
         return string.Empty;
     }
     
-    public async Task<IEnumerable<RoomDTO>> GetRoomsChunk(int countLoaded, int count)
+    public IEnumerable<RoomDTO> GetRoomsChunk(int countLoaded, int count)
     {
         var rooms = Room.Rooms.Values
             .Skip(countLoaded)
