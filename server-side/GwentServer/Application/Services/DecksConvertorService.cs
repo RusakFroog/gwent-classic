@@ -1,6 +1,6 @@
 ﻿using Core.Enums.Game;
-using Core.Models.Game;
-using Core.Models.Game.Cards;
+using Core.Entities.Game;
+using Core.Entities.Game.Cards;
 using DataAccess.Entities;
 using DataAccess.Interfaces;
 using DataAccess.Repositories;

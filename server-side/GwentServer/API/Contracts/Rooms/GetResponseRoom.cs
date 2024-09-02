@@ -1,4 +1,4 @@
-using Core.Models.Game;
+using Core.Entities.Game;
 
 namespace API.Contracts.Rooms;
 

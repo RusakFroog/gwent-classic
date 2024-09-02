@@ -1,5 +1,5 @@
 ﻿using Core.Enums.Game;
-using Core.Models.Game.Cards.Weather;
+using Core.Entities.Game.Cards.Weather;
 
 public class RainCard : Weather
 {

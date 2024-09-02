@@ -1,7 +1,7 @@
 ﻿using Core.Enums.Game;
-using Core.Models.Game.Cards;
-using Core.Models.Game.Cards.Special;
-using Core.Models.Game.Cards.Weather;
+using Core.Entities.Game.Cards;
+using Core.Entities.Game.Cards.Special;
+using Core.Entities.Game.Cards.Weather;
 using DataAccess.Databases;
 using DataAccess.Entities;
 

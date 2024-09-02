@@ -1,7 +1,7 @@
 using Core.Enums.Game;
-using Core.Models.Game.Cards;
+using Core.Entities.Game.Cards;
 
-namespace Core.Models.Game;
+namespace Core.Entities.Game;
 
 public record DeckDTO(Fraction Fraction, IEnumerable<int> CardIds);
 

@@ -1,5 +1,5 @@
 ﻿using Core.Enums.Game;
-using Core.Models.Game;
+using Core.Entities.Game;
 using DataAccess.Entities;
 using DataAccess.Interfaces;
 using DataAccess.Repositories;

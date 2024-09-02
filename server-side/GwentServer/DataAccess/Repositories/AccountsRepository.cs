@@ -15,7 +15,7 @@ public class AccountsRepository : Repository<AccountEntity>
     
     public async Task<AccountEntity?> GetByLoginAsync(string login)
     {
-        var findAccountEntity = _items.Values.FirstOrDefault(a => a.Login == login);
+        var findAccountEntity = _cachedItems.Values.FirstOrDefault(a => a.Login == login);
 
         if (findAccountEntity != null)
             return findAccountEntity;
@@ -30,14 +30,14 @@ public class AccountsRepository : Repository<AccountEntity>
         if (item == null)
             return null;
 
-        _items.Add(item.Id, item);
+        _cachedItems.Add(item.Id, item);
 
         return item;
     }
 
     public async Task<AccountEntity?> GetByEmailAsync(string email)
     {
-        var findAccountEntity = _items.Values.FirstOrDefault(a => a.Email == email);
+        var findAccountEntity = _cachedItems.Values.FirstOrDefault(a => a.Email == email);
 
         if (findAccountEntity != null)
             return findAccountEntity;
@@ -52,7 +52,7 @@ public class AccountsRepository : Repository<AccountEntity>
         if (item == null)
             return null;
 
-        _items.Add(item.Id, item);
+        _cachedItems.Add(item.Id, item);
 
         return item;
     }

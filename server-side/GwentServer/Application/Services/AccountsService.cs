@@ -1,5 +1,5 @@
-using Core.Models.Account;
-using Core.Models.Game;
+using Core.Entities.Account;
+using Core.Entities.Game;
 using DataAccess.Entities;
 using DataAccess.Interfaces;
 using DataAccess.Repositories;

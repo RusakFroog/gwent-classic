@@ -1,6 +1,6 @@
 ﻿using Core.Enums.Game;
 
-namespace Core.Models.Game.Cards;
+namespace Core.Entities.Game.Cards;
 
 public class Card
 {

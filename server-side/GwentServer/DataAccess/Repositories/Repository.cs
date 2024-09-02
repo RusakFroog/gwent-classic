@@ -13,7 +13,7 @@ public abstract class Repository<T> : IRepository<T> where T : EntityBase
 
     protected readonly MySqlDbContext _database;
 
-    protected readonly Dictionary<int, T> _items = [];
+    protected readonly Dictionary<int, T> _cachedItems = [];
 
     public Repository(MySqlDbContext database)
     {
@@ -24,7 +24,7 @@ public abstract class Repository<T> : IRepository<T> where T : EntityBase
     {
         try
         {
-            if (entity.Id != -1 && (_items.ContainsKey(entity.Id) || (await GetByIdAsync(entity.Id)) != null))
+            if (entity.Id != -1 && (_cachedItems.ContainsKey(entity.Id) || (await GetByIdAsync(entity.Id)) != null))
                 return null;
 
             string columns = string.Join(", ", typeof(T).GetProperties()
@@ -49,7 +49,7 @@ public abstract class Repository<T> : IRepository<T> where T : EntityBase
 
             entity.Id = lastInsertedId;
 
-            _items.Add(lastInsertedId, entity);
+            _cachedItems.Add(lastInsertedId, entity);
 
             return entity;
         }
@@ -78,26 +78,26 @@ public abstract class Repository<T> : IRepository<T> where T : EntityBase
 
         await _database.ExecuteAsync(cmd);
 
-        if (_items.TryAdd(entity.Id, entity) == false)
-            _items[entity.Id] = entity;
+        if (_cachedItems.TryAdd(entity.Id, entity) == false)
+            _cachedItems[entity.Id] = entity;
     }
 
     public virtual async Task DeleteAsync(T entity)
     {
-        if (!_items.ContainsKey(entity.Id))
+        if (!_cachedItems.ContainsKey(entity.Id))
         {
-            Console.WriteLine("Entity doesn't deleted because _items don't contain");
+            Console.WriteLine("[DEBUG] Entity doesn't deleted because `_cachedItems` doesn't contain");
             return;
         }
 
         await _database.ExecuteAsync($"DELETE FROM `{_table}` WHERE `id` = {entity.Id}");
 
-        _items.Remove(entity.Id);
+        _cachedItems.Remove(entity.Id);
     }
 
     public virtual async Task<T?> GetByIdAsync(int id)
     {
-        if (_items.TryGetValue(id, out T? cachedItem))
+        if (_cachedItems.TryGetValue(id, out T? cachedItem))
             return cachedItem;
 
         var dataTable = await _database.QueryAsync($"SELECT * FROM `{_table}` WHERE `id` = {id}");
@@ -110,7 +110,7 @@ public abstract class Repository<T> : IRepository<T> where T : EntityBase
         if (item == null)
             return null;
 
-        _items.Add(id, item);
+        _cachedItems.Add(id, item);
 
         return item;
     }

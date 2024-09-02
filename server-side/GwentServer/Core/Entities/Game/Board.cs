@@ -1,6 +1,6 @@
-using Core.Models.Game.Cards;
+using Core.Entities.Game.Cards;
 
-namespace Core.Models.Game;
+namespace Core.Entities.Game;
 
 public class Board
 {

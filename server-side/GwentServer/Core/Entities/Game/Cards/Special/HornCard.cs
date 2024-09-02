@@ -1,6 +1,6 @@
 ﻿using Core.Enums.Game;
 
-namespace Core.Models.Game.Cards.Special;
+namespace Core.Entities.Game.Cards.Special;
 
 public class HornCard : Card
 {

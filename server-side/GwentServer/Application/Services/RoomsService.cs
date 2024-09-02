@@ -1,5 +1,5 @@
-using Core.Models.Account;
-using Core.Models.Game;
+using Core.Entities.Account;
+using Core.Entities.Game;
 
 namespace Application.Services;
 

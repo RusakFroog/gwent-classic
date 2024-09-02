@@ -1,6 +1,6 @@
 using API.Contracts.Accounts;
 using Application.Services;
-using Core.Models.Account;
+using Core.Entities.Account;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;

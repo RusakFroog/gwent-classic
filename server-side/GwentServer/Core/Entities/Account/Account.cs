@@ -1,6 +1,6 @@
-using Core.Models.Game;
+using Core.Entities.Game;
 
-namespace Core.Models.Account;
+namespace Core.Entities.Account;
 
 public class Account
 {

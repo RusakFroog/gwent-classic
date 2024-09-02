@@ -1,6 +1,6 @@
 ﻿using Core.Enums.Game;
 
-namespace Core.Models.Game.Cards.Weather;
+namespace Core.Entities.Game.Cards.Weather;
 
 public class FogCard : Weather
 {
