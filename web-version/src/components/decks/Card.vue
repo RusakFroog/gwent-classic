@@ -31,7 +31,5 @@ export default {
     height: 365px;
     background-image: url('../../assets/decks/card.svg');
     background-repeat: no-repeat;
-    // background-size: contain;
-    // background-position: center;
 }
 </style>
