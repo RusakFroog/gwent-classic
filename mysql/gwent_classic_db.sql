@@ -1,7 +1,7 @@
 -- --------------------------------------------------------
 -- Хост:                         127.0.0.1
--- Версия сервера:               10.4.32-MariaDB - mariadb.org binary distribution
--- Операционная система:         Win64
+-- Версия сервера:               9.0.1 - MySQL Community Server - GPL
+-- Операционная система:         Linux
 -- HeidiSQL Версия:              12.6.0.6765
 -- --------------------------------------------------------
 
@@ -16,32 +16,20 @@
 
 
 -- Дамп структуры базы данных gwent_classic
-CREATE DATABASE IF NOT EXISTS `gwent_classic` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */;
+CREATE DATABASE IF NOT EXISTS `gwent_classic` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `gwent_classic`;
-
--- Дамп структуры для таблица gwent_classic.accounts
-CREATE TABLE IF NOT EXISTS `accounts` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `login` varchar(40) NOT NULL,
-  `name` varchar(20) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `hashed_password` longtext NOT NULL,
-  `decks` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`decks`)),
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- Экспортируемые данные не выделены.
 
 -- Дамп структуры для таблица gwent_classic.cards
 CREATE TABLE IF NOT EXISTS `cards` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `strength` int(11) NOT NULL,
-  `fraction` varchar(100) NOT NULL,
-  `field_lines` longtext NOT NULL,
-  `name` longtext NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `strength` int NOT NULL,
+  `fraction` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `field_lines` longtext COLLATE utf8mb4_general_ci NOT NULL,
+  `name` longtext COLLATE utf8mb4_general_ci NOT NULL,
   `can_be_taken` tinyint(1) NOT NULL,
   `horn_boost` tinyint(1) NOT NULL,
   `weather_immunity` tinyint(1) NOT NULL,
+  `card_category` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

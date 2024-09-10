@@ -54,12 +54,12 @@ public class CardsRepository : Repository<CardEntity>
 
         foreach (var fraction in fractions)
         {
-            Console.WriteLine("Loading deck for " + fraction + "...");
+            Console.WriteLine($"Loading deck for ${fraction}...");
 
             var deck = await _getDeckByFraction(fraction);
 
             foreach (var card in deck)
-                result.Add(card.Id, Card.CreateCard(card.Id, card.Name, (sbyte)card.Strength, card.Fraction, card.FieldLines, card.CanBeTaken, card.HornBoost, card.WeatherImmunity));
+                result.Add(card.Id, Card.CreateCard(card.Id, card.Name, (sbyte)card.Strength, card.Fraction, card.FieldLines, card.CardCategory, card.CanBeTaken, card.HornBoost, card.WeatherImmunity));
         }
 
         Console.WriteLine("Finish loading decks");

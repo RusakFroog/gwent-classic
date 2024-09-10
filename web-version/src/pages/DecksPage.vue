@@ -39,11 +39,21 @@ export default {
 
             aboutFractions: { 
                 "NorthernRealms": "Draw a card from your deck whenever you win a round.",
-                "Nilfgaardian": "",
-                "Monsters": "",
-                "Skellige": "",
-                "Scoiatael": "",
+                "Nilfgaardian": "Win whenever there is a draw.",
+                "Monsters": "One randomly-chosen Monsters Unit Card stays on the battlefield after each round.",
+                "Skellige": "2 random cards from the graveyard are placed on the battlefield at the start of the third round.",
+                "Scoiatael": "You decide who goes first at the start of battle.",
             },
+
+            categoriesName: [
+                "ALL CARDS",
+                "CLOSE COMBAT UNIT CARDS",
+                "RANGED UNIT CARDS",
+                "SIEGE UNIT CARDS",
+                "HERO CARDS",
+                "WEATHER CARDS",
+                "SPECIAL CARDS",
+            ],
 
             stats: {
                 cardsInDeck: 0,
@@ -58,12 +68,67 @@ export default {
                 specialCards: 10
             },
 
-            cardsInDeck: [0, 2, 3, 4],
-            cardsInPool: [1, 5, 6],
+            selectedRightCategoryId: 0,
+            selectedLeftCategoryId: 0,
+
+            cardsInDeck: [
+                {
+                    id: 0,
+                    subCategory: 0,
+                },
+                {
+                    id: 0,
+                    subCategory: 0,
+                },
+                {
+                    id: 0,
+                    subCategory: 0,
+                },
+                {
+                    id: 0,
+                    subCategory: 0,
+                },
+                {
+                    id: 0,
+                    subCategory: 0,
+                },
+                {
+                    id: 0,
+                    subCategory: 0,
+                },
+                {
+                    id: 0,
+                    subCategory: 0,
+                },
+                {
+                    id: 0,
+                    subCategory: 0,
+                },
+                {
+                    id: 0,
+                    subCategory: 0,
+                },
+                {
+                    id: 0,
+                    subCategory: 0,
+                },
+                {
+                    id: 0,
+                    subCategory: 0,
+                },
+            ],
+            cardsInPool: [
+                {
+                    id: 0,
+                    cardCategory: 0,
+                } 
+            ],
         };
     },
 
     mounted() {
+        console.log(window.navigator.userAgent);
+
         // get cards in deck etc.
     },
 
@@ -94,6 +159,28 @@ export default {
 
         getAboutFraction() {
             return this.aboutFractions[this.getCurrentFraction.name];
+        },
+
+        getActiveLeftCategory() {
+            return this.categoriesName[this.selectedLeftCategoryId];
+        },
+
+        getActiveRightCategory() {
+            return this.categoriesName[this.selectedRightCategoryId];
+        },
+
+        getCardsInPool() {
+            if (this.selectedLeftCategoryId === 0)
+                return this.cardsInPool;
+
+            return this.cardsInPool.filter(c => c.cardCategory === this.selectedLeftCategoryId);
+        },
+
+        getCardsInDeck() {
+            if (this.selectedRightCategoryId === 0)
+                return this.cardsInDeck;
+
+            return this.cardsInDeck.filter(c => c.cardCategory === this.selectedRightCategoryId);
         }
     },
 
@@ -104,6 +191,15 @@ export default {
 
         gotoNextFraction() {
             this.currentFractionId = (this.currentFractionId + 1) % this.fractions.length;
+        },
+
+        changeCategory(id, left = true) {
+            const categoryId = left ? 'selectedLeftCategoryId' : 'selectedRightCategoryId';
+
+            if (this[categoryId] === id)
+                return;
+
+            this[categoryId] = id;
         }
     }
 }
@@ -121,7 +217,7 @@ export default {
             <div class="text">
                 {{ getCurrentFractionName }}
                 <ul class="fractions-queue">
-                    <li v-for="(_, index) in fractionsQueue" :key="index" class="item"
+                    <li v-for="(_, index) in fractions" :key="index" class="item"
                         :class="{ active: index === currentFractionId }">■</li>
                 </ul>
             </div>
@@ -135,45 +231,48 @@ export default {
     <section class="additional-info">
         <div class="left-info">
             <h1>Card Collection</h1>
-            <h2>ARCHERS CARDS</h2>
+            <h2>{{ getActiveLeftCategory }}</h2>
         </div>
 
         <div class="about-fraction">{{ getAboutFraction }}</div>
         
         <div class="right-info">
             <h1>Cards in Deck</h1>
-            <h2>ARCHERS CARDS</h2>
+            <h2>{{ getActiveRightCategory }}</h2>
         </div>
     </section>
 
     <section class="main-section">
         <div class="types">
             <div class="left-group">
-                <div class="item card" />
-                <div class="item sword" />
-                <div class="item bow" />
-                <div class="item trebuchet" />
-                <div class="item head" />
-                <div class="item sun" />
-                <div class="item spikes" />
+                <div :class="['item', 'card', { 'active': selectedLeftCategoryId === 0 }]" @click="changeCategory(0)" />
+                <div :class="['item', 'sword', { 'active': selectedLeftCategoryId === 1 }]" @click="changeCategory(1)" />
+                <div :class="['item', 'bow', { 'active': selectedLeftCategoryId === 2 }]" @click="changeCategory(2)" />
+                <div :class="['item', 'trebuchet', { 'active': selectedLeftCategoryId === 3 }]" @click="changeCategory(3)" />
+                <div :class="['item', 'head', { 'active': selectedLeftCategoryId === 4 }]" @click="changeCategory(4)" />
+                <div :class="['item', 'sun', { 'active': selectedLeftCategoryId === 5 }]" @click="changeCategory(5)" />
+                <div :class="['item', 'spikes', { 'active': selectedLeftCategoryId === 6 }]" @click="changeCategory(6)" />
             </div>
             <div class="right-group">
-                <div class="item card" />
-                <div class="item sword" />
-                <div class="item bow" />
-                <div class="item trebuchet" />
-                <div class="item head" />
-                <div class="item sun" />
-                <div class="item spikes" />
+                <div :class="['item', 'card', { 'active': selectedRightCategoryId === 0 }]" @click="changeCategory(0, false)" />
+                <div :class="['item', 'sword', { 'active': selectedRightCategoryId === 1 }]" @click="changeCategory(1, false)" />
+                <div :class="['item', 'bow', { 'active': selectedRightCategoryId === 2 }]" @click="changeCategory(2, false)" />
+                <div :class="['item', 'trebuchet', { 'active': selectedRightCategoryId === 3 }]" @click="changeCategory(3, false)" />
+                <div :class="['item', 'head', { 'active': selectedRightCategoryId === 4 }]" @click="changeCategory(4, false)" />
+                <div :class="['item', 'sun', { 'active': selectedRightCategoryId === 5 }]" @click="changeCategory(5, false)" />
+                <div :class="['item', 'spikes', { 'active': selectedRightCategoryId === 6 }]" @click="changeCategory(6, false)" />
             </div>
         </div>
 
         <section class="cards">
             <section class="left-cards">
-                <Card 
-                    v-for="cardId in cardsInPool" 
-                    :cardId="cardId" 
-                />
+                <div class="frame">
+                    <Card 
+                        class="card"
+                        v-for="card in getCardsInPool" 
+                        :cardId="card.id" 
+                    />
+                </div>
             </section>
 
             <section class="stats">
@@ -221,10 +320,13 @@ export default {
             </section>
 
             <section class="right-cards">
-                <Card 
-                    v-for="cardId in cardsInDeck" 
-                    :cardId="cardId"
-                />
+                <div class="frame">
+                    <Card 
+                        class="card"
+                        v-for="card in getCardsInDeck" 
+                        :cardId="card.id" 
+                    />
+                </div>
             </section>
         </section>
     </section>
@@ -242,7 +344,6 @@ export default {
     background-color: #060606;
     background-size: cover;
     background-repeat: no-repeat;
-    width: 100vw;
     height: calc(100vh - 90px);
 }
 
@@ -284,6 +385,10 @@ export default {
         h2 {
             color: #d6d3cc;
             font-size: 23px;
+            min-width: 240px;
+            // need test what's better
+            // text-shadow: 0px 0px 3px #aca8a0;
+            filter: drop-shadow(0 0 6px $bronze-light);
             text-transform: uppercase;
         }
     }
@@ -297,7 +402,8 @@ export default {
         margin-right: 60px;
         margin-left: auto;
 
-        h1 {
+        h1, 
+        h2 {
             text-align: right;
         }
     }
@@ -306,9 +412,8 @@ export default {
 .fractions-info {
     display: flex;
     justify-content: center;
-    align-items: center;
     padding-top: 25px;
-    
+
     .prev-fraction,
     .next-fraction {
         display: flex;
@@ -320,6 +425,9 @@ export default {
             font-size: 21px;
             margin-left: 25px;
             margin-right: 25px;
+            width: 190px;
+            text-align: right;
+            user-select: none;
         }
 
         .right-arrow {
@@ -350,14 +458,21 @@ export default {
             }
         }
     }
+        
+    .next-fraction p {
+        text-align: left;
+    }
 
     .title {
         display: flex;
         color: $white;
         font-size: 30px;
-        
+        min-width: 300px;
+        justify-content: center;
+
         img {
-            width: 60px;
+            height: fit-content;
+            width: 62px;
             margin-right: 18px;
         }
 
@@ -370,30 +485,50 @@ export default {
 .main-section {
     display: flex;
     flex-direction: column;
-    width: 100vw;
+    width: 100%;
 
     .cards {
         display: flex;
 
-        .left-cards {
-            display: flex;
-            margin-left: 60px;
-    
-            background-image: url('../assets/decks/frame.svg');
-            background-repeat: no-repeat;
-            width: 50vw;
-            height: 372px;
-        }
-    
+        .left-cards,
         .right-cards {
             display: flex;
+            width: 50vw;
+            height: 65vh;
+        }
+    
+        .left-cards {
+            margin-left: 60px;
+        }
+
+        .right-cards {
             margin-right: 60px;
+            justify-content: end;
+        }
+        
+        .frame {
+            display: grid;
+            column-gap: 212px;
+            row-gap: 15px;
+            grid-template-columns: repeat(3, 0);
+            grid-template-rows: repeat(7, auto);
+
+            width: 648px;
+            height: 64vh;
+            padding: 15px;
             
             background-image: url('../assets/decks/frame.svg');
             background-repeat: no-repeat;
-            background-position: right;
-            width: 50vw;
-            height: 372px;
+            background-size: contain;
+            background-position: top;
+            
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
         }
     }
 
@@ -427,10 +562,15 @@ export default {
             background-size: contain;
             background-image: var(--background-image);
 
-            transition: background-image 0.2s ease-in-out;
+            transition: transform 0.1s ease-in-out;
 
             &:hover {
                 cursor: pointer;
+                transform: scale(1.15);
+            }
+
+            &.active {
+                filter: drop-shadow(0 0 5px $bronze-light);
                 background-image: var(--hover-background-image);
             }
 

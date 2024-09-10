@@ -13,7 +13,7 @@ export default {
 
     computed: {
         getImagePath() {
-            return CDN_URL + "cards/" + this.$props.cardId + ".png";
+            return `${CDN_URL}/cards/${this.$props.cardId}.png`;
         }
     }
 }
