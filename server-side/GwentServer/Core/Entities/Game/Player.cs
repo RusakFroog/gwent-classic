@@ -10,12 +10,14 @@ public class Player
     public readonly List<Card> CardsInDeck = [];
     public readonly List<Card> ReleasedCards = [];
     public readonly Fraction Fraction;
+    public readonly Game CurrentGame;
 
-    public Player(string userId, Fraction fraction, List<Card> cardsInDeck)
+    public Player(string userId, Fraction fraction, List<Card> cardsInDeck, Game currentGame)
     {
         UserId = userId;
         Fraction = fraction;
         CardsInDeck = cardsInDeck;
+        CurrentGame = currentGame;
     }
 
     public void DistributeCards(int count)

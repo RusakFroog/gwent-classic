@@ -1,6 +1,6 @@
-﻿using DataAccess.Entities;
+﻿using Core.Entities.Database;
 
-namespace DataAccess.Interfaces;
+namespace Core.Interfaces;
 
 public interface IRepository<T> where T : EntityBase
 {

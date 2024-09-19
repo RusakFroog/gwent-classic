@@ -1,6 +1,6 @@
 using Core.Enums.Game;
 
-namespace DataAccess.Entities;
+namespace Core.Entities.Database;
 
 public sealed class AccountEntity : EntityBase
 {

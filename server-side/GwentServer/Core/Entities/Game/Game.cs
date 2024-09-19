@@ -14,9 +14,11 @@ public class Game
         
         FirstPlayer = firstPlayer;
         SecondPlayer = secondPlayer;
+
+        _startGame();
     }
 
-    public void StartGame()
+    private void _startGame()
     {
         FirstPlayer.DistributeCards(CARDS_AT_START);
         SecondPlayer.DistributeCards(CARDS_AT_START);

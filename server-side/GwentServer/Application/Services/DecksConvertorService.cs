@@ -1,8 +1,8 @@
 ﻿using Core.Enums.Game;
 using Core.Entities.Game;
 using Core.Entities.Game.Cards;
-using DataAccess.Entities;
-using DataAccess.Interfaces;
+using Core.Entities.Database;
+using Core.Interfaces;
 using DataAccess.Repositories;
 namespace Application.Services;
 

@@ -1,11 +1,10 @@
+using Core.Entities.Database;
 using DataAccess.Databases;
-using DataAccess.Entities;
 
 namespace DataAccess.Repositories;
 
 public class AccountsRepository : Repository<AccountEntity>
 {
-
     protected override string _table => "accounts";
 
     public AccountsRepository(MySqlDbContext database) : base(database)

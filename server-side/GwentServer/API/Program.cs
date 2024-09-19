@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using MySqlConnector;
 using Application.Services;
 using DataAccess.Repositories;
-using DataAccess.Interfaces;
 using DataAccess.Databases;
-using DataAccess.Entities;
+using Core.Interfaces;
+using Core.Entities.Database;
+
+using Core.Enums.Game;
 
 var builder = WebApplication.CreateBuilder(args);
  
@@ -73,7 +75,10 @@ app.MapControllers();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.EnableTryItOutByDefault();
+    });
 
     app.Run();
 }

@@ -386,8 +386,6 @@ export default {
             color: #d6d3cc;
             font-size: 23px;
             min-width: 240px;
-            // need test what's better
-            // text-shadow: 0px 0px 3px #aca8a0;
             filter: drop-shadow(0 0 6px $bronze-light);
             text-transform: uppercase;
         }
@@ -619,7 +617,7 @@ export default {
 
         .leader {
             width: 140px;
-            margin-bottom: 35px;
+            margin-top: calc(-60px);
 
             p {
                 font-size: 23px;

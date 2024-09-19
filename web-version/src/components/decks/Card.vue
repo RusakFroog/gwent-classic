@@ -29,7 +29,9 @@ export default {
 .card {
     width: 192px;
     height: 365px;
-    background-image: url('../../assets/decks/card.svg');
-    background-repeat: no-repeat;
+
+    img {
+        border-radius: 15px;
+    }
 }
 </style>

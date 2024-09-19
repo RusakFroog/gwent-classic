@@ -1,6 +1,6 @@
 ﻿using Core.Enums.Game;
 
-namespace DataAccess.Entities;
+namespace Core.Entities.Database;
 
 public sealed class CardEntity : EntityBase
 {
@@ -9,7 +9,5 @@ public sealed class CardEntity : EntityBase
     public Fraction Fraction { get; set; } = Fraction.None;
     public List<FieldLine> FieldLines { get; set; } = [];
     public CardCategory CardCategory { get; set; } = CardCategory.None;
-    public bool CanBeTaken { get; set; }
-    public bool HornBoost { get; set; }
-    public bool WeatherImmunity { get; set; }
+    public bool IsHero { get; set; }
 }

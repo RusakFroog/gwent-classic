@@ -1,10 +1,11 @@
 using Core.ValueObjects;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Core.Entities.Game;
 
 public record RoomDTO(string? Owner, bool Password, string Name, string Uuid);
 
-public class Room
+public class Room : Hub
 {
     public static readonly Dictionary<string, Room> Rooms = [];
 

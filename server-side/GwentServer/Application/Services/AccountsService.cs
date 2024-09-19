@@ -1,8 +1,8 @@
 using Core.Entities.Account;
 using Core.Entities.Game;
-using DataAccess.Entities;
-using DataAccess.Interfaces;
+using Core.Entities.Database;
 using DataAccess.Repositories;
+using Core.Interfaces;
 using System.Text.RegularExpressions;
 
 namespace Application.Services;

@@ -1,10 +1,10 @@
 ﻿using DataAccess.Databases;
-using DataAccess.Entities;
-using DataAccess.Interfaces;
+using Core.Interfaces;
 using MySqlConnector;
 using Newtonsoft.Json;
 using System.Collections;
 using System.Data;
+using Core.Entities.Database;
 
 namespace DataAccess.Repositories;
 public abstract class Repository<T> : IRepository<T> where T : EntityBase
@@ -129,40 +129,22 @@ public abstract class Repository<T> : IRepository<T> where T : EntityBase
                 {
                     var value = row[propertyName];
 
-                    if (value != DBNull.Value)
+                    if (value == DBNull.Value)
+                        continue;
+
+                    if (property.PropertyType.IsGenericType && typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
                     {
-                        if (property.PropertyType.IsGenericType && typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
-                        {
-                            var dictionaryValue = JsonConvert.DeserializeObject(value.ToString(), property.PropertyType);
-                            property.SetValue(item, dictionaryValue);
-                        }
-                        else
-                        {
-                            property.SetValue(item, Convert.ChangeType(value, property.PropertyType));
-                        }
+                        var dictionaryValue = JsonConvert.DeserializeObject(value.ToString(), property.PropertyType);
+                        property.SetValue(item, dictionaryValue);
                     }
-                }
-            }
-
-            foreach (var field in typeof(T).GetFields())
-            {
-                string fieldName = _getFormatedField(field.Name);
-
-                if (tableColumns.Contains(fieldName))
-                {
-                    var value = row[fieldName];
-
-                    if (value != DBNull.Value)
+                    else if (property.PropertyType.IsEnum && typeof(Enum).IsAssignableFrom(property.PropertyType) && value is string)
                     {
-                        if (field.FieldType.IsGenericType && typeof(IEnumerable).IsAssignableFrom(field.FieldType))
-                        {
-                            var dictionaryValue = JsonConvert.DeserializeObject(value.ToString(), field.FieldType);
-                            field.SetValue(item, dictionaryValue);
-                        }
-                        else
-                        {
-                            field.SetValue(item, Convert.ChangeType(value, field.FieldType));
-                        }
+                        var enumValue = Enum.Parse(property.PropertyType, value.ToString()!);
+                        property.SetValue(item, enumValue);
+                    }
+                    else
+                    {
+                        property.SetValue(item, Convert.ChangeType(value, property.PropertyType));
                     }
                 }
             }
