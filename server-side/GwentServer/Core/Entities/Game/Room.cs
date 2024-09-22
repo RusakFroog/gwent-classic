@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace Core.Entities.Game;
 
-public record RoomDTO(string? Owner, bool Password, string Name, string Uuid);
+public record RoomDTO(string Owner, bool Password, string Name, string Uuid);
 
 public class Room : Hub
 {
@@ -17,8 +17,8 @@ public class Room : Hub
     
     private readonly PlayerReadiness _playerReadiness = new PlayerReadiness(false, false);
 
-    private Player? _firstPlayer { get; set; }
-    private Player? _secondPlayer { get; set; }
+    private Player _firstPlayer { get; set; }
+    private Player _secondPlayer { get; set; }
     
     public Room(string uuid, int ownerUserId, string ownerName, string name, string password)
     {
@@ -31,7 +31,7 @@ public class Room : Hub
         Rooms.Add(uuid, this);
     }
 
-    public static Room? GetRoom(string id)
+    public static Room GetRoom(string id)
     {
         return Rooms.Values.FirstOrDefault(r => r.Id == id);
     }

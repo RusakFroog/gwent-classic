@@ -20,7 +20,7 @@ public abstract class Repository<T> : IRepository<T> where T : EntityBase
         _database = database;
     }
 
-    public virtual async Task<T?> AddAsync(T entity)
+    public virtual async Task<T> AddAsync(T entity)
     {
         try
         {
@@ -95,9 +95,9 @@ public abstract class Repository<T> : IRepository<T> where T : EntityBase
         _cachedItems.Remove(entity.Id);
     }
 
-    public virtual async Task<T?> GetByIdAsync(int id)
+    public virtual async Task<T> GetByIdAsync(int id)
     {
-        if (_cachedItems.TryGetValue(id, out T? cachedItem))
+        if (_cachedItems.TryGetValue(id, out T cachedItem))
             return cachedItem;
 
         var dataTable = await _database.QueryAsync($"SELECT * FROM `{_table}` WHERE `id` = {id}");
@@ -115,7 +115,7 @@ public abstract class Repository<T> : IRepository<T> where T : EntityBase
         return item;
     }
 
-    protected static T? _getParsedItem(DataColumnCollection tableColumns, DataRow row)
+    protected static T _getParsedItem(DataColumnCollection tableColumns, DataRow row)
     {
         try
         {

@@ -49,7 +49,7 @@ public sealed class MySqlDbContext
     /// </summary>
     /// <param name="command"></param>
     /// <returns>DataTable - data from command</returns>
-    public async Task<DataTable?> QueryAsync(MySqlCommand command)
+    public async Task<DataTable> QueryAsync(MySqlCommand command)
     {
         try
         {
@@ -83,5 +83,5 @@ public sealed class MySqlDbContext
     /// </summary>
     /// <param name="command"></param>
     /// <returns>DataTable - data from command</returns>
-    public async Task<DataTable?> QueryAsync(string command) => await QueryAsync(new MySqlCommand(command));
+    public async Task<DataTable> QueryAsync(string command) => await QueryAsync(new MySqlCommand(command));
 }

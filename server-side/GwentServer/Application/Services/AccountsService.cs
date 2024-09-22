@@ -20,14 +20,14 @@ public class AccountsService
         _encryptService = encryptService;
     }
 
-    public async Task<(Account? Value, string Error)> Create(string login, string name, string email, string password)
+    public async Task<(Account Value, string Error)> Create(string login, string name, string email, string password)
     {
         string error = await _validateAccount(login, email, password);
 
         if (!string.IsNullOrEmpty(error))
             return (null, error);
 
-        AccountEntity? accountEntity = new AccountEntity()
+        AccountEntity accountEntity = new AccountEntity()
         {
             Login = login,
             Name = name,
@@ -64,28 +64,28 @@ public class AccountsService
         await _accountRepository.UpdateAsync(accountEntity);
     }
     
-    public async Task<Account?> GetAccountByLogin(string login)
+    public async Task<Account> GetAccountByLogin(string login)
     {
         var entity = await _accountRepository.GetByLoginAsync(login);
 
         return _castToAccount(entity);
     }
 
-    public async Task<Account?> GetAccountByEmail(string email)
+    public async Task<Account> GetAccountByEmail(string email)
     {
         var entity = await _accountRepository.GetByEmailAsync(email);
 
         return _castToAccount(entity);
     }
 
-    public async Task<Account?> GetAccountById(int id)
+    public async Task<Account> GetAccountById(int id)
     {
         var entity = await _accountRepository.GetByIdAsync(id);
 
         return _castToAccount(entity);
     }
 
-    private Account? _castToAccount(AccountEntity? accountEntity)
+    private Account _castToAccount(AccountEntity accountEntity)
     {
         if (accountEntity == null)
             return null;

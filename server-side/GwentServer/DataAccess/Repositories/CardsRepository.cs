@@ -3,8 +3,10 @@ using Core.Entities.Database;
 using Core.Entities.Game.Cards;
 using Core.Entities.Game.Cards.Special;
 using Core.Entities.Game.Cards.Weather;
+using Core.Entities.Game.Cards.Types;
 using DataAccess.Databases;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace DataAccess.Repositories;
 
@@ -18,8 +20,13 @@ public class CardsRepository : Repository<CardEntity>
     {
         _loadedCards = _getCards().Result;
 
+        _loadCard(Card.CreateCard<KambiCard>(153));
+        _loadCard(Card.CreateCard<YoungBerserkCard>(156));
+        _loadCard(Card.CreateCard<BerserkCard>(157));
+        _loadCard(Card.CreateCard<Ermion>(177));
+        _loadCard(Card.CreateCard<MardroemeCard>(181));
+
         _loadCard(Card.CreateCard<CowCard>(618));
-        _loadCard(Card.CreateCard<DandelionCard>(619));
 
         _loadCard(Card.CreateCard<DecoyCard>(1001));
         _loadCard(Card.CreateCard<HornCard>(1002));
@@ -28,12 +35,12 @@ public class CardsRepository : Repository<CardEntity>
         _loadCard(Card.CreateCard<RainCard>(1005));
         _loadCard(Card.CreateCard<SkelligeStormCard>(1006));
         _loadCard(Card.CreateCard<ClearWeatherCard>(1007));
-        _loadCard(Card.CreateCard<ScorchCard>(1008));
+        _loadCard(Card.CreateCard<SpecialScorchCard>(1008));
     }
 
     public Card GetCardById(int id)
     {
-        _loadedCards.TryGetValue(id, out Card? value);
+        _loadedCards.TryGetValue(id, out Card value);
 
         ArgumentNullException.ThrowIfNull(value, $"Card with id {id} was not found");
 
@@ -54,7 +61,7 @@ public class CardsRepository : Repository<CardEntity>
     {
         Dictionary<int, Card> result = [];
 
-        Fraction[] fractions = [Fraction.None, Fraction.Nilfgaardian, Fraction.Skellige, Fraction.Monsters, Fraction.Scoiatael, Fraction.NorthenRealms];
+        Fraction[] fractions = [Fraction.None, Fraction.Monsters, Fraction.Nilfgaardian, Fraction.NorthenRealms, Fraction.Scoiatael, Fraction.Skellige];
         
         Console.WriteLine("Start loading decks");
 
@@ -77,10 +84,10 @@ public class CardsRepository : Repository<CardEntity>
     {
         var dataTable = await _database.QueryAsync
         (
-            $"SELECT {_table}.id, {_table}.type_id, {_table}.strength, {_table}.field_lines, {_table}.is_hero, {_table}.muster_cards, {_table}.card_category, fractions.name AS fraction " +
+            $"SELECT {_table}.id, {_table}.strength, {_table}.field_lines, {_table}.is_hero, {_table}.muster_cards, fractions.name AS fraction, card_types.name AS type " +
             $"FROM {_table} " +
-            $"JOIN fractions " +
-            $"ON {_table}.fraction_id = fractions.id " +
+            $"JOIN fractions ON {_table}.fraction_id = fractions.id " +
+            $"JOIN card_types ON {_table}.type_id = card_types.id " +
             $"WHERE fractions.name = '{fraction}'"
         );
 
@@ -92,16 +99,17 @@ public class CardsRepository : Repository<CardEntity>
         foreach (System.Data.DataRow row in dataTable.Rows)
         {
             int id = Convert.ToInt32(row["id"]);
-            // TODO: SELECT WITH JOIN `card_types`
-            //int typeId = Convert.ToBoolean(row["type_id"]);
             bool isHero = Convert.ToBoolean(row["is_hero"]);
+            CardType cardType = Enum.Parse<CardType>(row["type"].ToString());
             sbyte strength = Convert.ToSByte(row["strength"]);
-            Fraction fractionOfCard = Enum.Parse<Fraction>(row["fraction"].ToString()!);
-            IEnumerable<FieldLine> fieldLines = JsonSerializer.Deserialize<IEnumerable<FieldLine>>(row["field_lines"].ToString()!)!;
-            CardCategory cardCategory = Enum.Parse<CardCategory>(row["card_category"].ToString()!);
-            IEnumerable<int>? musterCards = JsonSerializer.Deserialize<IEnumerable<int>>(row["muster_cards"].ToString()!);
+            Fraction fractionOfCard = Enum.Parse<Fraction>(row["fraction"].ToString());
+            
+            IEnumerable<FieldLine> fieldLines = JsonSerializer.Deserialize<IEnumerable<FieldLine>>(row["field_lines"].ToString(), new JsonSerializerOptions
+                { Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase, true) } }
+            );
+            IEnumerable<int> musterCards = JsonSerializer.Deserialize<IEnumerable<int>>(row["muster_cards"].ToString());
 
-            var card = Card.CreateCard(id, strength, fractionOfCard, fieldLines, cardCategory);
+            var card = Card.CreateCard(id, strength, isHero, fractionOfCard, cardType, fieldLines, musterCards);
 
             result.Add(card);
         }

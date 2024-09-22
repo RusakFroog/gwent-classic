@@ -12,7 +12,7 @@ public class RoomsService
         _accountsService = accountsService;
     }
 
-    public async Task<(Room? Room, string Error)> CreateRoom(string id, int userId, string name, string password)
+    public async Task<(Room Room, string Error)> CreateRoom(string id, int userId, string name, string password)
     {
         if (Room.GetRoom(name) != null)
             return new(null, "ROOM_NAME_ALREADY_EXISTS");
@@ -20,7 +20,7 @@ public class RoomsService
         if (Room.Rooms.Values.FirstOrDefault(r => r.OwnerId == userId) != null)
             return new(null, "YOU_ALREADY_HAVE_ROOM");
 
-        Account? account = await _accountsService.GetAccountById(userId);
+        Account account = await _accountsService.GetAccountById(userId);
 
         if (account == null)
             return new(null, "UNAUTHORIZED");
@@ -32,7 +32,7 @@ public class RoomsService
 
     public async Task<string> JoinToRoom(string id, int userId, string password)
     {
-        Room? room = Room.GetRoom(id);
+        Room room = Room.GetRoom(id);
 
         if (room == null)
             return "ROOM_DOES_NOT_EXIST";
@@ -40,7 +40,7 @@ public class RoomsService
         if (room.Password != password)
             return "INCORRECT_PASSWORD";
 
-        Account? account = await _accountsService.GetAccountById(userId);
+        Account account = await _accountsService.GetAccountById(userId);
 
         if (account == null) 
             return "TO_LOGIN";
@@ -52,7 +52,7 @@ public class RoomsService
 
     public string SetReady(string id, int userId, bool state)
     {
-        Room? room = Room.GetRoom(id);
+        Room room = Room.GetRoom(id);
         
         if (room == null)
             return "ROOM_DOES_NOT_EXIST";

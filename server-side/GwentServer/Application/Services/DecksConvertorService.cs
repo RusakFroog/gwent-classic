@@ -28,7 +28,7 @@ public class DecksConvertorService
 
             foreach (int cardId in cardsId)
             {
-                Card? card = _cardsRepository.GetCardById(cardId);
+                Card card = _cardsRepository.GetCardById(cardId);
 
                 ArgumentNullException.ThrowIfNull(card);
 

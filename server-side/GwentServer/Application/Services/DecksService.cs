@@ -17,7 +17,7 @@ public class DecksService
         _accountsService = accountsService;
     }
 
-    public async Task<(DeckDTO? Value, string Error)> GetDeckByFraction(int userId, Fraction fraction)
+    public async Task<(DeckDTO Value, string Error)> GetDeckByFraction(int userId, Fraction fraction)
     {
         var account = await _accountsService.GetAccountById(userId);
 

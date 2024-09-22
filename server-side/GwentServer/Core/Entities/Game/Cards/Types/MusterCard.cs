@@ -1,18 +1,16 @@
-﻿namespace Core.Entities.Game.Cards.Special;
+﻿namespace Core.Entities.Game.Cards.Types;
 
 public class MusterCard : Card
 {
-    public override OnDrop? OnDrop => _onDrop;
-
     public IEnumerable<int> MustersId { get; private set; }
 
-    public MusterCard(sbyte strength, Enums.Game.Fraction fraction, IEnumerable<Enums.Game.FieldLine> lines, Enums.Game.CardCategory cardCategory, IEnumerable<int> mustersId) 
-        : base(strength, fraction, lines, cardCategory) 
+    public MusterCard(int id, sbyte strength, Enums.Game.Fraction fraction, IEnumerable<Enums.Game.FieldLine> lines, Enums.Game.CardCategory cardCategory, IEnumerable<int> mustersId, bool isHero)
+        : base(strength, fraction, lines, cardCategory, isHero, id)
     {
         MustersId = mustersId;
     }
 
-    private void _onDrop(Player player)
+    protected override void _onDrop(Player player)
     {
         var findArea = player.CardsInDeck.Concat(player.HandCards).ToList();
 
@@ -20,7 +18,7 @@ public class MusterCard : Card
 
         if (mustersCards.Count == 0)
             return;
-        
+
         Board board = player.CurrentGame.Board;
 
         foreach (var c in mustersCards)

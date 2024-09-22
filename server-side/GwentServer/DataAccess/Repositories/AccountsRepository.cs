@@ -12,7 +12,7 @@ public class AccountsRepository : Repository<AccountEntity>
 
     }
     
-    public async Task<AccountEntity?> GetByLoginAsync(string login)
+    public async Task<AccountEntity> GetByLoginAsync(string login)
     {
         var findAccountEntity = _cachedItems.Values.FirstOrDefault(a => a.Login == login);
 
@@ -34,7 +34,7 @@ public class AccountsRepository : Repository<AccountEntity>
         return item;
     }
 
-    public async Task<AccountEntity?> GetByEmailAsync(string email)
+    public async Task<AccountEntity> GetByEmailAsync(string email)
     {
         var findAccountEntity = _cachedItems.Values.FirstOrDefault(a => a.Email == email);
 

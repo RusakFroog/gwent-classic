@@ -56,7 +56,7 @@ public class AccountsController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequestAccount request)
     {
-        Account? account = await _accountsService.GetAccountByLogin(request.Login);
+        Account account = await _accountsService.GetAccountByLogin(request.Login);
 
         if (account == null || !_encryptService.VerifyPassword(request.Password, account.HashedPassword))
             return Conflict("INVALID_DATA");
