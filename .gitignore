@@ -5,11 +5,10 @@ server-side/GwentServer/.idea
 server-side/GwentServer/API/bin
 server-side/GwentServer/API/obj
 server-side/GwentServer/Application/obj
+server-side/GwentServer/Application/bin
 server-side/GwentServer/Core/obj
+server-side/GwentServer/Core/bin
 server-side/GwentServer/DataAccess/obj
 server-side/GwentServer/DataAccess/bin
-server-side/GwentServer/Core/bin
-server-side/GwentServer/Application/bin
-server-side/GwentServer/Game/bin
-server-side/GwentServer/Game/obj
 server-side/GwentServer/.vs
+cdn
