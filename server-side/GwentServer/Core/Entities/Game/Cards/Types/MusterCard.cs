@@ -5,7 +5,7 @@ public class MusterCard : Card
     public IEnumerable<int> MustersId { get; private set; }
 
     public MusterCard(int id, sbyte strength, Enums.Game.Fraction fraction, IEnumerable<Enums.Game.FieldLine> lines, Enums.Game.CardCategory cardCategory, IEnumerable<int> mustersId, bool isHero)
-        : base(strength, fraction, lines, cardCategory, isHero, id)
+        : base(id, strength, fraction, lines, cardCategory, isHero)
     {
         MustersId = mustersId;
     }

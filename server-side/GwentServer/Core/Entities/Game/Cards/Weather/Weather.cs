@@ -4,7 +4,7 @@ namespace Core.Entities.Game.Cards.Weather;
 
 public abstract class Weather : Card
 {
-    protected Weather(IEnumerable<FieldLine> fields, Fraction fraction = Fraction.None) : base(-1, fraction, fields, CardCategory.Weather)
+    protected Weather(int id, IEnumerable<FieldLine> fields, Fraction fraction = Fraction.None) : base(id, -1, fraction, fields, CardCategory.Weather)
     {
 
     }

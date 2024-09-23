@@ -4,7 +4,7 @@ namespace Core.Entities.Game.Cards.Weather;
 
 public class RainCard : Weather
 {
-    public RainCard() : base([FieldLine.Siege])
+    public RainCard() : base(1005, [FieldLine.Siege])
     {
 
     }

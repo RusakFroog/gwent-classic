@@ -4,7 +4,7 @@ namespace Core.Entities.Game.Cards.Weather;
 
 public class FogCard : Weather
 {
-    public FogCard() : base([FieldLine.Ranger])
+    public FogCard() : base(1003, [FieldLine.Ranger])
     {
 
     }

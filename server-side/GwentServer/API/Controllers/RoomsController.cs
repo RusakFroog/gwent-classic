@@ -2,13 +2,12 @@ using API.Contracts.Rooms;
 using Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class RoomsController : ControllerBase
+public class RoomsController : ExtendedBaseController
 {
     private readonly RoomsService _roomsService;
     
@@ -21,9 +20,7 @@ public class RoomsController : ControllerBase
     [HttpPost("create")]
     public async Task<IActionResult> CreateRoom([FromBody] CreateRequestRoom request)
     {
-        int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
-        var result = await _roomsService.CreateRoom(request.Id, userId, request.Name, request.Password);
+        var result = await _roomsService.CreateRoom(request.Id, UserId, request.Name, request.Password);
 
         if (!string.IsNullOrEmpty(result.Error))
             return BadRequest(result.Error);
@@ -35,9 +32,7 @@ public class RoomsController : ControllerBase
     [HttpPost("join/{id}")]
     public async Task<IActionResult> JoinToRoom(string id, [FromBody] JoinRequestRoom request)
     {
-        int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
-        string error = await _roomsService.JoinToRoom(id, userId, request.Password);
+        string error = await _roomsService.JoinToRoom(id, UserId, request.Password);
         
         if (!string.IsNullOrEmpty(error))
             return BadRequest(error);
@@ -49,9 +44,7 @@ public class RoomsController : ControllerBase
     [HttpPost("setready/{id}")]
     public IActionResult SetReady(string id, [FromQuery] bool state)
     {
-        int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
-        string error = _roomsService.SetReady(id, userId, state);
+        string error = _roomsService.SetReady(id, UserId, state);
         
         if (!string.IsNullOrEmpty(error))
             return BadRequest(error);

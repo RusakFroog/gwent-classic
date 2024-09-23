@@ -25,15 +25,15 @@ public sealed class MySqlDbContext
     /// </summary>
     /// <param name="command"></param>
     /// <returns>Last inserted ID</returns>
-    public async Task<int> ExecuteAsync(MySqlCommand command)
+    public async Task<int> ExecuteAsync(MySqlCommand command, CancellationToken ct = default)
     {
         try
         {
             if (_dbConnection.State != ConnectionState.Open)
-                await _dbConnection.OpenAsync();
+                await _dbConnection.OpenAsync(ct);
 
             command.Connection = _dbConnection;
-            await command.ExecuteNonQueryAsync();
+            await command.ExecuteNonQueryAsync(ct);
 
             return (int)command.LastInsertedId;
         }
@@ -49,24 +49,23 @@ public sealed class MySqlDbContext
     /// </summary>
     /// <param name="command"></param>
     /// <returns>DataTable - data from command</returns>
-    public async Task<DataTable> QueryAsync(MySqlCommand command)
+    public async Task<DataTable> QueryAsync(MySqlCommand command, CancellationToken ct = default)
     {
         try
         {
             if (_dbConnection.State != ConnectionState.Open)
-                await _dbConnection.OpenAsync();
+                await _dbConnection.OpenAsync(ct);
 
             command.Connection = _dbConnection;
 
             DataTable result = new DataTable();
-            result.Load(await command.ExecuteReaderAsync());
+            result.Load(await command.ExecuteReaderAsync(ct));
 
             return result;
         }
         catch (Exception ex)
         {
             await Console.Out.WriteLineAsync(ex.ToString());
-
             return null;
         }
     }
@@ -76,12 +75,12 @@ public sealed class MySqlDbContext
     /// </summary>
     /// <param name="command"></param>
     /// <returns>Last inserted ID</returns>
-    public async Task<int> ExecuteAsync(string command) => await ExecuteAsync(new MySqlCommand(command));
+    public async Task<int> ExecuteAsync(string command, CancellationToken ct = default) => await ExecuteAsync(new MySqlCommand(command), ct);
  
     /// <summary>
     /// Execute command to database and return data
     /// </summary>
     /// <param name="command"></param>
     /// <returns>DataTable - data from command</returns>
-    public async Task<DataTable> QueryAsync(string command) => await QueryAsync(new MySqlCommand(command));
+    public async Task<DataTable> QueryAsync(string command, CancellationToken ct = default) => await QueryAsync(new MySqlCommand(command), ct);
 }

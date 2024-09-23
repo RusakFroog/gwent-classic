@@ -2,7 +2,7 @@
 
 public class HemdallCard : Card
 {
-    public HemdallCard() : base(11, Enums.Game.Fraction.Skellige, [Enums.Game.FieldLine.Closer], Enums.Game.CardCategory.Hero, true)
+    public HemdallCard() : base(180, 11, Enums.Game.Fraction.Skellige, [Enums.Game.FieldLine.Closer], Enums.Game.CardCategory.Hero, true)
     {
 
     }

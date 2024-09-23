@@ -21,7 +21,7 @@ public class Card
 
     public virtual bool IsHero { get; private set; } = false;
 
-    protected Card(sbyte strength, Fraction fraction, IEnumerable<FieldLine> fields, CardCategory cardCategory = CardCategory.None, bool isHero = false, int id = -1)
+    protected Card(int id, sbyte strength, Fraction fraction, IEnumerable<FieldLine> fields, CardCategory cardCategory = CardCategory.None, bool isHero = false)
     {
         Id = id;
         Strength = strength;
@@ -46,7 +46,7 @@ public class Card
             CardType.MoraleBoost => new MoraleBoostCard(id, strength, fraction, fields, cardCategory, isHero),
             CardType.Scorch => new ScorchCard(id, strength, fraction, fields, cardCategory, isHero),
             CardType.CommanderHorn => new CommanderHornCard(id, strength, fraction, fields, cardCategory, isHero),
-            _ => new Card(strength, fraction, fields, cardCategory, isHero, id)
+            _ => new Card(id, strength, fraction, fields, cardCategory, isHero)
         };
     }
 
@@ -63,13 +63,5 @@ public class Card
     protected virtual void _onDied()
     {
 
-    }
-
-    public static T CreateCard<T>(int id) where T : Card
-    {
-        var card = Activator.CreateInstance<T>();
-        card.Id = id;
-
-        return card;
     }
 }

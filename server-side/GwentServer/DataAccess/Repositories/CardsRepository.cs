@@ -20,22 +20,24 @@ public class CardsRepository : Repository<CardEntity>
     {
         _loadedCards = _getCards().Result;
 
-        _loadCard(Card.CreateCard<KambiCard>(153));
-        _loadCard(Card.CreateCard<YoungBerserkCard>(156));
-        _loadCard(Card.CreateCard<BerserkCard>(157));
-        _loadCard(Card.CreateCard<Ermion>(177));
-        _loadCard(Card.CreateCard<MardroemeCard>(181));
+        _loadCard(new KambiCard());
+        _loadCard(new YoungBerserkCard());
+        _loadCard(new BerserkCard());
+        _loadCard(new Ermion());
+        _loadCard(new MardroemeCard());
 
-        _loadCard(Card.CreateCard<CowCard>(618));
+        _loadCard(new CowCard());
 
-        _loadCard(Card.CreateCard<DecoyCard>(1001));
-        _loadCard(Card.CreateCard<HornCard>(1002));
-        _loadCard(Card.CreateCard<FogCard>(1003));
-        _loadCard(Card.CreateCard<FrostCard>(1004));
-        _loadCard(Card.CreateCard<RainCard>(1005));
-        _loadCard(Card.CreateCard<SkelligeStormCard>(1006));
-        _loadCard(Card.CreateCard<ClearWeatherCard>(1007));
-        _loadCard(Card.CreateCard<SpecialScorchCard>(1008));
+        _loadCard(new DecoyCard());
+        _loadCard(new HornCard());
+
+        _loadCard(new FogCard());
+        _loadCard(new FrostCard());
+        _loadCard(new RainCard());
+        _loadCard(new SkelligeStormCard());
+        _loadCard(new ClearWeatherCard());
+        
+        _loadCard(new SpecialScorchCard());
     }
 
     public Card GetCardById(int id)
@@ -44,7 +46,7 @@ public class CardsRepository : Repository<CardEntity>
 
         ArgumentNullException.ThrowIfNull(value, $"Card with id {id} was not found");
 
-        return value!;
+        return value;
     }
 
     public int GetIdByCard<T>() where T : Card

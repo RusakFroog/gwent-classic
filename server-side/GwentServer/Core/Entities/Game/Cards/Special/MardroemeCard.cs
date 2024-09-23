@@ -2,7 +2,7 @@
 
 public class MardroemeCard : Card
 {
-    public MardroemeCard() : base(-1, Enums.Game.Fraction.Skellige, [Enums.Game.FieldLine.Ranger], Enums.Game.CardCategory.Special)
+    public MardroemeCard() : base(181, -1, Enums.Game.Fraction.Skellige, [Enums.Game.FieldLine.Ranger], Enums.Game.CardCategory.Special)
     {
 
     }

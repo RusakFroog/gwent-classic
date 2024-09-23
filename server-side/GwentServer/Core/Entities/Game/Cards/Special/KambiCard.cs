@@ -2,14 +2,14 @@
 
 public class KambiCard : Card
 {
-    public KambiCard() : base(0, Enums.Game.Fraction.Skellige, [Enums.Game.FieldLine.Closer], Enums.Game.CardCategory.None)
+    public KambiCard() : base(153, 0, Enums.Game.Fraction.Skellige, [Enums.Game.FieldLine.Closer], Enums.Game.CardCategory.None)
     {
 
     }
 
     protected override void _onDied()
     {
-        Card.CreateCard<HemdallCard>(180);
+        new HemdallCard();
         //.. drop on board
     }
 }

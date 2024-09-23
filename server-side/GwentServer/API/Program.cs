@@ -7,6 +7,7 @@ using Core.Interfaces;
 using Core.Entities.Database;
 
 using Core.Enums.Game;
+using API.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
  
@@ -15,7 +16,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
 
-builder.Services.AddMySqlDataSource(builder.Configuration.GetConnectionString("DefaultConnection")!);
+builder.Services.AddMySqlDataSource(builder.Configuration.GetConnectionString("DefaultConnection"));
 
 builder.Services.AddSingleton<MySqlDbContext>();
 
@@ -69,6 +70,8 @@ app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<UserIdMiddleware>();
 
 app.MapControllers();
 

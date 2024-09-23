@@ -2,7 +2,7 @@
 
 public class Ermion : Card
 {
-    public Ermion() : base(8, Enums.Game.Fraction.Skellige, [Enums.Game.FieldLine.Ranger], Enums.Game.CardCategory.Hero, true)
+    public Ermion() : base(177, 8, Enums.Game.Fraction.Skellige, [Enums.Game.FieldLine.Ranger], Enums.Game.CardCategory.Hero, true)
     {
 
     }

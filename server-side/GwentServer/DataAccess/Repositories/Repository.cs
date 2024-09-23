@@ -43,7 +43,10 @@ public abstract class Repository<T> : IRepository<T> where T : EntityBase
                         return $"'{value}'";
                 }));
 
-            MySqlCommand cmd = new MySqlCommand($"INSERT INTO `{_table}` ({columns}) VALUES ({values})");
+            MySqlCommand cmd = new MySqlCommand($"INSERT INTO @table (@columns) VALUES (@values)");
+            cmd.Parameters.AddWithValue("table", _table);
+            cmd.Parameters.AddWithValue("columns", columns);
+            cmd.Parameters.AddWithValue("values", values);
 
             int lastInsertedId = await _database.ExecuteAsync(cmd);
 
@@ -74,7 +77,9 @@ public abstract class Repository<T> : IRepository<T> where T : EntityBase
                     return $"`{_getFormatedField(p.Name)}` = '{value}'";
             }));
 
-        MySqlCommand cmd = new MySqlCommand($"UPDATE `{_table}` SET {updates} WHERE `id` = {entity.Id}");
+        MySqlCommand cmd = new MySqlCommand($"UPDATE @table SET {updates} WHERE id = @id");
+        cmd.Parameters.AddWithValue("table", _table);
+        cmd.Parameters.AddWithValue("id", entity.Id);
 
         await _database.ExecuteAsync(cmd);
 
@@ -90,7 +95,11 @@ public abstract class Repository<T> : IRepository<T> where T : EntityBase
             return;
         }
 
-        await _database.ExecuteAsync($"DELETE FROM `{_table}` WHERE `id` = {entity.Id}");
+        MySqlCommand cmd = new MySqlCommand("DELETE FROM @table WHERE id = @id");
+        cmd.Parameters.AddWithValue("table", _table);
+        cmd.Parameters.AddWithValue("id", entity.Id);
+
+        await _database.ExecuteAsync(cmd);
 
         _cachedItems.Remove(entity.Id);
     }
@@ -100,7 +109,11 @@ public abstract class Repository<T> : IRepository<T> where T : EntityBase
         if (_cachedItems.TryGetValue(id, out T cachedItem))
             return cachedItem;
 
-        var dataTable = await _database.QueryAsync($"SELECT * FROM `{_table}` WHERE `id` = {id}");
+        MySqlCommand cmd = new MySqlCommand("SELECT * FROM @table WHERE id = @id");
+        cmd.Parameters.AddWithValue("table", _table);
+        cmd.Parameters.AddWithValue("id", id);
+
+        var dataTable = await _database.QueryAsync(cmd);
 
         if (dataTable == null || dataTable.Rows.Count == 0)
             return null;
@@ -139,7 +152,7 @@ public abstract class Repository<T> : IRepository<T> where T : EntityBase
                     }
                     else if (property.PropertyType.IsEnum && typeof(Enum).IsAssignableFrom(property.PropertyType) && value is string)
                     {
-                        var enumValue = Enum.Parse(property.PropertyType, value.ToString()!);
+                        var enumValue = Enum.Parse(property.PropertyType, value.ToString());
                         property.SetValue(item, enumValue);
                     }
                     else

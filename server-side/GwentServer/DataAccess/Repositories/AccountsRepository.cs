@@ -19,7 +19,11 @@ public class AccountsRepository : Repository<AccountEntity>
         if (findAccountEntity != null)
             return findAccountEntity;
 
-        var dataTable = await _database.QueryAsync($"SELECT * FROM `{_table}` WHERE `login`='{login}'");
+        MySqlConnector.MySqlCommand cmd = new MySqlConnector.MySqlCommand("SELECT id, login, name, email, hashed_password, decks FROM @table WHERE login = @login");
+        cmd.Parameters.AddWithValue("table", _table);
+        cmd.Parameters.AddWithValue("login", login);
+
+        var dataTable = await _database.QueryAsync(cmd);
 
         if (dataTable == null || dataTable.Rows.Count == 0)
             return null;
@@ -40,8 +44,12 @@ public class AccountsRepository : Repository<AccountEntity>
 
         if (findAccountEntity != null)
             return findAccountEntity;
+        
+        MySqlConnector.MySqlCommand cmd = new MySqlConnector.MySqlCommand("SELECT id, login, name, email, hashed_password, decks FROM @table WHERE email = @email");
+        cmd.Parameters.AddWithValue("table", _table);
+        cmd.Parameters.AddWithValue("email", email);
 
-        var dataTable = await _database.QueryAsync($"SELECT * FROM `{_table}` WHERE `email` = '{email}'");
+        var dataTable = await _database.QueryAsync(cmd);
 
         if (dataTable == null || dataTable.Rows.Count == 0)
             return null;

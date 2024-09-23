@@ -4,15 +4,14 @@ namespace Core.Entities.Game.Cards.Special;
 
 public class CowCard : Card
 {
-    public CowCard() : base(0, Fraction.None, [FieldLine.Ranger], CardCategory.None)
+    public CowCard() : base(618, 0, Fraction.None, [FieldLine.Ranger], CardCategory.None)
     {
 
     }
 
     protected override void _onDied()
     {
-        Card.CreateCard<BovineDefenseForceCard>(619);
+        new BovineDefenseForceCard();
         //.. drop on board
-
     }
 }

@@ -12,7 +12,7 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class AccountsController : ControllerBase
+public class AccountsController : ExtendedBaseController
 {
     private readonly EncryptService _encryptService;
     private readonly AccountsService _accountsService;
@@ -93,16 +93,14 @@ public class AccountsController : ControllerBase
         if (request.Name.Length > Account.MAX_LENGTH_NAME)
             return BadRequest("Max. length of nick name: " + Account.MAX_LENGTH_NAME);
 
-        int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
-        var account = await _accountsService.GetAccountById(userId);
+        var account = await _accountsService.GetAccountById(UserId);
 
         if (account == null)
             return BadRequest("NO_ACCOUNT_WITH_ID");
 
         await _accountsService.Update(account.Id, account.Login, request.Name, account.Email, account.HashedPassword, account.Decks);
 
-        HttpContext.Response.Cookies.Append("account_nickname", request.Name, new CookieOptions()
+        Response.Cookies.Append("account_nickname", request.Name, new CookieOptions()
         {
             HttpOnly = false,
             MaxAge = TimeSpan.FromDays(600)
@@ -119,9 +117,7 @@ public class AccountsController : ControllerBase
     [HttpGet("loggedin")]
     public async Task<IActionResult> LoggedIn()
     {
-        int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
-        var account = await _accountsService.GetAccountById(userId);
+        var account = await _accountsService.GetAccountById(UserId);
 
         return account == null ? Unauthorized() : Ok();
     }

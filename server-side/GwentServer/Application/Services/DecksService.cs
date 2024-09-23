@@ -24,7 +24,7 @@ public class DecksService
         if (account == null)
             return (null, "ACCOUNT_DOES_NOT_EXIST");
 
-        return (new DeckDTO(fraction, account.Decks.FirstOrDefault(d => d.Fraction == fraction)!.Cards.Select(c => c.Id)), string.Empty);
+        return (new DeckDTO(fraction, account.Decks.FirstOrDefault(d => d.Fraction == fraction).Cards.Select(c => c.Id)), string.Empty);
     }
 
     public async Task<string> UpdateDeck(int userId, DeckDTO deck)

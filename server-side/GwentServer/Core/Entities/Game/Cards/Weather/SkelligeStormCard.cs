@@ -4,7 +4,7 @@ namespace Core.Entities.Game.Cards.Weather;
 
 public class SkelligeStormCard : Weather
 {
-    public SkelligeStormCard() : base([FieldLine.Siege, FieldLine.Ranger], Fraction.None)
+    public SkelligeStormCard() : base(1006, [FieldLine.Siege, FieldLine.Ranger], Fraction.None)
     {
 
     }
