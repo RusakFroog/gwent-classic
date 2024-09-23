@@ -222,7 +222,7 @@ REPLACE INTO `cards` (`id`, `type_id`, `strength`, `fraction_id`, `field_lines`,
 	(173, 4, 6, 5, '["Siege"]', 0, '[]'),
 	(176, 5, 12, 5, '["Closer", "Ranger"]', 0, '[]'),
 	(178, 0, 10, 5, '["Ranger"]', 1, '[]'),
-	(179, 3, 10, 5, '["Closer"]', 1, '[179]'),
+	(179, 3, 10, 5, '["Closer"]', 1, '[158, 159, 160]'),
 	(182, 2, 0, 0, '["Closer"]', 1, '[]'),
 	(183, 0, 7, 0, '["Closer"]', 1, '[]'),
 	(184, 1, 7, 0, '["Ranger"]', 1, '[]'),
@@ -236,7 +236,7 @@ CREATE TABLE IF NOT EXISTS `card_types` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Дамп данных таблицы gwent_classic.card_types: ~8 rows (приблизительно)
+-- Дамп данных таблицы gwent_classic.card_types: ~9 rows (приблизительно)
 REPLACE INTO `card_types` (`id`, `name`) VALUES
 	(0, 'None'),
 	(1, 'Medic'),
