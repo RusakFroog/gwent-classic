@@ -1,6 +1,7 @@
 <script>
 import Button from '../components/ui/Button.vue';
 import CustomInput from '../components/ui/CustomInput.vue';
+import Notification from '../components/ui/Notification.vue';
 import router from '../router/index.js';
 import { loginToAccount } from '../services/accounts.js';
 
@@ -17,7 +18,6 @@ export default {
             componentInputs: [],
 
             error: {
-                active: false,
                 text: ""
             }
         }
@@ -25,7 +25,8 @@ export default {
 
     components: {
         Button,
-        CustomInput
+        CustomInput,
+        Notification
     },
 
     methods: {
@@ -52,31 +53,22 @@ export default {
 
         showError(message) {
             this.error.text = message;
-
-            this.error.active = true;
-        },
-
-        hideError() {
-            if (!this.error.active)
-                return;
-
-            this.error.active = false;
         },
 
         login() {
-            this.hideError();
-            
             const login = this.componentInputs[0].inputValue;
             const password = this.componentInputs[1].inputValue;
 
-            if (login.length < 5 || password < 6 || login.includes(" ") || password.includes(" "))
-                return this.showError("ERROR: Login or Password are invalid");
+            if (login.length < 5 || password < 6 || login.includes(" ") || password.includes(" ")) {
+                return this.showError("Login or Password are invalid");
+            }
 
             setTimeout(async () => {
                 const result = await loginToAccount(login, password);
 
-                if (result.error != null)
-                    return this.showError("ERROR: " + result.error);
+                if (result.error != null) {
+                    return this.showError(result.error);
+                }
 
                 this.goToPage('/home');
 
@@ -96,6 +88,8 @@ export default {
 </script>
 
 <template>
+    <Notification :text="error.text" :onCloseClick="() => this.error.text = undefined" type="error" />
+
     <section class="login-section">
         <div class="panel">
             <h1>Log in to account</h1>
@@ -195,26 +189,6 @@ export default {
     background-image: url('../assets/images/gwent-game.png');
     background-repeat: no-repeat;
     background-size: cover;
-}
-
-//TODO: Delete when will notify about error
-.error {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    width: 310px;
-    margin-top: 10px;
-
-    .error-image {
-        width: 60px;
-        height: 60px;
-    }
-
-    text {
-        color: #AB1E1E;
-        padding-left: 10px;
-        font-size: 18px;
-    }
 }
 
 @media screen and (max-height: 1020px) {

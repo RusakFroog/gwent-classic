@@ -1,6 +1,7 @@
 <script>
 import Button from '../components/ui/Button.vue';
 import CustomInput from '../components/ui/CustomInput.vue';
+import Notification from '../components/ui/Notification.vue';
 import router from '../router/index.js';
 import { createAccount } from '../services/accounts.js';
 
@@ -19,7 +20,6 @@ export default {
             componentInputs: [],
 
             error: {
-                active: false,
                 text: ""
             }
         }
@@ -27,7 +27,8 @@ export default {
 
     components: {
         Button,
-        CustomInput
+        CustomInput,
+        Notification
     },
 
     methods: {
@@ -54,15 +55,10 @@ export default {
 
         showError(message) {
             this.error.text = message;
-
-            this.error.active = true;
         },
 
         hideError() {
-            if (!this.error.active)
-                return;
-
-            this.error.active = false;
+            this.error.text = '';
         },
 
         signUp() {
@@ -73,14 +69,16 @@ export default {
             const password = this.componentInputs[2].inputValue;
             const repeatPassword = this.componentInputs[3].inputValue;
 
-            if (password !== repeatPassword)
-                return this.showError('ERROR: Passwords do not match');
+            if (password !== repeatPassword) {
+                return this.showError('Passwords do not match');
+            }
             
             setTimeout(async () => {
                 const result = await createAccount(login, email, password);
                 
-                if (result.error != null) 
-                    return this.showError("ERROR: " + result.error);
+                if (result.error != null) {
+                    return this.showError(result.error);
+                }
                 
                 this.goToPage('/home');
 
@@ -100,6 +98,8 @@ export default {
 </script>
 
 <template>
+    <Notification :text="error.text" :onCloseClick="() => this.error.text = undefined" type="error" />
+
     <section class="registration-section">
         <div class="panel">
             <h1>Create account</h1>
@@ -200,25 +200,6 @@ export default {
     background-repeat: no-repeat;
     background-size: cover;
     background-image: url('../assets/images/gwent-game.png');
-}
-
-.error {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 310px;
-    margin-top: 10px;
-
-    .error-image {
-        width: 60px;
-        height: 60px;
-    }
-
-    text {
-        color: #AB1E1E;
-        padding-left: 10px;
-        font-size: 18px;
-    }
 }
 
 @media screen and (max-height: 950px) {

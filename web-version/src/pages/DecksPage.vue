@@ -73,53 +73,41 @@ export default {
 
             cardsInDeck: [
                 {
-                    id: 0,
+                    id: 1,
+                    subCategory: 0,
+                },{
+                    id: 1,
+                    subCategory: 0,
+                },{
+                    id: 1,
+                    subCategory: 0,
+                },{
+                    id: 1,
                     subCategory: 0,
                 },
                 {
-                    id: 0,
+                    id: 1,
                     subCategory: 0,
-                },
-                {
-                    id: 0,
+                },{
+                    id: 1,
                     subCategory: 0,
-                },
-                {
-                    id: 0,
+                },{
+                    id: 1,
                     subCategory: 0,
-                },
-                {
-                    id: 0,
+                },{
+                    id: 1,
                     subCategory: 0,
-                },
-                {
-                    id: 0,
+                },{
+                    id: 1,
                     subCategory: 0,
-                },
-                {
-                    id: 0,
-                    subCategory: 0,
-                },
-                {
-                    id: 0,
-                    subCategory: 0,
-                },
-                {
-                    id: 0,
-                    subCategory: 0,
-                },
-                {
-                    id: 0,
-                    subCategory: 0,
-                },
-                {
-                    id: 0,
+                },{
+                    id: 1,
                     subCategory: 0,
                 },
             ],
             cardsInPool: [
                 {
-                    id: 0,
+                    id: 1,
                     cardCategory: 0,
                 } 
             ],
@@ -411,6 +399,7 @@ export default {
     display: flex;
     justify-content: center;
     padding-top: 25px;
+    margin-right: 60px;
 
     .prev-fraction,
     .next-fraction {
@@ -487,12 +476,12 @@ export default {
 
     .cards {
         display: flex;
+        height: 100%;
 
         .left-cards,
         .right-cards {
             display: flex;
             width: 50vw;
-            height: 65vh;
         }
     
         .left-cards {
@@ -512,7 +501,7 @@ export default {
             grid-template-rows: repeat(7, auto);
 
             width: 648px;
-            height: 64vh;
+            height: 59vh;
             padding: 15px;
             
             background-image: url('../assets/decks/frame.svg');
@@ -527,6 +516,11 @@ export default {
             &::-webkit-scrollbar {
                 display: none;
             }
+
+            .card {
+                width: 192px;
+                height: 365px;
+            }
         }
     }
 
@@ -535,21 +529,20 @@ export default {
         margin-top: 20px;
         margin-bottom: 20px;
 
-        .left-group {
-            display: flex;
-            gap: 60px;
-            
-            margin-left: 60px;
-            width: 50vw;
-        }
-
+        .left-group,
         .right-group {
             display: flex;
             gap: 60px;
+            width: 50vw;
+        }
 
+        .left-group {
+            margin-left: 60px;
+        }
+
+        .right-group {
             margin-right: 60px;
             justify-content: end;
-            width: 50vw;
         }
 
         .item {
@@ -654,6 +647,70 @@ export default {
                         margin-right: 12px;
                     }
                 }
+            }
+        }
+    }
+}
+
+@media screen and (max-height: 1280px) {
+    .main-section .cards .frame {
+        height: 60vh;
+    }
+}
+
+@media screen and (max-height: 1025px) {
+    .main-section { 
+        .cards {
+            .frame {
+                height: 65vh;
+                width: 576px;
+                column-gap: 190px;
+    
+                .card {
+                    width: 165px;
+                    height: auto;
+                }
+            }
+        }
+
+        .types {
+            .left-group,
+            .right-group {
+                gap: 52px;
+            }
+
+            .item {
+                width: 36px;
+                height: 36px;
+            }
+        }
+    }
+}
+
+@media screen and (max-height: 960px) {
+    .main-section {
+        .cards {
+            .frame {
+                height: 63vh;
+                width: 512px;
+                column-gap: 165px;
+    
+                .card {
+                    width: 150px;
+                    height: auto;
+                }
+            }
+        }
+
+        .types {
+            .left-group,
+            .right-group {
+                gap: 46px;
+            }
+
+            .item {
+                width: 32px;
+                height: 32px;
             }
         }
     }
