@@ -86,7 +86,7 @@ export default {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     outline: 1px solid $bronze;
     width: 20vw;
-    height: 30vh;
+    height: 400px;
 }
 
 .modal-title {

@@ -46,13 +46,13 @@ export default {
             },
 
             categoriesName: [
-                "ALL CARDS",
-                "CLOSE COMBAT UNIT CARDS",
-                "RANGED UNIT CARDS",
-                "SIEGE UNIT CARDS",
-                "HERO CARDS",
-                "WEATHER CARDS",
-                "SPECIAL CARDS",
+                { All: "ALL CARDS" },
+                { Closer: "CLOSE COMBAT UNIT CARDS" }, 
+                { Ranger: "RANGED UNIT CARDS" }, 
+                { Siege: "SIEGE UNIT CARDS" }, 
+                { Hero: "HERO CARDS" }, 
+                { Weather: "WEATHER CARDS" }, 
+                { Special: "SPECIAL CARDS" }, 
             ],
 
             stats: {
@@ -68,48 +68,57 @@ export default {
                 specialCards: 10
             },
 
-            selectedRightCategoryId: 0,
-            selectedLeftCategoryId: 0,
+            selectedRightCategory: 'All',
+            selectedLeftCategory: 'All',
 
             cardsInDeck: [
                 {
-                    id: 1,
-                    subCategory: 0,
-                },{
-                    id: 1,
-                    subCategory: 0,
-                },{
-                    id: 1,
-                    subCategory: 0,
-                },{
-                    id: 1,
-                    subCategory: 0,
+                    id: 2,
+                    lines: ['Ranger', 'Closer'],
+                    category: 'Hero'
                 },
                 {
                     id: 1,
-                    subCategory: 0,
-                },{
-                    id: 1,
-                    subCategory: 0,
-                },{
-                    id: 1,
-                    subCategory: 0,
-                },{
-                    id: 1,
-                    subCategory: 0,
-                },{
-                    id: 1,
-                    subCategory: 0,
-                },{
-                    id: 1,
-                    subCategory: 0,
+                    lines: ['Siege'],
+                    category: 'Hero'
+                },
+                {
+                    id: 3,
+                    lines: ['Closer'],
+                    category: 'Hero'
+                },
+                {
+                    id: 4,
+                    lines: ['Closer'],
+                    category: 'Hero'
+                },
+                {
+                    id: 5,
+                    lines: ['Closer'],
+                    category: 'Hero'
+                },
+                {
+                    id: 6,
+                    lines: ['Closer'],
+                    category: 'Hero'
+                },
+                {
+                    id: 12,
+                    lines: ['Closer'],
+                    category: 'Hero'
+                },
+                {
+                    id: 14,
+                    lines: ['Closer'],
+                    category: 'Hero'
                 },
             ],
             cardsInPool: [
                 {
-                    id: 1,
-                    cardCategory: 0,
-                } 
+                    id: 17,
+                    lines: ['Closer'],
+                    category: 'Hero'
+                },
             ],
         };
     },
@@ -150,25 +159,27 @@ export default {
         },
 
         getActiveLeftCategory() {
-            return this.categoriesName[this.selectedLeftCategoryId];
+            const category = this.categoriesName.find(c => this.selectedLeftCategory in c);
+            return category[this.selectedLeftCategory];
         },
 
         getActiveRightCategory() {
-            return this.categoriesName[this.selectedRightCategoryId];
+            const category = this.categoriesName.find(c => this.selectedRightCategory in c);
+            return category[this.selectedRightCategory];
         },
 
         getCardsInPool() {
-            if (this.selectedLeftCategoryId === 0)
+            if (this.selectedLeftCategory === 'All')
                 return this.cardsInPool;
 
-            return this.cardsInPool.filter(c => c.cardCategory === this.selectedLeftCategoryId);
+            return this.cardsInPool.filter(c => c.lines.includes(this.selectedLeftCategory) || c.category === this.selectedLeftCategory);
         },
 
         getCardsInDeck() {
-            if (this.selectedRightCategoryId === 0)
+            if (this.selectedRightCategory === 'All')
                 return this.cardsInDeck;
 
-            return this.cardsInDeck.filter(c => c.cardCategory === this.selectedRightCategoryId);
+            return this.cardsInDeck.filter(c => c.lines.includes(this.selectedRightCategory) || c.category === this.selectedRightCategory);
         }
     },
 
@@ -181,13 +192,23 @@ export default {
             this.currentFractionId = (this.currentFractionId + 1) % this.fractions.length;
         },
 
-        changeCategory(id, left = true) {
-            const categoryId = left ? 'selectedLeftCategoryId' : 'selectedRightCategoryId';
+        changeCategory(name, left = true) {
+            const category = left ? 'selectedLeftCategory' : 'selectedRightCategory';
 
-            if (this[categoryId] === id)
+            if (this[category] === name)
                 return;
 
-            this[categoryId] = id;
+            this[category] = name;
+        },
+
+        moveToDeck(card) {
+            this.cardsInDeck.push(card);
+            this.cardsInPool.splice(this.cardsInPool.indexOf(card), 1);
+        },
+
+        moveToPool(card) {
+            this.cardsInPool.push(card);
+            this.cardsInDeck.splice(this.cardsInDeck.indexOf(card), 1);
         }
     }
 }
@@ -233,22 +254,22 @@ export default {
     <section class="main-section">
         <div class="types">
             <div class="left-group">
-                <div :class="['item', 'card', { 'active': selectedLeftCategoryId === 0 }]" @click="changeCategory(0)" />
-                <div :class="['item', 'sword', { 'active': selectedLeftCategoryId === 1 }]" @click="changeCategory(1)" />
-                <div :class="['item', 'bow', { 'active': selectedLeftCategoryId === 2 }]" @click="changeCategory(2)" />
-                <div :class="['item', 'trebuchet', { 'active': selectedLeftCategoryId === 3 }]" @click="changeCategory(3)" />
-                <div :class="['item', 'head', { 'active': selectedLeftCategoryId === 4 }]" @click="changeCategory(4)" />
-                <div :class="['item', 'sun', { 'active': selectedLeftCategoryId === 5 }]" @click="changeCategory(5)" />
-                <div :class="['item', 'spikes', { 'active': selectedLeftCategoryId === 6 }]" @click="changeCategory(6)" />
+                <div :class="['item', 'card', { 'active': selectedLeftCategory === 'All' }]" @click="changeCategory('All')" />
+                <div :class="['item', 'sword', { 'active': selectedLeftCategory === 'Closer' }]" @click="changeCategory('Closer')" />
+                <div :class="['item', 'bow', { 'active': selectedLeftCategory === 'Ranger' }]" @click="changeCategory('Ranger')" />
+                <div :class="['item', 'trebuchet', { 'active': selectedLeftCategory === 'Siege' }]" @click="changeCategory('Siege')" />
+                <div :class="['item', 'head', { 'active': selectedLeftCategory === 'Hero' }]" @click="changeCategory('Hero')" />
+                <div :class="['item', 'sun', { 'active': selectedLeftCategory === 'Weather' }]" @click="changeCategory('Weather')" />
+                <div :class="['item', 'spikes', { 'active': selectedLeftCategory === 'Special' }]" @click="changeCategory('Special')" />
             </div>
             <div class="right-group">
-                <div :class="['item', 'card', { 'active': selectedRightCategoryId === 0 }]" @click="changeCategory(0, false)" />
-                <div :class="['item', 'sword', { 'active': selectedRightCategoryId === 1 }]" @click="changeCategory(1, false)" />
-                <div :class="['item', 'bow', { 'active': selectedRightCategoryId === 2 }]" @click="changeCategory(2, false)" />
-                <div :class="['item', 'trebuchet', { 'active': selectedRightCategoryId === 3 }]" @click="changeCategory(3, false)" />
-                <div :class="['item', 'head', { 'active': selectedRightCategoryId === 4 }]" @click="changeCategory(4, false)" />
-                <div :class="['item', 'sun', { 'active': selectedRightCategoryId === 5 }]" @click="changeCategory(5, false)" />
-                <div :class="['item', 'spikes', { 'active': selectedRightCategoryId === 6 }]" @click="changeCategory(6, false)" />
+                <div :class="['item', 'card', { 'active': selectedRightCategory === 'All' }]" @click="changeCategory('All', false)" />
+                <div :class="['item', 'sword', { 'active': selectedRightCategory === 'Closer' }]" @click="changeCategory('Closer', false)" />
+                <div :class="['item', 'bow', { 'active': selectedRightCategory === 'Ranger' }]" @click="changeCategory('Ranger', false)" />
+                <div :class="['item', 'trebuchet', { 'active': selectedRightCategory === 'Siege' }]" @click="changeCategory('Siege', false)" />
+                <div :class="['item', 'head', { 'active': selectedRightCategory === 'Hero' }]" @click="changeCategory('Hero', false)" />
+                <div :class="['item', 'sun', { 'active': selectedRightCategory === 'Weather' }]" @click="changeCategory('Weather', false)" />
+                <div :class="['item', 'spikes', { 'active': selectedRightCategory === 'Special' }]" @click="changeCategory('Special', false)" />
             </div>
         </div>
 
@@ -258,6 +279,7 @@ export default {
                     <Card 
                         class="card"
                         v-for="card in getCardsInPool" 
+                        @dblclick="moveToDeck(card)"
                         :cardId="card.id" 
                     />
                 </div>
@@ -312,7 +334,8 @@ export default {
                     <Card 
                         class="card"
                         v-for="card in getCardsInDeck" 
-                        :cardId="card.id" 
+                        @dblclick="moveToPool(card)"
+                        :cardId="card.id"
                     />
                 </div>
             </section>
@@ -495,12 +518,12 @@ export default {
         
         .frame {
             display: grid;
-            column-gap: 212px;
-            row-gap: 15px;
+            column-gap: 200px;
+            row-gap: 8px;
             grid-template-columns: repeat(3, 0);
             grid-template-rows: repeat(7, auto);
 
-            width: 648px;
+            width: 625px;
             height: 59vh;
             padding: 15px;
             
@@ -519,7 +542,7 @@ export default {
 
             .card {
                 width: 192px;
-                height: 365px;
+                height: 356px;
             }
         }
     }
@@ -532,7 +555,7 @@ export default {
         .left-group,
         .right-group {
             display: flex;
-            gap: 60px;
+            gap: 56px;
             width: 50vw;
         }
 
@@ -663,8 +686,8 @@ export default {
         .cards {
             .frame {
                 height: 65vh;
-                width: 576px;
-                column-gap: 190px;
+                width: 540px;
+                column-gap: 172px;
     
                 .card {
                     width: 165px;
@@ -676,7 +699,7 @@ export default {
         .types {
             .left-group,
             .right-group {
-                gap: 52px;
+                gap: 48px;
             }
 
             .item {
@@ -692,8 +715,8 @@ export default {
         .cards {
             .frame {
                 height: 63vh;
-                width: 512px;
-                column-gap: 165px;
+                width: 490px;
+                column-gap: 155px;
     
                 .card {
                     width: 150px;
@@ -705,7 +728,7 @@ export default {
         .types {
             .left-group,
             .right-group {
-                gap: 46px;
+                gap: 44px;
             }
 
             .item {

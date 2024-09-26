@@ -36,7 +36,6 @@ export default {
     methods: {
         close() {
             this.active = false;
-
             this.onCloseClick();
         }
     },
