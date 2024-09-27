@@ -31,9 +31,9 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   CONSTRAINT `accounts_chk_1` CHECK (json_valid(`decks`))
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Дамп данных таблицы gwent_classic.accounts: ~0 rows (приблизительно)
+-- Дамп данных таблицы gwent_classic.accounts: ~1 rows (приблизительно)
 REPLACE INTO `accounts` (`id`, `login`, `name`, `email`, `hashed_password`, `decks`) VALUES
-	(2, 'rusak', 'rusak', '123@gma.cm', '$2a$11$xtXwUj6R9NRtPENeYN9eb.2UQf1Kly6q2nBp/rQvvEaqUQ45vFQYK', '{"None":[],"Monsters":[],"Nilfgaardian":[],"NorthenRealms":[],"Scoiatael":[],"Skellige":[]}');
+	(2, 'rusak', 'rusak', '123@gma.cm', '$2a$11$xtXwUj6R9NRtPENeYN9eb.2UQf1Kly6q2nBp/rQvvEaqUQ45vFQYK', '{"None":[],"Monsters":[14,15,16,17],"Nilfgaardian":[54,55,56],"NorthernRealms":[87,90],"Scoiatael":[],"Skellige":[158]}');
 
 -- Дамп структуры для таблица gwent_classic.cards
 CREATE TABLE IF NOT EXISTS `cards` (
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `cards` (
   CONSTRAINT `FK_fractions_cards` FOREIGN KEY (`fraction_id`) REFERENCES `fractions` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=187 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Дамп данных таблицы gwent_classic.cards: ~175 rows (приблизительно)
+-- Дамп данных таблицы gwent_classic.cards: ~170 rows (приблизительно)
 REPLACE INTO `cards` (`id`, `type_id`, `strength`, `fraction_id`, `field_lines`, `is_hero`, `muster_cards`) VALUES
 	(1, 3, 2, 0, '["Siege"]', 0, '[1]'),
 	(2, 3, 4, 0, '["Ranger"]', 0, '[2]'),
@@ -259,7 +259,7 @@ REPLACE INTO `fractions` (`id`, `name`) VALUES
 	(0, 'None'),
 	(1, 'Monsters'),
 	(2, 'Nilfgaardian'),
-	(3, 'NorthenRealms'),
+	(3, 'NorthernRealms'),
 	(4, 'Scoiatael'),
 	(5, 'Skellige');
 
