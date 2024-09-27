@@ -3,7 +3,8 @@ using Core.Entities.Game.Cards;
 
 namespace Core.Entities.Game;
 
-public record DeckDTO(Fraction Fraction, IEnumerable<int> CardIds);
+public record CardDTO(int Id, IEnumerable<string> Lines, string Category);
+public record DeckDTO(Fraction Fraction, IEnumerable<CardDTO> Cards);
 
 public class Deck
 {
@@ -12,7 +13,7 @@ public class Deck
         new Deck(Fraction.None, []),
         new Deck(Fraction.Monsters, []),
         new Deck(Fraction.Nilfgaardian, []),
-        new Deck(Fraction.NorthenRealms, []),
+        new Deck(Fraction.NorthernRealms, []),
         new Deck(Fraction.Scoiatael, []),
         new Deck(Fraction.Skellige, [])
     ];

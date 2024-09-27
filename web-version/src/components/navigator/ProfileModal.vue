@@ -159,13 +159,16 @@ export default {
     font-size: 24px;
     margin-left: 12px;
     margin-top: 65px;
-    padding: 5px 20px;
+    padding: 2px 20px 10px;
 }
 
 .button {
     width: 208px;
     height: 60px;
     font-size: 24px;
-    margin: 35px auto 5px;
+    // margin: 35px auto 5px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
 }
 </style>

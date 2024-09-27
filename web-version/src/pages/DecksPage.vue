@@ -1,13 +1,16 @@
 <script>
 import Button from '../components/ui/Button.vue';
 import Card from '../components/decks/Card.vue';
+import Notification from '../components/ui/Notification.vue';
 import { FRACTIONS } from '../services/data/constants';
+import { getDeck as getDeckByFraction, updateDeck } from '../services/Decks.js';
 
 export default {
     name: "DecksPage",
     components: {
         Button,
-        Card
+        Card,
+        Notification
     },
 
     data() {
@@ -27,6 +30,10 @@ export default {
         }
 
         return {
+            error: {
+                text: "" 
+            },
+
             currentFractionId: 0,
 
             fractions: [
@@ -124,9 +131,11 @@ export default {
     },
 
     mounted() {
-        console.log(window.navigator.userAgent);
+        this.getDeck(this.fractions[this.currentFractionId].name);
+    },
 
-        // get cards in deck etc.
+    unmounted() {
+        updateDeck(this.fractions[this.currentFractionId].name, this.cardsInDeck.map(c => c.id));
     },
 
     computed: {
@@ -172,24 +181,38 @@ export default {
             if (this.selectedLeftCategory === 'All')
                 return this.cardsInPool;
 
-            return this.cardsInPool.filter(c => c.lines.includes(this.selectedLeftCategory) || c.category === this.selectedLeftCategory);
+            return this.cardsInPool.filter(c => (c.lines.includes(this.selectedLeftCategory) && (c.category === 'Hero' || c.category === 'None')) || c.category === this.selectedLeftCategory);
         },
 
         getCardsInDeck() {
             if (this.selectedRightCategory === 'All')
                 return this.cardsInDeck;
 
-            return this.cardsInDeck.filter(c => c.lines.includes(this.selectedRightCategory) || c.category === this.selectedRightCategory);
+            return this.cardsInDeck.filter(c => (c.lines.includes(this.selectedRightCategory) && (c.category === 'Hero' || c.category === 'None')) || c.category === this.selectedRightCategory);
         }
     },
 
     methods: {
-        gotoPrevFraction() {
+        async gotoPrevFraction() {
+            const error = await updateDeck(this.fractions[this.currentFractionId].name, this.cardsInDeck.map(c => c.id));
+            
+            if (error)
+                this.showError(error);
+
             this.currentFractionId = (this.currentFractionId - 1 + this.fractions.length) % this.fractions.length;
+
+            this.getDeck(this.fractions[this.currentFractionId].name);
         },
 
-        gotoNextFraction() {
+        async gotoNextFraction() {
+            const error = await updateDeck(this.fractions[this.currentFractionId].name, this.cardsInDeck.map(c => c.id));
+
+            if (error)
+                this.showError(error);
+
             this.currentFractionId = (this.currentFractionId + 1) % this.fractions.length;
+
+            this.getDeck(this.fractions[this.currentFractionId].name);
         },
 
         changeCategory(name, left = true) {
@@ -209,12 +232,33 @@ export default {
         moveToPool(card) {
             this.cardsInPool.push(card);
             this.cardsInDeck.splice(this.cardsInDeck.indexOf(card), 1);
+        },
+
+        showError(msg) {
+            this.error.text = msg;
+        },
+
+        async getDeck(fractionName) {
+            const deck = await getDeckByFraction(fractionName);
+
+            if (deck.error) {
+                this.showError(deck.errorMessage);
+
+                return;
+            }
+
+            const result = deck.result;
+
+            this.cardsInPool = result.poolCards.cards;
+            this.cardsInDeck = result.deckCards.cards;
         }
     }
 }
 </script>
 
 <template>
+<Notification :text="error.text" :onCloseClick="() => showError(undefined)" type="error" />
+
 <section class="main-container">
     <header class="fractions-info">
         <div class="prev-fraction">
@@ -542,7 +586,7 @@ export default {
 
             .card {
                 width: 192px;
-                height: 356px;
+                height: 354px;
             }
         }
     }
@@ -691,7 +735,7 @@ export default {
     
                 .card {
                     width: 165px;
-                    height: auto;
+                    height: 305px;
                 }
             }
         }
@@ -720,7 +764,7 @@ export default {
     
                 .card {
                     width: 150px;
-                    height: auto;
+                    height: 277px;
                 }
             }
         }

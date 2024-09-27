@@ -56,6 +56,8 @@ export default {
         },
 
         login() {
+            this.showError("");
+
             const login = this.componentInputs[0].inputValue;
             const password = this.componentInputs[1].inputValue;
 
@@ -88,7 +90,7 @@ export default {
 </script>
 
 <template>
-    <Notification :text="error.text" :onCloseClick="() => this.error.text = undefined" type="error" />
+    <Notification :text="error.text" :onCloseClick="() => error.text = undefined" type="error" />
 
     <section class="login-section">
         <div class="panel">

@@ -54,6 +54,11 @@ public class CardsRepository : Repository<CardEntity>
         return _loadedCards.FirstOrDefault(x => x.Value is T).Key;
     }
 
+    public IEnumerable<Card> GetCardsByFraction(Fraction fraction)
+    {
+        return _loadedCards.Values.Where(c => c.Fraction == fraction);
+    }
+
     private void _loadCard(Card card)
     {
         _loadedCards.Add(card.Id, card);
@@ -63,7 +68,7 @@ public class CardsRepository : Repository<CardEntity>
     {
         Dictionary<int, Card> result = [];
 
-        Fraction[] fractions = [Fraction.None, Fraction.Monsters, Fraction.Nilfgaardian, Fraction.NorthenRealms, Fraction.Scoiatael, Fraction.Skellige];
+        Fraction[] fractions = [Fraction.None, Fraction.Monsters, Fraction.Nilfgaardian, Fraction.NorthernRealms, Fraction.Scoiatael, Fraction.Skellige];
         
         Console.WriteLine("Start loading decks");
 

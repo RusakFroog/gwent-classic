@@ -2,4 +2,4 @@
 
 namespace API.Contracts.Decks;
 
-public record GetResponseDeck(DeckDTO DeckDTO);
+public record GetResponseDeck(DeckDTO PoolCards, DeckDTO DeckCards);

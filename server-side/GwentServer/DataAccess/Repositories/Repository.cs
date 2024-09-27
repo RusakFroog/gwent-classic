@@ -43,8 +43,7 @@ public abstract class Repository<T> : IRepository<T> where T : EntityBase
                         return $"'{value}'";
                 }));
 
-            MySqlCommand cmd = new MySqlCommand($"INSERT INTO @table (@columns) VALUES (@values)");
-            cmd.Parameters.AddWithValue("table", _table);
+            MySqlCommand cmd = new MySqlCommand($"INSERT INTO {_table} (@columns) VALUES (@values)");
             cmd.Parameters.AddWithValue("columns", columns);
             cmd.Parameters.AddWithValue("values", values);
 
@@ -77,14 +76,14 @@ public abstract class Repository<T> : IRepository<T> where T : EntityBase
                     return $"`{_getFormatedField(p.Name)}` = '{value}'";
             }));
 
-        MySqlCommand cmd = new MySqlCommand($"UPDATE @table SET {updates} WHERE id = @id");
-        cmd.Parameters.AddWithValue("table", _table);
+        MySqlCommand cmd = new MySqlCommand($"UPDATE {_table} SET {updates} WHERE id = @id");
         cmd.Parameters.AddWithValue("id", entity.Id);
 
         await _database.ExecuteAsync(cmd);
 
-        if (_cachedItems.TryAdd(entity.Id, entity) == false)
-            _cachedItems[entity.Id] = entity;
+        _cachedItems.TryAdd(entity.Id, entity);
+
+        _cachedItems[entity.Id] = entity;
     }
 
     public virtual async Task DeleteAsync(T entity)
@@ -95,8 +94,7 @@ public abstract class Repository<T> : IRepository<T> where T : EntityBase
             return;
         }
 
-        MySqlCommand cmd = new MySqlCommand("DELETE FROM @table WHERE id = @id");
-        cmd.Parameters.AddWithValue("table", _table);
+        MySqlCommand cmd = new MySqlCommand($"DELETE FROM {_table} WHERE id = @id");
         cmd.Parameters.AddWithValue("id", entity.Id);
 
         await _database.ExecuteAsync(cmd);
@@ -109,8 +107,7 @@ public abstract class Repository<T> : IRepository<T> where T : EntityBase
         if (_cachedItems.TryGetValue(id, out T cachedItem))
             return cachedItem;
 
-        MySqlCommand cmd = new MySqlCommand("SELECT * FROM @table WHERE id = @id");
-        cmd.Parameters.AddWithValue("table", _table);
+        MySqlCommand cmd = new MySqlCommand($"SELECT * FROM {_table} WHERE id = @id");
         cmd.Parameters.AddWithValue("id", id);
 
         var dataTable = await _database.QueryAsync(cmd);

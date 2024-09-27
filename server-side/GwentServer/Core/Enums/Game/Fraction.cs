@@ -5,7 +5,7 @@ public enum Fraction
     None,
     Monsters,
     Nilfgaardian,
-    NorthenRealms,
+    NorthernRealms,
     Scoiatael,
     Skellige
 }

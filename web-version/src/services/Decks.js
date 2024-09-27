@@ -31,25 +31,18 @@ export const getDeck = async (fraction) => {
         credentials: 'include'
     });
 
-    if (response.status === 400) {
+    if (!response.ok) {
         const errorText = TranslationService.getTranslate(await response.text());
         
-        alert(errorText);
-
-        return false;
+        return { error: true, errorMessage: errorText, result: null };
     }
 
-    if (!response.ok)
+    if (response.status === 400)
         return router.push('/login');
 
-    const cards = [];
-    const cardsId = await response.json();
-
-    for (const cardId of cardsId) {
-        cards.push(await getCard(cardId));
-    }
-
-    return cards;
+    const result = await response.json();
+    
+    return { error: false, errorMessage: null, result: result };
 }
 
 /**
@@ -63,19 +56,12 @@ export const updateDeck = async (fraction, cardsId) => {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            deckDTO: {
-                fraction: getFractionId(fraction),
-                cardIds: [cardsId]
-            }
+            fraction: fraction,
+            deck: cardsId
         }),
         credentials: 'include'
     });
 
     if (!response.ok)
-        return router.push('/login');
-}
-
-const getCard = async (id) => {
-    //release get cards from some CDN
-    //return { img: "https://cdn.com/images/cards/card1.png" };
+        return await response.json();
 }

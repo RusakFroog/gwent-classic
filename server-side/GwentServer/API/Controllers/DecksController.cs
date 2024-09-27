@@ -21,7 +21,10 @@ public class DecksController : ExtendedBaseController
     [HttpPut("update")]
     public async Task<IActionResult> UpdateDeck([FromBody] UpdateRequestDeck request)
     {
-        string error = await _decksService.UpdateDeck(UserId, request.DeckDTO);
+        if (!Enum.TryParse<Fraction>(request.Fraction, true, out var fractionParsed))
+            return BadRequest("Invalid fraction");
+
+        string error = await _decksService.UpdateDeck(UserId, fractionParsed, request.Deck);
 
         if (!string.IsNullOrEmpty(error))
             return BadRequest(error);
@@ -31,16 +34,21 @@ public class DecksController : ExtendedBaseController
 
     [Authorize]
     [HttpGet("get/{fraction}")]
-    public async Task<IActionResult> GetDecks(string fraction, CancellationToken ct)
+    public async Task<IActionResult> GetDecks(string fraction)
     {
         if (!Enum.TryParse<Fraction>(fraction, true, out var fractionParsed))
             return BadRequest("Invalid fraction");
 
-        var result = await _decksService.GetDeckByFraction(UserId, fractionParsed);
+        var resultDeck = await _decksService.GetDeckByFraction(UserId, fractionParsed);
 
-        if (!string.IsNullOrEmpty(result.Error))
-            return BadRequest(result.Error);
+        if (!string.IsNullOrEmpty(resultDeck.Error))
+            return BadRequest(resultDeck.Error);
 
-        return Ok(new GetResponseDeck(result.Value));
+        var resultPool = await _decksService.GetCardsPoolByFraction(UserId, fractionParsed);
+
+        if (!string.IsNullOrEmpty(resultPool.Error))
+            return BadRequest(resultPool.Error);
+
+        return Ok(new GetResponseDeck(resultPool.Value, resultDeck.Value));
     }
 }
