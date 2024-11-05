@@ -71,7 +71,7 @@ export const updateAccount = async (name) => {
 }
 
 export const loggedIn = async () => {
-    const response = await fetch(`${HTTP_SERVER}/accounts/loggedin`, {
+    const response = await fetch(`${HTTP_SERVER}/accounts/logged-in`, {
         method: 'GET',
         credentials: 'include'
     });

@@ -5,23 +5,6 @@ import Translation from './Translation.js';
 
 const TranslationService = new Translation(DECK_ERRORS);
 
-const getFractionId = (fraction) => {
-    switch (fraction) {
-        case FRACTIONS.Monsters:
-            return 1;
-        case FRACTIONS.Nilfgaardian:
-            return 2;
-        case FRACTIONS.NorthernRealms:
-            return 3;
-        case FRACTIONS.Scoiatael:
-            return 4;
-        case FRACTIONS.Skellige:
-            return 5;
-        default:
-            return 0;
-    }
-}
-
 /**
  * @param {FRACTIONS} fraction
  */

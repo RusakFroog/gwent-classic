@@ -41,7 +41,7 @@ export default {
 
 
 <style scoped lang="scss">
-@import '../../utilities/variables.scss';
+@use "../../utilities/variables" as *;
 
 li {
     transition: 0.3s;

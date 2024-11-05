@@ -1,5 +1,5 @@
 <script>
-import musicPlayer from '../../services/musicPlayer.js';
+import musicPlayer from '../../services/MusicPlayer.js';
 
 export default {
     data() {
@@ -76,7 +76,7 @@ export default {
 </template>
 
 <style scoped lang="scss">
-@import '../../utilities/variables.scss';
+@use "../../utilities/variables" as *;
 
 .volume {
     position: absolute;

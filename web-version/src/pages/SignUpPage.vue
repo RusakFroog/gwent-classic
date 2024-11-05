@@ -3,7 +3,7 @@ import Button from '../components/ui/Button.vue';
 import CustomInput from '../components/ui/CustomInput.vue';
 import Notification from '../components/ui/Notification.vue';
 import router from '../router/index.js';
-import { createAccount } from '../services/accounts.js';
+import { createAccount } from '../services/Accounts.js';
 
 export default {
     data() {
@@ -117,10 +117,10 @@ export default {
                 />
                 <Button class="sign-up" @click="signUp()" text="SIGN UP" />
             </div>
-            <div class="error" v-if="error.active">
+            <!-- <div class="error" v-if="error.active">
                 <img class="error-image" src="/info.svg" />
                 <text>{{ error.text }}</text>
-            </div>
+            </div> -->
             <p>Already have an account? 
                 <a @click="goToPage('/login')" class="login-link">LOG IN</a>
             </p>
@@ -130,7 +130,7 @@ export default {
 </template>
 
 <style scoped lang="scss">
-@import '../utilities/variables.scss';
+@use "../utilities/variables" as *;
 
 .registration-section {
     display: flex;

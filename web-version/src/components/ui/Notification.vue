@@ -68,7 +68,7 @@ export default {
 </template>
 
 <style scoped lang="scss">
-@import '../../utilities/variables.scss';
+@use "../../utilities/variables" as *;
 
 $error-text-color: red;
 $warn-text-color: orange;

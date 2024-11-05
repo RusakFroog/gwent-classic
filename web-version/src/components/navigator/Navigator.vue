@@ -3,7 +3,7 @@ import NavigatorItem from './NavigatorItem.vue';
 import ProfileModal from './ProfileModal.vue';
 import MusicPlayer from '../music-player/MusicPlayer.vue';
 import { useRouter } from 'vue-router';
-import { loggedIn } from '../../services/accounts.js';
+import { loggedIn } from '../../services/Accounts.js';
 
 export default {
     components: {

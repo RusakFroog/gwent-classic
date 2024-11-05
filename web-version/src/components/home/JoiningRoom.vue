@@ -1,5 +1,5 @@
 <script>
-import { joinRoom } from '../../services/gameRooms.js';
+import { joinRoom } from '../../services/GameRooms.js';
 import Button from '../ui/Button.vue';
 import CustomInput from '../ui/CustomInput.vue';
 
@@ -63,7 +63,7 @@ export default {
 </template>
 
 <style scoped lang="scss">
-@import '../../utilities/variables.scss';
+@use "../../utilities/variables" as *;
 
 .modal-overlay {
     display: flex;

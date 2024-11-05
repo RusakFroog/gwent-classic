@@ -16,7 +16,8 @@ export default {
 </template>
 
 <style scoped lang="scss">
-@import "../../utilities/variables.scss";
+@use "../../utilities/variables" as *;
+
 
 $transition-duration: 0.3s;
 

@@ -1,7 +1,7 @@
 <script>
 import Button from '../ui/Button.vue';
 import CustomInput from '../ui/CustomInput.vue';
-import { joinRoom } from '../../services/gameRooms.js';
+import { joinRoom } from '../../services/GameRooms.js';
 
 export default {
     components: {
@@ -94,7 +94,7 @@ export default {
 </template>
 
 <style scoped lang="scss">
-@import '../../utilities/variables.scss';
+@use "../../utilities/variables" as *;
 
 .room-list-item {
     display: flex;

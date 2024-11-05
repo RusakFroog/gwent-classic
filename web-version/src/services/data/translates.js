@@ -7,6 +7,8 @@ export const ACCOUNT_ERRORS = {
     "EXIST_EMAIL" : "Account with current Email already registered",
     "EXIST_LOGIN" : "Account with current Login already registered",
     "INVALID_DATA" : "Login or Password are invalid",
+    "LENGTH_NAME": "Name must be 4-40 characters",
+    "ACCOUNT_DOES_NOT_EXIST": "Account doesn't exist",
 };
 
 export const ROOM_ERRORS = {

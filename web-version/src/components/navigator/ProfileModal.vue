@@ -1,7 +1,7 @@
 <script>
 import Button from '../ui/Button.vue'; 
 import CustomInput from '../ui/CustomInput.vue';
-import { logoutAccount, updateAccount } from '../../services/accounts.js';
+import { logoutAccount, updateAccount } from '../../services/Accounts.js';
 
 export default {
     name: "ProfileModal",
@@ -98,7 +98,8 @@ export default {
 </template>
 
 <style scoped lang="scss">
-@import "../../utilities/variables.scss";
+@use "../../utilities/variables" as *;
+
 
 .profile-container {
     display: flex;

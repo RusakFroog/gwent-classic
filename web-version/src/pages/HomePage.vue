@@ -3,7 +3,7 @@ import Button from '../components/ui/Button.vue';
 import GameRow from '../components/home/GameRow.vue';
 import JoiningRoom from '../components/home/JoiningRoom.vue';
 import CreatingRoom from '../components/home/CreatingRoom.vue';
-import { getRooms } from '../services/gameRooms.js';
+import { getRooms } from '../services/GameRooms.js';
 
 export default {
     name: "HomePage",
@@ -113,7 +113,7 @@ export default {
 </template>
 
 <style scoped lang="scss">
-@import "../utilities/variables.scss";
+@use "../utilities/variables" as *;
 
 .registration-container {
     display: flex;
